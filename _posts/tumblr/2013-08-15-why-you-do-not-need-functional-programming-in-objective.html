@@ -1,0 +1,22 @@
+---
+layout: post
+title: Why you don't need functional programming in Objective-C
+date: '2013-08-15T08:01:37+02:00'
+tags:
+- objective-c
+- functionalkit
+tumblr_url: http://pawelniewiadomski.pl/post/58311441221/why-you-do-not-need-functional-programming-in-objective
+---
+<p>I love Objective-C ;-) Coming from a Java world one of the first questions that popped into my mind - is there any functional programming available - you know the usual stuff - filter, find, transform. The things you can&#8217;t live when programming in Java after you learn how cool they are (especially Guava).</p>
+<p>Seems Objective-C has some nice features too in this area, maybe they don&#8217;t exactly match 1:1 to Java approach.</p>
+<p>Like for example consider creating a cache for objects, like you want to speed up lookups for profiles by name, here&#8217;s what you can do:</p>
+<p><strong><span>NSDictionary *profilesByName = [NSDictionary dictionaryWithObjects:profiles forKeys:[profiles valueForKey:@&#8221;name&#8221;]];</span></strong></p>
+<p><span>Profiles is a NSArray when you call valueForKey on it it will iterate over all elements and using key value coding (KVC) ask nicely about property name. It can talk to any object implementing KVC which is awesome!</span></p>
+<p>There&#8217;s a great way to filter stuff like:</p>
+<p><strong>NSArray *array = @[ @{ @&#8221;email&#8221;&#160;: @&#8221;filter string&#8221;} ];</strong></p>
+<p><strong><span>NSArray *filteredarray = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@&#8221;(email == %@)&#8221;, @&#8221;filter string&#8221;]];</span> </strong></p>
+<p>Here&#8217;s the code will match any entries in the array that have a matching e-mail, and once again you can do this for any object implementing KVC.</p>
+<p>How awesome is that?</p>
+<p>It&#8217;s not all there&#8217;s more because NSPredicate is a really powerful mechanism. Check out <a href="http://nshipster.com/nspredicate/" target="_blank">NSPredicate post</a> on NSHipster.</p>
+<p>That&#8217;s not all there are also KVC operators that allow you to create one-liners for stuff like counting the average, finding max or min values. There&#8217;s a great <a href="http://nshipster.com/kvc-collection-operators/" target="_blank">NSHipster post about it</a>.</p>
+<p>And if that&#8217;s not enough for your there are libraries like <a href="https://github.com/mogeneration/functionalkit" target="_blank">FunctionalKit</a> that bring in advanced stuff like Eithers, Options, anonymous functions, mappers, etc.</p>

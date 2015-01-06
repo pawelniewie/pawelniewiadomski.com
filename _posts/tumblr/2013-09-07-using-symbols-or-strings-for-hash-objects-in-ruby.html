@@ -1,0 +1,29 @@
+---
+layout: post
+title: Using symbols or strings for hash objects in Ruby?
+date: '2013-09-07T20:55:00+02:00'
+tags:
+- learning ruby
+tumblr_url: http://pawelniewiadomski.pl/post/60564698945/using-symbols-or-strings-for-hash-objects-in-ruby
+---
+<p>[pawel@server Tumblr (master)]$ irb</p>
+<p><span>irb(main):001:0&gt; test = {&#8220;test&#8221; =&gt; &#8220;zxczxc&#8221;}</span></p>
+<p>=&gt; {&#8220;test&#8221;=&gt;&#8221;zxczxc&#8221;}</p>
+<p>irb(main):002:0&gt; puts test[&#8220;test&#8221;]</p>
+<p>zxczxc</p>
+<p>=&gt; nil</p>
+<p>irb(main):003:0&gt; puts test[:test]</p>
+
+<p>=&gt; nil</p>
+<p>irb(main):004:0&gt; test = {:test =&gt; &#8220;asdasd&#8221;}</p>
+<p>=&gt; {:test=&gt;&#8221;asdasd&#8221;}</p>
+<p>irb(main):005:0&gt; puts test[&#8220;test&#8221;]</p>
+
+<p>=&gt; nil</p>
+<p>irb(main):006:0&gt; puts test[:test]</p>
+<p>asdasd</p>
+<p>=&gt; nil</p>
+<p>This short irb session showed what&#8217;s broken with my ruby code. I didn&#8217;t know that when you have a hash with keys which are symbols you must not access them using strings, and other way around - having a hash with strings you must not refer to them using symbols. How broken is that?</p>
+<p>You could assume that everything will be kept as symbol since they are immutable and mutating hash key is really a bad idea. But that comes with a price - symbols are never garbage collected.</p>
+<p>Now, each library can decide whether to use symbols or strings. I see that on forums people advocate for using symbols. But Koala (Facebook client) uses strings and my code was broken because I assumed symbols.</p>
+<p>I learned there&#8217;s a way to make the hash behave the same, you can call <a href="http://rubyquicktips.com/post/603292403/accessing-a-hash-with-either-string-or-symbol-keys" target="_blank">hash.with_indifferent_access</a> which will return hash that will behave intuitively.</p>

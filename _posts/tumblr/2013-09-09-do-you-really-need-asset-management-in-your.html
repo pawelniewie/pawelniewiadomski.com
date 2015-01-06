@@ -1,0 +1,27 @@
+---
+layout: post
+title: do you really need asset management in your
+date: '2013-09-09T07:45:00+02:00'
+tags:
+- sinatra
+- asset pipeline
+- sprockets
+tumblr_url: http://pawelniewiadomski.pl/post/60732224574/do-you-really-need-asset-management-in-your
+---
+<img src="/tumblr_files/tumblr_msufzfClG91s8nah1o1_1280.png"/><br/><p>Do you really need asset management in your Sinatra app?</p>
+<p>You&#8217;re just doing this simple and naive proof of concept, don&#8217;t you? At least that&#8217;s what I&#8217;m doing - I want to get this thing working ASAP and don&#8217;t care if it&#8217;s state of the art ;-)</p>
+<p>I&#8217;m doing <a href="http://appcasts.herokuapp.com">this little site</a> for managing Sparkle appcasts and recently added my first external component - it&#8217;s a drag and drop directive for AngularJS.</p>
+<p>This led to a weekend full of playing with assets pipeline. What&#8217;s assets pipeline? It&#8217;s the whole process of transforming what you wrote in your preferred language (CoffeScript, JS, or whatever) to something digestible by the browser and serving it to clients. Preferably automated.</p>
+<p>I started first with sinatra-assetpack which felt more natural to the app (since it&#8217;s Sinatra app), I quickly made it work in a development env, but with no luck on the production.</p>
+<p>Later found <a href="https://github.com/sstephenson/sprockets" target="_blank">sprockets</a> which is a generic (or mostly rails) solution, compared those two on ruby gems the first has around 30k downloads, the other 1,2M.</p>
+<p>Setup was quite easy thanks to <a href="https://github.com/petebrowne/sprockets-helpers" target="_blank">Peter Browne</a>, with a couple of fixes I made it work as I wanted (processing files on the fly and caching them).</p>
+<p>Had to <strong>set :digest_assets, true</strong> and add configure :production with:</p>
+<p><strong>assets.js_compressor = Closure::Compiler.new</strong></p>
+<p><strong>assets.css_compressor = YUI::CssCompressor.new</strong></p>
+<p><strong>uid = Digest::MD5.hexdigest(File.dirname(__FILE__))[0,8]</strong></p>
+<p><strong>assets.cache = Sprockets::Cache::FileStore.new(&#8220;/tmp/sinatra-#{uid}&#8221;)</strong></p>
+<p>But did I really need it a this stage?</p>
+<p>Well, truth to be told that was a premature optimization, I should have spent this time actually working on the app itself.</p>
+<p>Sure it was nice to learn that your AngularJS code breaks after minification, but I could have waited to learn that a few more weeks ;-)</p>
+<p>What seemed like a trivial task took me too many precious hours. Sure I learned something in the process which is valuable but still didn&#8217;t have too.</p>
+<p>I need to be more careful if I want to finish this ;-)</p>

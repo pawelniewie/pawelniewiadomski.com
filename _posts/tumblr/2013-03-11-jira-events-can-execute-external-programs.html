@@ -1,0 +1,53 @@
+---
+layout: post
+title: JIRA events can execute external programs!
+date: '2013-03-11T22:28:00+01:00'
+tags:
+- devonsteroids
+- jira
+- plugin
+tumblr_url: http://pawelniewiadomski.pl/post/45135045732/jira-events-can-execute-external-programs
+---
+<p>Ever wondered how to automate JIRA server and execute external scripts when events are triggered? Here&#8217;s a simple example that will tell you exactly that!</p>
+
+<p>You didn&#8217;t know that&#8217;s possible? Sure it is with a help from <a href="https://marketplace.atlassian.com/plugins/com.pawelniewiadomski.devs.jira.automat">Automat</a> my little JIRA plugin.</p>
+
+<p>Each JIRA issue operation triggers an internal event - when for example issue is updated, or created, or commented, there&#8217;s plenty of different event types. So why not to use that to enhancing your workflow?</p>
+
+<p>I thought about that. The only thing you need to do is installing <a href="https://marketplace.atlassian.com/plugins/com.pawelniewiadomski.devs.jira.automat">Automat</a> then your can put scripts in your JIRA-home directory and they will be automatically run. No other configuration is required!</p>
+
+<p>Put the script file for each event into JIRA-home/automat subdirectory, each file needs to follow a naming convention (which is described in the plugin itself) for example issueCreated.sh will be executed whenever issue is updated. When you open a configuration page for the plugin you&#8217;ll see a list of handled events with respective filenames.</p>
+
+<p>But what if you don&#8217;t want to use Shell to create your hooks in? There&#8217;s simple. Here&#8217;s an example of a simple hook that I created in python! Here&#8217;s issueUpdated.sh (arguments are following: JIRA site URL, issue key, user that performed the action):</p>
+
+<blockquote>
+<p>#!/usr/bin/env python</p>
+<p>import sys</p>
+
+<p>try:</p>
+<p><span class="Apple-tab-span"> </span>import requests</p>
+<p>except:</p>
+<p><span class="Apple-tab-span"> </span>print &#8220;run sudo easy_install requests&#8221;</p>
+<p><span class="Apple-tab-span"> </span>exit(1)</p>
+
+<p>USERNAME = &#8220;admin&#8221;</p>
+<p>PASSWORD = &#8220;admin&#8221;</p>
+
+<p>def issueUpdatedAt(jiraUrl, issueKey):</p>
+<p><span class="Apple-tab-span"> </span># ignore other projects than TST</p>
+<p><span class="Apple-tab-span"> </span>if (not issueKey.startswith(&#8220;TST&#8221;)):</p>
+<p><span class="Apple-tab-span"> </span>return</p>
+<p><span class="Apple-tab-span"> </span>issueUrl = &#8220;%s/rest/api/2/issue/%s&#8221; % (jiraUrl, issueKey)</p>
+<p><span class="Apple-tab-span"> </span>issue = requests.get(issueUrl, auth=(USERNAME, PASSWORD)).json()</p>
+<p><span class="Apple-tab-span"> </span># dump issue details to a file</p>
+<p><span class="Apple-tab-span"> </span>with open(&#8220;/tmp/test.txt&#8221;, &#8220;w+&#8221;) as f:</p>
+<p><span class="Apple-tab-span"> </span>f.write(str(issue))</p>
+
+<p>if __name__ == &#8220;__main__&#8221;:</p>
+<p><span class="Apple-tab-span"> </span>issueUpdatedAt(sys.argv[1], sys.argv[2]) </p>
+</blockquote>
+<p>It will connect back to the JIRA to obtain more details about the issue being updated. You can easily use any JIRA REST endpoint so scripts can be really smart!</p>
+
+<p>Hope you found this tutorial useful. If you have any questions fell free to contact me.</p>
+
+<p><a href="https://marketplace.atlassian.com/plugins/com.pawelniewiadomski.devs.jira.automat">Go to the plugin page.</a></p>

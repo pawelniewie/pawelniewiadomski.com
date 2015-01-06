@@ -1,0 +1,44 @@
+---
+layout: post
+title: Front Trends 2013 summary
+date: '2013-04-29T13:05:00+02:00'
+tags:
+- fronttrends
+- injoybusiness
+- devonsteroids
+- conference
+- javascript
+tumblr_url: http://pawelniewiadomski.pl/post/49171459997/front-trends-2013-summary
+---
+<p>It&#8217;s was my first time attending Front Trends. The idea was to get a glimpse of the new and upcoming stuff that will happen on the web. Or just go outside the building and see what cool kids are doing these days as I&#8217;m pretty much chained to the chair with this wonderful stack we use at Atlassian.</p>
+<p>I learned couple of things that were fascinating.</p>
+<p><strong>JavaScript is dead, long live VM</strong></p>
+<p>Seems JavaScript VM (JSVM) is now a destination platform for many new languages. As it happened with Java VM people got bored either with the flaky syntax or the execution performance and led new efforts to fix both.</p>
+<p>So there&#8217;s stuff like <a href="http://coffeescript.org/" target="_blank">CoffeScript</a> that gives you a nice object oriented language on top of JavaScript VM.</p>
+<p>There&#8217;s also <a href="http://asmjs.org/" target="_blank">asm.js</a> (more <a href="http://ejohn.org/blog/asmjs-javascript-compile-target/" target="_blank">here</a>) that lets you treat JSVM as a processor/computer architecture so you can compile your rusty C or C++ into JavaScript and execute it blazingly fast (almost running on bare metal). </p>
+<p>There&#8217;s also other things like <a href="https://github.com/olov/defs" target="_blank">defs.js</a> that give you ability to transform JavaScript to JavaScript! WTF you would ask? Yeah, me too. But it has a reason - defs.js lets you compile and use EcmaScript 6 goodies on old browsers that don&#8217;t support ES6 (all of them).</p>
+<p>And talking about goodies - there are <a href="http://kishorelive.com/2011/11/22/ecmascript-6-looks-promising/" target="_blank">let and const</a> that will finally make resolving variable scope sane. Throw vars out of the window!</p>
+<p><strong>Source maps</strong></p>
+<p>You&#8217;d ask that it&#8217;s great to have a new language on JSVM but what about maintainability, that must suck, right? Right!</p>
+<p>But with <a href="https://wiki.mozilla.org/DevTools/Features/SourceMap" target="_blank">source maps</a> it sucks less! You can add special additional files that will help you translate your generated JavaScript code into sth readable - say you minimized your JavaScript but now want to debug it? Use source maps.</p>
+<p>Or did you actually wrote your app in CoffeScript? Use source maps.</p>
+<p><strong>Localization in 21st century</strong></p>
+<p>How many things go into writing a great, localized product? Does having key-value maps is sufficient to create outstanding apps that speak the user&#8217;s language?</p>
+<p>Yes or no? Well, we thought key-value pairs are enough. At least for a long time.</p>
+<p>But guess what, it&#8217;s the least you can do. If you really want to talk to you users and really show that you care and you don&#8217;t want to introduce user experience failures it&#8217;s time to use something better.</p>
+<p>And here comes the project from Mozilla, they are building Firefox OS which wants to talk to the users (and is built on JavaScript+HTML) so they had to figure out how to create sth better than gettext and friends.</p>
+<p><a href="https://github.com/l20n" target="_blank">With L20n</a> you can separate your application with translation, you can add arbitrary logic to each language (you know that they have their own sometimes incompatible rules?) then render it server side or client side, and what&#8217;s better (when done on the client) you can even make it respond to events (like device orientation change).</p>
+<p>This is a responsive design!</p>
+<p><strong>CSS is bigger than you think</strong></p>
+<p>So this is an overall impression. Knowing only bits of CSS I was amazed by the power it comes with it - doing animations? Use CSS for that! <span>Use Transitions? CSS! Really complex UI layout? CSS!</span></p>
+<p>Want to have responsive pages? There&#8217;s plenty of new stuff that will help you (flex boxes, etc.).</p>
+<p>There are even proposal for adding stuff from print design - like following paragraphs that let&#8217;s you totally separate text from the presentation and make your text flow from arbitrary DOM elements to another (Pages anyone?).</p>
+<p><strong>Building software from blocks</strong></p>
+<p>There&#8217;s plenty of tools that let&#8217;s use create your MVP from scratch in less time than you can use to think up the idea. I loved the idea of moving this even step further, with <a href="http://hood.ie" target="_blank">hood.ie</a> you get not only nice back-end server with common stuff already implemented (like sign-ups, password reminders, etc.) but you even get JavaScript API to use it!</p>
+<p>That&#8217;s really making it easy to stack up blocks to create an app. Love the concept!</p>
+<p><strong>The venue</strong></p>
+<p>It was refreshing and inspiring to see all those people presenting their ideas. The organization of the venue was really good.</p>
+<p>There were some quirks - like that rest area was a glass house so it&#8217;s really hot. And the presentation area being really chilly.</p>
+<p>The food was great (at least from observation),  the party was even better (with free beer), and the beer was free also during the days.</p>
+<p>There were some really poor presentations (4 in total), especially day one was a bit of a disappointment. But on the other hand there were some great like the one done by <a href="https://twitter.com/jaffathecake" target="_blank">Jake Archibald</a>.</p>
+<p>In summary I&#8217;ve got what I came for which is food for thought. I think I should more often come and visit conferences like that.</p>

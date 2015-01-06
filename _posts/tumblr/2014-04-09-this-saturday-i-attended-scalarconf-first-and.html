@@ -1,0 +1,32 @@
+---
+layout: post
+title: this saturday i attended scalarconf first and
+date: '2014-04-09T13:57:23+02:00'
+tags:
+- scala
+- scalarconf
+tumblr_url: http://pawelniewiadomski.pl/post/82185779259/this-saturday-i-attended-scalarconf-first-and
+---
+<img src="/tumblr_files/tumblr_n3rijnujmX1s8nah1o1_1280.jpg"/><br/><img src="/tumblr_files/tumblr_n3rijnujmX1s8nah1o2_1280.jpg"/><br/><br/><p>This Saturday I attended ScalarConf first (and free) Scala conference organized in Poland. I was going there as a Scala enthusiast just to leave it with an impression that we should stop using Scala :-)</p>
+<p>Our team&#8217;s history with Scala started like a year ago when we started using it mostly for tests in one of the plugins. We are forced to use Java 1.6 but we can use Scala, so it was obvious choice. Scala&#8217;s less verbose syntax is what we were after.</p>
+<p>We enjoyed using it that way so we decided to try it on a bigger scale and wrote a whole JIRA plugin in it (not the first one in JIRA, but first done by us).</p>
+<p>We also enjoyed it, but we started to notice sharp edges. Especially when browsing and reading code from an older plugin that uses Scala - there were some parts really hard to understand (but we ignored this bad sign back there).</p>
+<p>We wrote the plugin using Scala with no additions like Scalaz, etc. We tried to keep the code clean. Although we did introduce a bunch of implicits (there&#8217;s a lot of places when we map values from one type to another and they were handy for that).</p>
+<p>So we happily signed up for ScalaConf thinking it would be a great learning experience and it was. We learned not to use Scala ;-)</p>
+<p>There are couple of issues that struck us.</p>
+<p>Like the code presented as &#8220;readable&#8221; or &#8220;cool&#8221; was actually not. There was a great example of a code validating a form written in Scala, then refactored in Scalaz, and once again for the third time refactored a bit.</p>
+<p>Version 1 was ugly, version 2 was uglier, version 3 was a mess.</p>
+<p>Scalaz looks like a maintenance nightmare. I would not want to read code written using it. Never.</p>
+<p>Another great example was about creating domain specific language in Scala on an example of <a class="external-link" href="http://spray.io/" rel="nofollow">Spray.io</a>, it was ok at first glimpse, but why was there a strange operator combining those GET/POST rules together? Because we can ;-)</p>
+<p>Compare it to the great Sinatra or Ruby On Rails DSL and you see that once again Scala folks made it wrong :-/</p>
+<p>There was also a great presentation about good and bad sides of Scala with awesome list of resources at the end. Here are couple of them. Watch them if you&#8217;re thinking whether or not to use Scala.</p>
+<p><iframe frameborder="0" height="315" src="//www.youtube.com/embed/uiJycy6dFSQ" width="560"></iframe></p>
+<p>They persuaded me not to pursue Scala further (and I was not the only one leaving with this impression). Referring to the video above - if people creating the language say how bad it is it&#8217;s a sign that the whole product is mismanaged and you should avoid it.</p>
+<p>Look the code should be simple and understandable. The more complex it gets the harder it is to maintain it and we all maintain code - ever got a bug report from someone or CI?</p>
+<p>Scala (meaning everything it offers) is a great way to boost your ego proving how clever you are <a class="external-link" href="http://michid.wordpress.com/2011/06/12/union-types/" rel="nofollow">using all those funky abstracts</a>. But I don&#8217;t give a shit - I want to see a readable code.</p>
+<p>Haven&#8217;t we learned from PERL? Well, maybe it&#8217;s a history for some but I still remember reading PERL code and it was shit. I don&#8217;t want to go back there.</p>
+<p>So, I&#8217;ll pass.</p>
+<p>I don&#8217;t think any software company that cares about long term future should actually invest their time in Scala. I believe there are better alternatives that make code actually look decent and terse.</p>
+<p>Because if you&#8217;re going to introduce Scala no one&#8217;s stopping &#8220;clever folks&#8221; doing crazy shit in it.</p>
+<p>We&#8217;re going probably to investigate a few alternatives in the future (like Kotlin), also in some time we&#8217;ll be allowed to upgrade our product to modern Java 8 and maybe this will be good enough?</p>
+<p>But for sure I&#8217;m not longer going to advocate for Scala&#8230;</p>

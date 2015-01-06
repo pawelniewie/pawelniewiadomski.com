@@ -1,0 +1,19 @@
+---
+layout: post
+title: Velocity is broken in JIRA 6.0
+date: '2013-03-14T22:24:42+01:00'
+tags:
+- devonsteroids
+- jira
+- atlassian
+- velocity
+- html
+- encoding
+tumblr_url: http://pawelniewiadomski.pl/post/45367834249/velocity-is-broken-in-jira-6-0
+---
+<p>Yesterday was a great day at work - I thought I&#8217;ll finally start working on a plugin that I had a short separation with (<a href="https://marketplace.atlassian.com/plugins/com.atlassian.cpji.cpji-jira-plugin" target="_blank">JIRA Remote Copy</a>). But coming in the morning I noticed my canary build of JIRA Importers Plugin went red.</p>
+<p>Great! Nothing is better than starting a day with a red build that you&#8217;re the one to fix ;-)</p>
+<p>The build was broken because the time has come and Justus switched the magical switch and now all velocity templates use HTML escaping by default.</p>
+<p>I love how it was all planned long time ago, and there <a href="https://developer.atlassian.com/display/JIRADEV/Velocity+Templates" target="_blank">was documentation already in place</a> so it was obvious what to do.</p>
+<p>I don&#8217;t like the fact that I missed it (as many devs) and had to fix in last minute before <a href="https://marketplace.atlassian.com/plugins/com.atlassian.jira.plugins.jira-importers-plugin" target="_blank">JIRA Importers Plugin</a> is shipped, but as I said before that&#8217;s a price of the progress ;-)</p>
+<p>So I&#8217;m leaving this just in case your JIRA velocity templates are now using HTML escaping and you don&#8217;t know why.</p>

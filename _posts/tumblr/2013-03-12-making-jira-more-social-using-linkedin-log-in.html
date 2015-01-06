@@ -1,0 +1,32 @@
+---
+layout: post
+title: Making JIRA more social using LinkedIn log in feature
+date: '2013-03-12T15:05:00+01:00'
+tags:
+- devonsteroids
+- development
+- jira
+- atlassian
+- linkedin
+- authentication
+- users
+tumblr_url: http://pawelniewiadomski.pl/post/45188773794/making-jira-more-social-using-linkedin-log-in
+---
+<p>For this ShipIt I wanted to investigate how to ease life of our users by allowing them not to have to remember yet another username/password to access JIRA.</p>
+
+<p>Because LinkedIn is the worlds biggest professional network I decided to go and use them to authenticate users for JIRA. They give nice JavaScript Sign In button with allows you to setup whole authentication in minutes.</p>
+
+<p>Unfortunately that requires a fixed domain name and cross origin headers. Nothing wrong with that but I wanted to make it a plugin that everyone could install (so no prior knowledge of domain name). Decided to use some Java client library.</p>
+<p>A bit of JavaScript injecting a button on log in page.</p>
+<p><img alt="image" src="http://media.tumblr.com/e5bff4776279e55cc839c9cf18c63b78/tumblr_inline_mjjwcp71Gm1qz4rgp.png"/></p>
+
+<p><span>Redirects you to LinkedIn as part of OAuth dance.</span></p>
+<p><span><img alt="image" src="http://media.tumblr.com/97ba83b8b1c9937658228ad9788d50c3/tumblr_inline_mjjwdp1tf71qz4rgp.png"/></span></p>
+
+<p><span>A new fresh account is created for you (if it doesn&#8217;t exist) and you&#8217;re automatically logged in.</span></p>
+<p><span><img alt="image" src="http://media.tumblr.com/95ac6119d08e217c7868b2cc7b4d9bba/tumblr_inline_mjjwefhO821qz4rgp.png"/></span></p>
+
+<p><span>Some nice defaults.</span></p>
+<p><span><img alt="image" src="http://media.tumblr.com/72e30677b690ded2e0e96da86c74b381/tumblr_inline_mjjwf7gWbn1qz4rgp.png"/></span></p>
+
+<p><span>Since we now have a user and his OAuth tokens we can do whatever we want (as long as he agrees) - get details from LinkedIn about his connections, publish some updates like new releases, promote issues (like spreading the world to reach more voters), etc.</span></p>
