@@ -20,3 +20,7 @@ gems:
 - jemoji
 - jekyll-redirect-from
 - jekyll-sitemap
+exclude:
+- Gemfile
+- Gemfile.lock
+- wercker.yml
