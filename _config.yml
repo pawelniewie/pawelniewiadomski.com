@@ -1,13 +1,17 @@
 # Site settings
 title: Pawel Niewiadomski
 email: 11110000b@gmail.com
+paginate: 1
 description: > # this means to ignore newlines until "baseurl:"
   A few observations on world of software development, life and all the things.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://pawelniewiadomski.com" # the base hostname & protocol for your site
 twitter_username: devonsteroids
 github_username:  pawelniewie
-
+pages_list:       
+  About: '/about'
+  Archive: '/archive'
+  Feed: '/feed.xml'
 # Build settings
 markdown: kramdown
 gems:
