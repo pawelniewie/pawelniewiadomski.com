@@ -1,4 +1,4 @@
-box: rvm
+box: wercker/rvm
 build:
     steps:
         - bundle-install
