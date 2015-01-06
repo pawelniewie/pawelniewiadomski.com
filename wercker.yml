@@ -1,4 +1,4 @@
-box: wercker/ruby
+box: wercker/box-rvm
 build:
     steps:
         - bundle-install
