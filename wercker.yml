@@ -3,7 +3,7 @@ build:
     steps:
         - script:
             name: Build site with jekyll
-            script: |-
+            code: |-
                 jekyll build
 deploy:
     steps:
