@@ -29,6 +29,7 @@ You probably didn't enable Google+ API in Google Developer Console.
 ### I'm getting SSL errors
 
 There's couple of reasons you could get them:
+
 - you're using a self signed certificate
 - you're using a certificate signed by Certification Authoriting that isn't known for the Java version you use
 - you're using 2048 bit certificate key which is only supported by latest Java 1.7 and 1.8 releases
