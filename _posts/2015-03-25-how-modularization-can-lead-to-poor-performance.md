@@ -31,4 +31,4 @@ In Rails contrary the idea is that the object that gets stored in the database h
 
 I believe this approach scales better, now we'll have to figure our how to combine it with the existing code and persistence framework.
 
-But in case you're starting from scratch you can try using [ActiveJDBC](http://javalite.io) which offers the same model for Java!
+But in case you're starting from scratch you can try using [ActiveJDBC](http://javalite.io) or [ActiveJPA](https://github.com/activejpa/activejpa) which offer the same model for Java! 
