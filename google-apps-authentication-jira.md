@@ -1,9 +1,9 @@
 ---
 layout: default
-title: OpenID Authentication for JIRA
+title: OpenID Authentication for JIRA/Confluence
 permalink: /atlassian/google-apps-authentication-for-jira/
 ---
-OpenID Authentication for JIRA
+OpenID Authentication for JIRA/Confluence
 =============
 
 Hi,
