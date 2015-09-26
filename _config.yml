@@ -25,6 +25,10 @@ version:          2.0.0
 baseurl: ""
 url: "http://pawelniewiadomski.com"
 
+fb_admins:          http://facebook.com/pawelniewie
+locale:				en_US
+avatar:				media/avatar.png
+
 gems:
 - jekyll-mentions
 - jemoji
