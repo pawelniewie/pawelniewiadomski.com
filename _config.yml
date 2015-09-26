@@ -27,7 +27,7 @@ url: "http://pawelniewiadomski.com"
 
 fb_admins:          http://facebook.com/pawelniewie
 locale:				en_US
-avatar:				media/avatar.png
+avatar:				media/avatar.jpg
 
 gems:
 - jekyll-mentions
