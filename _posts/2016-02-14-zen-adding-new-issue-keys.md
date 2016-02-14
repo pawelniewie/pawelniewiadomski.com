@@ -69,3 +69,5 @@ This it the power of using the database to its full potential. Cannot wait to in
 
 And yes, this means that I'm tying Zen to PostgreSQL forever. I can live with that.
 
+But wait, aren't those migrations written with Active Record Migrations? They are, but I'm using an awesome gem [standalone migrations](https://github.com/thuss/standalone-migrations/) to run them without Rails project.
+
