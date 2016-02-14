@@ -13,7 +13,7 @@ Stealing good ideas is a good idea. So loving the fact that every JIRA issue has
 
 I'm using [PostgREST](http://postgrest.com) as a backend for now. That's an easy way to write to the database without writing any code. But at the same time that's a stupid way to write to the database because you cannot add any custom code.
 
-But that's forces me to use the power of the database (or PostgreSQL in this case). Fixing this requires only two triggers:
+Without any other place to write the code that forces me to use the power of the database (or PostgreSQL in this case). Fixing this requires only two triggers:
 
 ```ruby
 class CreateProjectNoRule < ActiveRecord::Migration
