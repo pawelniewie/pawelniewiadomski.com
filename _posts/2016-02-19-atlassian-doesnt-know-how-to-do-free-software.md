@@ -6,7 +6,7 @@ tags:
 - free
 - sourcetree
 ---
-Recently a buddy of mine sent me (a post summing up bad experiences people had with Atlassian's SourceTree)[http://movingfulcrum.com/sourcetree-atlassians-most-epic-engineering-fail/]. What an angry mob :-)
+Recently a buddy of mine sent me [a post summing up bad experiences people had with Atlassian's SourceTree](http://movingfulcrum.com/sourcetree-atlassians-most-epic-engineering-fail/). What an angry mob :-)
 
 It's not the first time the company didn't know what to do with its free offering. Once upon a time I worked on Atlassian Connectors for Eclipse and we were struggling to move the product forward. Finally after years it was killed.
 
