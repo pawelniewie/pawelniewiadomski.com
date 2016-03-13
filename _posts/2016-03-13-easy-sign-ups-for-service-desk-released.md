@@ -24,4 +24,4 @@ I silently expect this plugin to beat OpenID for JIRA at least two-folds. Will s
 
 Now I'm playing again with Zen. Thinking about killing the idea too and using this time for something more productive.
 
-Before I make any decision I plan to do play with PostgREST more - I need to figure out how it handles security. I know it does but I haven't figured it out yet if that's something I could use.
+Before I make any decision I plan to play with PostgREST more - I need to figure out how it handles security. I know it does but I haven't figured it out yet if that's something I could use.
