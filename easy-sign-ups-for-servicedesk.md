@@ -8,7 +8,7 @@ Easy sign ups for JIRA ServiceDesk
 =============
 
 Hi,
-I'm really happy that you are evaluating [Easy sign ups](https://marketplace.atlassian.com/plugins/easy.social.sign-ups.servicedesk/)
+I'm really happy that you are evaluating [Easy sign ups](https://marketplace.atlassian.com/plugins/easy.social.sign-ups.servicedesk/server/overview)
 
 You clicked the documentation link and I wonder what would you want to find here.
 
