@@ -39,3 +39,4 @@ In case you want to change the address you host your JIRA ServiceDesk you will h
 
 There is no way for the user to set the password. If the user decides no to use his external account for JIRA ServiceDesk he will have to reset his password.
 
+{% include atlassian-authentication-common.md %}
