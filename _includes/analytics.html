@@ -7,3 +7,23 @@
   ga('create', 'UA-1934760-4', 'auto');
   ga('send', 'pageview');
 </script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+	});
+});
+</script>
