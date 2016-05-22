@@ -1,6 +1,8 @@
 box: wercker/rvm
 build:
     steps:
+        - rvm-use:
+            version: 2.3.1
         - bundle-install
         - script:
             name: Build site with jekyll
