@@ -1,7 +1,7 @@
 box: wercker/rvm
 build:
     steps:
-        - rvm-use:
+        - inokappa/rvm-install:
             version: 2.3.1
         - bundle-install
         - script:
