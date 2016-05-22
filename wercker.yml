@@ -1,12 +1,10 @@
 box: wercker/rvm
 build:
     steps:
-        - inokappa/rvm-install:
-            version: 2.3.1
         - script:
-            name: rvm reload
+            name: rvm install
             code: |-
-                rvm reload
+                rvm install ruby-2.3.1
         - bundle-install
         - script:
             name: Build site with jekyll
