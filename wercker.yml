@@ -3,6 +3,10 @@ build:
     steps:
         - inokappa/rvm-install:
             version: 2.3.1
+        - script:
+            name: rvm reload
+            code: |-
+                rvm reload
         - bundle-install
         - script:
             name: Build site with jekyll
