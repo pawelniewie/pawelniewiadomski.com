@@ -43,6 +43,7 @@ GEM
       toml (~> 0.1.0)
     jekyll-coffeescript (1.0.1)
       coffee-script (~> 2.2)
+    jekyll-feed (0.5.1)
     jekyll-gist (1.4.0)
       octokit (~> 4.2)
     jekyll-mentions (0.2.1)
@@ -106,6 +107,7 @@ PLATFORMS
 DEPENDENCIES
   html-pipeline (= 1.9.0)
   jekyll
+  jekyll-feed
   jekyll-mentions (>= 0.2.1)
   jekyll-redirect-from
   jekyll-sitemap
@@ -116,4 +118,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.3
+   1.12.5
