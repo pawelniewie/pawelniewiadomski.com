@@ -13,7 +13,7 @@ thumbnail: /media/2016/05/rails-github.png
 
 In this series I'm going to document how to build a simple BitBucket add-on using Rails. I'm going to replicate GitHub's Star feature that I often use and miss on BitBucket.
 
-This add-on will be created using Ruby on Rails! So let's start!
+This add-on will be created using Ruby on Rails! So lets start!
 
 Time to bootstrap the project:
 
@@ -50,7 +50,7 @@ development:
 
 Run `bundle exec rails g atlassian_jwt_authentication:setup` to create required migrations. Then `rails db:migrate`
 
-Now we're ready to start developing the add-on itself. I'll cover first steps in the next part.
+Now we're ready to start developing the add-on itself. I'll cover first steps in the next part.	
 
 [Get the source code](https://github.com/pawelniewie/bitbucket-rails-add-on/tree/master/part-1)
 
