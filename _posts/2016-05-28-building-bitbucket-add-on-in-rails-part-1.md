@@ -25,7 +25,7 @@ You can run it with `rails server` but it does nothing.
 
 Time to add [Atlassian Connect integration for Rails](https://github.com/MeisterLabs/atlassian-jwt-authentication):
 
-```
+```ruby
 gem 'atlassian-jwt-authentication', 
 	git: 'https://github.com/MeisterLabs/atlassian-jwt-authentication.git', 
 	branch: 'master',
@@ -41,7 +41,7 @@ createdb -O bbs bbs-dev
 
 Edit `config/database.yml` and make sure you have development database configured:
 
-```
+```yaml
 development:
   <<: *default
   database: bbs-dev

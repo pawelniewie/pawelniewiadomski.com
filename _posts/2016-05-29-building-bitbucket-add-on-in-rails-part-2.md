@@ -10,9 +10,11 @@ series: bitbucket-rails-add-on
 ---
 In this part of the series I'm going to publish BitBucket Connect descriptor. This is a file that describes [how you want to integrate with BitBucket](https://developer.atlassian.com/bitbucket/concepts/connect_descriptor.html). 
 
+{% include series.html %}
+
 Edit `config/routes.rb` to add a new route that will serve the descriptor.
 
-```
+```ruby
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
@@ -37,7 +39,7 @@ end
 
 In `Gemfile` uncomment `jbuilder`:
 
-```
+```ruby
 gem 'jbuilder', '~> 2.0'
 ```
 
@@ -106,5 +108,3 @@ X-XSS-Protection: 1; mode=block
 Now I'm ready to install it in BitBucket, that's something I'm going to cover in next part.
 
 [Get the source code](https://github.com/pawelniewie/bitbucket-rails-add-on/tree/master/part-2)
-
-{% include series.html %}
