@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to build BitBucket Cloud add-on in Rails, part 1
+title: How to build BitBucket Cloud add-on in Rails &rarr; bootstraping rails
 tags:
 - rails
 - ruby

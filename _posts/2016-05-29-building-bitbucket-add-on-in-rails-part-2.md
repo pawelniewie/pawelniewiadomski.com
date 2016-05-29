@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to build BitBucket Cloud add-on in Rails, part 2
+title: How to build BitBucket Cloud add-on in Rails &rarr; add-on descriptor
 tags:
 - rails
 - ruby
@@ -68,7 +68,7 @@ No it's time to create the descriptor view! You place it in `app/views/bitbucket
 }
 ```
 
-Now you can test it out using [httpie](http://httpie.org):
+<a name="descriptor"></a> Now you can test it out using [httpie](http://httpie.org):
 
 ```
 $ http http://localhost:3000/bitbucket/descriptor
