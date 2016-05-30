@@ -65,6 +65,6 @@ Click `Grant Access` and you will install the plugin!
 
 {% image_tag src="/media/2016/05/installed.png" width="572" %}
 
-Now I have the pipeline set up and I can start working on the real thing! That's in the next port.
+Now that I have the pipeline set up and I can start working on the real thing! That's in the next post.
 
 [Get the source code](https://github.com/pawelniewie/bitbucket-rails-add-on/tree/master/part-3)

@@ -10,7 +10,7 @@ Java Streams are great. But one thing that took me a while was figuring out how 
 
 The simple reduce case is obvious:
 
-```
+```java
 Integer sum = integers.reduce(0, Integer::sum);
 ```
 
@@ -18,7 +18,7 @@ First argument is the accumulator (you can pass any initial state). The second i
 
 Now in case of a map you want to have the map as the first argument and the current element as the second. So you cannot use the simple reduce. There's another method which you can use though:
 
-```
+```java
 <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);
 ```
 
@@ -28,7 +28,7 @@ Lets imagine I want to show all the applications grouped by name. I want to sort
 
 Here's how I can do it with Java Streams:
 
-```
+```java
 final TreeMultimap<String, Application> results = applications
   .stream()
   .reduce(TreeMultimap.create(String.CASE_INSENSITIVE_ORDER,
