@@ -41,3 +41,16 @@ final TreeMultimap<String, Application> results = applications
 This is a case of `TreeMultimap.<String, Application>create()` taking two `Comparators` so you can be explicit about the ordering. You don't need to use it if both classes implement `Comparable` and you want to use a default ordering.
 
 Hope that will help use `reduce` in your code.
+
+But there's another way as well using `Collectors.groupingBy` (thanks Seba for mentioning it):
+
+```java
+final Map<Project, Collection<Application>> results = applications
+  .stream()
+  .collect(Collectors.groupingBy(
+    (application) -> application.getIssue().getProjectObject(),
+    () -> new TreeMap<>(Named.NAME_COMPARATOR),
+    Collectors.toCollection(() -> new TreeSet<>((o1, o2) -> o1.getIssue().getKey().compareTo(o2.getIssue().getKey())))));
+```
+
+Streams FTW!
