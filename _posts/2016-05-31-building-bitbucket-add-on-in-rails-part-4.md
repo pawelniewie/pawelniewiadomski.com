@@ -8,7 +8,7 @@ tags:
 - add-on
 series: bitbucket-rails-add-on
 ---
-Time to handled authentication between the service and BitBucket itself.
+Time to handle authentication between the service and BitBucket itself.
 
 {% include series.html %}
 
