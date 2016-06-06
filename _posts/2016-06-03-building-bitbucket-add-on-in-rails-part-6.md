@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to build BitBucket Cloud add-on in Rails &rarr; calling back
+title: How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from JavaScript
 tags:
 - rails
 - ruby
