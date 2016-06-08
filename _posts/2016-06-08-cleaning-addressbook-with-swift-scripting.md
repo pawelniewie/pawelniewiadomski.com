@@ -26,6 +26,8 @@ If there's no such entry it will update the existing entry and set proper names 
 
 The script is available as [gist](https://gist.github.com/pawelniewie/2148dc9ff0cbdfb189b4cea5a93baa39). Grab it!
 
+{% gist pawelniewie/2148dc9ff0cbdfb189b4cea5a93baa39 %}
+
 If you remove `ab.save()` from the end you can play safely with it as whatever you do will not be persisted.
 
 You can add as many print lines as you want to make sure you know what you are doing.
