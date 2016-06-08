@@ -41,6 +41,8 @@ gems:
 - jekyll-feed
 - jekyll-paginate
 - jekyll-gist
+- jekyll/tagging
+- jekyll-tagging-related_posts
 exclude:
 - Gemfile
 - Gemfile.lock
