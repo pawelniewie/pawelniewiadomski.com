@@ -57,3 +57,5 @@ config.action_dispatch.default_headers.merge!({'X-Frame-Options' => 'ALLOWALL'})
 Now the last thing I need to add I calling back to my service to save starred repos. I will describe that in the last part.
 
 [Get the source code](https://github.com/pawelniewie/bitbucket-rails-add-on/tree/tutorial/part-5)
+
+{% include stars-for-bitbucket-on-marketplace.html %}

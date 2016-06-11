@@ -12,6 +12,8 @@ There's only one major part missing in my app - calling back the service and sto
 
 {% include series.html %}
 
+{% include stars-for-bitbucket-on-marketplace.html %}
+
 I added a new model called `Repo` that will be used to store stars:
 
 ```ruby

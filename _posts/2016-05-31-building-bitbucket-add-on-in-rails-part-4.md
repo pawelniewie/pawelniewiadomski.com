@@ -58,3 +58,5 @@ Completed 204 No Content in 92ms (ActiveRecord: 69.2ms)
 ```
 
 [Get the source code](https://github.com/pawelniewie/bitbucket-rails-add-on/tree/tutorial/part-4)
+
+{% include stars-for-bitbucket-on-marketplace.html %}

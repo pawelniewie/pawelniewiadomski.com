@@ -54,4 +54,6 @@ Now we're ready to start developing the add-on itself. I'll cover first steps in
 
 [Get the source code](https://github.com/pawelniewie/bitbucket-rails-add-on/tree/master/part-1)
 
+{% include stars-for-bitbucket-on-marketplace.html %}
+
 {% include series.html %}

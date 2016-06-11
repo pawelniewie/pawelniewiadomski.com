@@ -12,6 +12,8 @@ The last thing I want to mention is how to make a call to BitBucket REST API fro
 
 {% include series.html %}
 
+{% include stars-for-bitbucket-on-marketplace.html %}
+
 As the user already allowed the plugin to access his account it doesn't make sense to do an additional OAuth dance. So [BitBucket Cloud OAuth](https://developer.atlassian.com/bitbucket/concepts/oauth2.html) supports a special JWT Grant that you can use from the add-on to get the access token. 
 
 Here's how I get the access token:

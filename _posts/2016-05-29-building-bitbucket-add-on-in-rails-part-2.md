@@ -108,3 +108,5 @@ X-XSS-Protection: 1; mode=block
 Now I'm ready to install it in BitBucket, that's something I'm going to cover in next part.
 
 [Get the source code](https://github.com/pawelniewie/bitbucket-rails-add-on/tree/master/part-2)
+
+{% include stars-for-bitbucket-on-marketplace.html %}

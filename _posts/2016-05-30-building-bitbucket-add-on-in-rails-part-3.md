@@ -12,6 +12,8 @@ Time to install our plugin in BitBucket!
 
 {% include series.html %}
 
+{% include stars-for-bitbucket-on-marketplace.html %}
+
 First I need to make sure that BitBucket will be able to access our service running locally. For that I'm running [ngrok](https://ngrok.com) client:
 
 ```
