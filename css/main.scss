@@ -6,6 +6,10 @@
 $grey-color:       #828282;
 
 // Import partials from `sass_dir` (defaults to `_sass`)
-@import
-        "base"
-;
+@import "base";
+
+.sidebar-nav {
+	.icon {
+		color: $grey-color;
+	}
+}
