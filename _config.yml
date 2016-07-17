@@ -1,34 +1,34 @@
 # Dependencies
-markdown:         redcarpet
-highlighter:         pygments
+markdown: redcarpet
+highlighter: pygments
 
 # Permalinks
-permalink:        pretty
+permalink: pretty
 
 # Setup
-title:            Pawel Niewiadomski
-tagline:          ''
-description:      'A few observations on world of software development, life and all the things.'
+title: Pawel Niewiadomski
+tagline: ''
+description: 'A few observations on world of software development, life and all the things.'
 
 author:
-  name:           'Pawel Niewiadomski'
-  url:            https://twitter.com/devonsteroids
-  email:			11110000b@gmail.com
+  name: Pawel Niewiadomski
+  url: https://twitter.com/devonsteroids
+  email: 11110000b@gmail.com
   github:	pawelniewie
   twitter: devonsteroids
   linkedin: pawelniewiadomski
 
-paginate:         5
+paginate: 5
 
 # Custom vars
-version:          2.0.0
+version: 2.0.0
 
 baseurl: ""
-url: "https://pawelniewiadomski.com"
+url: https://pawelniewiadomski.com
 
-fb_admins:          http://facebook.com/pawelniewie
-locale:				en_US
-avatar:				/media/avatar.jpg
+fb_admins: http://facebook.com/pawelniewie
+locale:	en_US
+avatar:	/media/avatar.jpg
 
 feed:
   path: atom.xml
