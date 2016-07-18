@@ -27,7 +27,7 @@ Is there an alternative?
 
 There are some nice gems you can use for that. As I need those in our application I made a research and here's a few that I found interesting.
 
-# Hashids
+## Hashids
 
 The first one that draw my attentions is a project called [hashids](http://hashids.org). It's a set of libraries implementing the same algorithm.
 
@@ -86,3 +86,94 @@ What's really nice about the library is that you can still refer objects by thei
 What I have mixed feelings about is that hashids are not stored, so once you want to change settings (for example make them longer) you will break existing ones. So think carefully how large your database can get.
 
 Other than that I like it, you can also encode multiple ids into one (in case you have complex keys and associations that you want to link to).
+
+## Uniqify
+
+An alternative solution is to add a unique token to each model and store it in the database. There's a simple solution for that as well - [uniqify](https://github.com/Openbay/uniquify).
+
+To add it to your project, update `Gemfile`
+
+```ruby
+gem 'uniquify', github: 'Openbay/uniquify'
+```
+
+Prepare a migration:
+
+````ruby
+add_column :uniqify_examples, :token, :string, null: false
+add_index :uniqify_examples, :token, unique: true
+```
+
+In your model:
+
+```ruby
+class UniqifyExample < ApplicationRecord
+    uniquify :token, :length => 6
+
+    def as_json(options = {})
+        super(options).reject{|k,v| k == "id"}
+    end
+end
+```
+
+What nice about this library is that you can have multiple tokens in the same model (in case you want that):
+
+```ruby
+uniquify :token, :another, :length => 6
+```
+
+You can specify length, and allowed characters. Token gets persisted so you can change to format as you go.
+
+## random\_unique\_id
+
+There's another very similar gem called [random\_unique\_id](https://github.com/pupeno/random_unique_id). I tested it out but didn't like it.
+
+There are two limitations - I doesn't work out of the box with model hierarchy introduced by Rails (all models subclassing `ApplicationRecord` by default). You need to change your model and extend `ActiveRecord::Base`.
+
+Also you can only have one unique field per model which is fine most of the time. But we are going to use multiple tokens for some models.
+
+## How long should be the token?
+
+That Depends on the character set that you will use. Generally all libraries use something like 62 possibilities for each character:
+
+`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`
+
+> 5 chars in base 62 will give you 62^5 unique IDs = 916,132,832 (~1 billion) At 10k IDs per day you will be ok for 91k+ days
+
+> 6 chars in base 62 will give you 62^6 unique IDs = 56,800,235,584 (56+ billion) At 10k IDs per day you will be ok for 5+ million days
+
+> -- from [StackOverflow](http://stackoverflow.com/a/9543797)
+
+## Other approaches?
+
+[Instagram come up with an interesting approach](http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram) that helps them generate unique ids and at the same time shard data. If you're going to be huge like them it's worth considering. I'd love to have problems like that ;-)
+
+## Final thoughts
+
+I think `uniqify` and `hashids` are both two interesting gems you can try to use. I'm not sure yet which one we're going to choose. Will update the article once we have a decision.
+
+I also prepared [a small project](https://github.com/pawelniewie/non-predictable-ids) you can play with. Run:
+
+`bundle install`
+
+`rails s`
+
+`brew install httpie`
+
+Then you can play with it:
+
+`http http://localhost:3000/hashids title=test`
+
+`http http://localhost:3000/hashids`
+
+`http http://localhost:3000/hashids/1`
+
+
+`http http://localhost:3000/rids title=another`
+
+`http http://localhost:3000/rids`
+
+
+`http http://localhost:3000/uniqifies title=hurra`
+
+`http http://localhost:3000/uniqifies`
