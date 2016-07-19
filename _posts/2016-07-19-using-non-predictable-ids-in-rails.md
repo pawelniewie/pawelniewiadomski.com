@@ -7,9 +7,9 @@ tags:
 - security
 - obscurity
 ---
-In many applications you generate ids that are visible to customers or used in links. Rails by default use sequential integers for that which is fine in many cases. Those are simple, fast, short and look good ;-)
+In many applications you generate ids that are visible to customers or used in links. Rails by default uses sequential integers for that which is fine most of the time. Those are integers so they are fast, short and look good ;-)
 
-But they have one disadvantage - if they are visible to outside someone can learn a lot about your business. For example if you're running a shop someone can guess how many orders you process, or number of items you offer or clients you have. Usually you want to avoid that.
+But they have one disadvantage - if they are visible externally someone can learn a lot about your business. For example if you're running a shop someone can guess how many orders you process, or number of items you offer or clients you have. Probably you want to avoid that.
 
 You can fix that easily by switching to UUIDs, this is something Rails makes it [really easy to do](http://theworkaround.com/2015/06/12/using-uuids-in-rails.html).
 
@@ -25,15 +25,15 @@ The only downside is that they are long and ugly, computers don't care but human
 
 Is there an alternative?
 
-There are some nice gems you can use for that. As I need those in our application I made a research and here's a few that I found interesting.
+Yes, there is. As I need non-predictable, human readable ids in our application I made a research and here's a few gems that I found interesting.
 
 ## Hashids
 
-The first one that draw my attentions is a project called [hashids](http://hashids.org). It's a set of libraries implementing the same algorithm.
+The first one that draw my attentions is a project called [hashids](http://hashids.org). It's a set of libraries implementing the same algorithm in many languages.
 
 You can get a lib for Ruby, Python, Java, Swift, or whatever else you like :-)
 
-There's [hashid-rails](https://github.com/akinomaeni/hashid-rails) as well for simple integration.
+There's [hashid-rails](https://github.com/akinomaeni/hashid-rails) as well for simple integration with Rails.
 
 Simply update `Gemfile` with
 
@@ -47,12 +47,12 @@ Create `config/initializers/hashids.rb`
 hashids = Hashids.new()
 
 Hashid::Rails.configure do |config|
-  config.secret = Rails.application.secrets.secret_key_base
-  config.length = 6
+  config.secret = Rails.application.secrets.secret_key_base # some secret id
+  config.length = 6 # length of the generated ids
 end
 ```
 
-And update your model to return hashid instead of the sequential id (in case of JSON representation):
+And update your model to return hashid instead of the sequential id (here's for JSON representation):
 
 ```ruby
 class HashidExample < ApplicationRecord
@@ -83,9 +83,9 @@ So let's see how this works:
 
 What's really nice about the library is that you can still refer objects by their old id. So there's an easy migration path.
 
-What I have mixed feelings about is that hashids are not stored, so once you want to change settings (for example make them longer) you will break existing ones. So think carefully how large your database can get.
+I have mixed feelings about one things though &rarr; hashids are not stored, so once you want to change settings (for example make them longer) you will break existing ones. So think carefully how large your database can get.
 
-Other than that I like it, you can also encode multiple ids into one (in case you have complex keys and associations that you want to link to).
+Other than that I like the gem. You can also encode multiple ids into one (in case you have complex keys and associations that you want to link to).
 
 ## Uniqify
 
@@ -111,7 +111,7 @@ class UniqifyExample < ApplicationRecord
     uniquify :token, :length => 6
 
     def as_json(options = {})
-        super(options).reject{|k,v| k == "id"}
+        super(options).reject{|k,v| k == "id"} # to hide id from JSON representation
     end
 end
 ```
