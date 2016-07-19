@@ -132,6 +132,14 @@ There are two limitations - I doesn't work out of the box with model hierarchy i
 
 Also you can only have one unique field per model which is fine most of the time. But we are going to use multiple tokens for some models.
 
+## Or just use math (update 2016-07-19)
+
+[Kari Ikonen](https://github.com/kikonen) was so kind to mention that there is another way - mathematical one!
+
+You can use multiplicative inverses to create obfuscated integers.
+
+It's really cheap and easy to do, and you can read more about it at [Eric Lippert's blog](https://ericlippert.com/2013/11/14/a-practical-use-of-multiplicative-inverses/).
+
 ## How long should be the token?
 
 That Depends on the character set that you will use. Generally all libraries use something like 62 possibilities for each character:
