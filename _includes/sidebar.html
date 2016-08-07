@@ -54,6 +54,14 @@
         <span class="username">{{ site.author.twitter }}</span>
       </a>
     {% endif %}
+
+    <a class="sidebar-nav-item" href="{{ '/atom.xml' | prepend: site.url }}">
+      <span class="icon  icon--twitter">
+        <i class="fa fa-rss"></i>
+      </span>
+
+      <span class="username">RSS feed</span>
+    </a>
   </nav>
 
   <div class="sidebar-item">
