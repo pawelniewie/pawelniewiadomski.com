@@ -95,3 +95,5 @@ rate suggests you should shorten development intervals, perhaps radically, and m
 > * Be humble about what tests can achieve. Tests don’t improve quality: developers do.
 
 I would only extend on "turn most unit tests into assertions". James writes about it but in case you skip it - having assertions in your application is a good thing! I see developers rarely add assertions but they are really useful. Not only they protect the code, set the context right, but also are a great documentation. People used to say that unit tests are great because they document what your code does. Assertions are even better because they do it exactly in the place you look into first!
+
+You can try out [solid_assert](https://github.com/jorgemanrubia/solid_assert)for that!
