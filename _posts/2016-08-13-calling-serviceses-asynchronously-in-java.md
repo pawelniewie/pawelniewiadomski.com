@@ -1,6 +1,7 @@
 ---
 layout: post
 title: How to call services ansynchonously in Java?
+series: calling-services-ansynchonously
 tags:
 - java
 - threads
@@ -126,6 +127,8 @@ Transfer-Encoding: chunked
 
 http http://localhost:8080  0.20s user 0.05s system 4% cpu 5.269 total
 ```
+
+{% include series.html %}
 
 PS
 [Grab http if you already don't have it](http://httpie.org)
