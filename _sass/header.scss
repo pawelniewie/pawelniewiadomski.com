@@ -19,6 +19,27 @@ header.masthead {
 				}
 			}
 		}
+
+		@media screen and (max-width: 800px) {
+			& {
+				font-size: 20px;
+				line-height: 1.8;
+				
+				ul {
+					padding: 10px;
+
+					li {
+						display: block;
+						padding: 0;
+
+						&:first-child {
+							padding: 0;
+						}
+					}
+				}
+			}
+
+		}
 	}
 }
 
