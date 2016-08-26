@@ -11,3 +11,17 @@
         }
     }
 }
+
+
+.container {
+	ul.posts {
+		list-style-type: none; 
+		padding: 0;
+
+		li {
+			overflow: hidden;
+    		white-space: nowrap;
+    		text-overflow: ellipsis;
+		}
+	}
+}

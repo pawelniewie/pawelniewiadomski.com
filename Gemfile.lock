@@ -1,17 +1,16 @@
 GIT
-  remote: git://github.com/octopress-paginate/octopress-paginate.git
-  revision: ea57b6a9aad672db5d3a0e506087c31d0fc2294c
-  branch: master
-  specs:
-    octopress-paginate (1.1.2)
-      octopress-hooks
-
-GIT
   remote: git://github.com/octopress/hooks.git
   revision: 9ec9efcbe8e2aa4d79d2a35543a29b51f3e6feb2
   specs:
     octopress-hooks (2.6.1)
       jekyll (>= 2.0)
+
+GIT
+  remote: git://github.com/octopress/paginate.git
+  revision: ea57b6a9aad672db5d3a0e506087c31d0fc2294c
+  specs:
+    octopress-paginate (1.1.2)
+      octopress-hooks
 
 GIT
   remote: git://github.com/pawelniewie/jekyll-srcset.git

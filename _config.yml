@@ -19,8 +19,9 @@ author:
   linkedin: pawelniewiadomski
 
 pagination:
-  limit: 10
-  title_suffix: " (:num)"
+  per_page: 50
+  limit: 5
+  title_suffix: " (page :num)"
 
 # Custom vars
 version: 2.0.0
