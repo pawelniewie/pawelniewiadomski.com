@@ -1,13 +1,12 @@
 ---
 layout: post
 permalink: /products
-collection: sidebar
 ---
 # What has Pawel made?
 
 I've worked as a software developer for AirHelp, Atlassian (JIRA team), Intel, Lufthansa and Unizeto. The trends for me is getting from larger to smaller and smaller companies, up to my own ;-)
 
-I always did some pet projects, business ideas on a side.
+I always do some pet projects or business ideas on a side.
 
 Here's a few things I've launched:
 

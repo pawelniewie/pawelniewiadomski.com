@@ -10,7 +10,7 @@
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
          content to avoid any CSS collisions with our real content. -->
     <div class="wrap">
-      <div class="masthead">
+      <header class="masthead">
         <div class="container">
           <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 
@@ -21,8 +21,25 @@
               I want to help you build better software.
             </small>
           </h3>
+
+          <nav class="top">
+            <ul>
+              <li>
+                <a href="{{ '/about' | prepend: site.baseurl | prepend: site.url }}">About</a>
+              </li>
+              <li>
+                <a href="{{ '/products' | prepend: site.baseurl | prepend: site.url }}">Products</a>
+              </li>
+              <li>
+                <a href="http://eepurl.com/b3yac1">Newsletter</a>
+              </li>
+              <li>
+                <a href="{{ '/about' | prepend: site.baseurl | prepend: site.url }}">Consulting</a>
+              </li>
+            </ul>
+          </nav>
         </div>
-      </div>
+      </header>
 
       <div class="container content">
         {{ content }}

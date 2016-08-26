@@ -1,28 +1,22 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+---
+layout: html
+---
+<div class="container content">
+  <small class="back">
+    <strong>← <a href="{{ site.baseurl | prepend: site.url }}">back home</a></strong>
+  </small>
 
-  {% include head.html %}
+  <article class="post">
+    <h1 class="post-title">{{ page.title }}</h1>
+    {% if page.date %}
+      <span class="post-date">{{ page.date | date_to_string }}</span>
+    {% endif %}
+    {{ content }}
+  </article>
 
-  <body>
-    <div class="container content">
-      <small class="back">
-        <strong>← <a href="{{ site.baseurl | prepend: site.url }}">back home</a></strong>
-      </small>
-
-      <article class="post">
-        <h1 class="post-title">{{ page.title }}</h1>
-        {% if page.date %}
-          <span class="post-date">{{ page.date | date_to_string }}</span>
-        {% endif %}
-        {{ content }}
-      </article>
-
-      <footer>
-        <div class="links">
-          <a href="http://eepurl.com/b3yac1">Want to get on my list?</a>
-        </div>
-      </footer>
+  <footer>
+    <div class="links">
+      <a href="http://eepurl.com/b3yac1">Want to get on my list?</a>
     </div>
-  </body>
-</html>
-
+  </footer>
+</div>
