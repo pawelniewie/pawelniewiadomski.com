@@ -1,4 +1,19 @@
 GIT
+  remote: git://github.com/octopress-paginate/octopress-paginate.git
+  revision: ea57b6a9aad672db5d3a0e506087c31d0fc2294c
+  branch: master
+  specs:
+    octopress-paginate (1.1.2)
+      octopress-hooks
+
+GIT
+  remote: git://github.com/octopress/hooks.git
+  revision: 9ec9efcbe8e2aa4d79d2a35543a29b51f3e6feb2
+  specs:
+    octopress-hooks (2.6.1)
+      jekyll (>= 2.0)
+
+GIT
   remote: git://github.com/pawelniewie/jekyll-srcset.git
   revision: cc7ea47bf6d92c31c2b4791583813ed1003453ee
   branch: feature/site-url-in-img-tag
@@ -10,29 +25,31 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.0.0)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
+    activesupport (4.2.7.1)
       i18n (~> 0.7)
+      json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
-    colorator (0.1)
-    concurrent-ruby (1.0.2)
+    colorator (1.1.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
+    forwardable-extended (2.6.0)
     gemoji (2.1.0)
     html-pipeline (2.4.2)
       activesupport (>= 2)
       nokogiri (>= 1.4)
     i18n (0.7.0)
-    jekyll (3.1.6)
-      colorator (~> 0.1)
+    jekyll (3.2.1)
+      colorator (~> 1.0)
       jekyll-sass-converter (~> 1.0)
       jekyll-watch (~> 1.1)
       kramdown (~> 1.3)
       liquid (~> 3.0)
       mercenary (~> 0.3.3)
+      pathutil (~> 0.9)
       rouge (~> 1.7)
       safe_yaml (~> 1.0)
     jekyll-feed (0.6.0)
@@ -41,7 +58,6 @@ GEM
     jekyll-mentions (1.1.3)
       html-pipeline (~> 2.3)
       jekyll (~> 3.0)
-    jekyll-paginate (1.1.0)
     jekyll-redirect-from (0.11.0)
       jekyll (>= 2.0)
     jekyll-sass-converter (1.4.0)
@@ -53,13 +69,15 @@ GEM
     jekyll-tagging-related_posts (0.2.1)
       jekyll (~> 3.0)
       jekyll-tagging (~> 1.0.0)
-    jekyll-watch (1.4.0)
+    jekyll-watch (1.5.0)
       listen (~> 3.0, < 3.1)
-    jemoji (0.6.2)
+    jemoji (0.7.0)
+      activesupport (~> 4.0)
       gemoji (~> 2.0)
       html-pipeline (~> 2.2)
       jekyll (>= 3.0)
-    kramdown (1.11.1)
+    json (1.8.3)
+    kramdown (1.12.0)
     liquid (3.0.6)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -74,6 +92,8 @@ GEM
     nuggets (1.0.0)
     octokit (4.3.0)
       sawyer (~> 0.7.0, >= 0.5.3)
+    pathutil (0.14.0)
+      forwardable-extended (~> 2.6)
     pkg-config (1.1.7)
     posix-spawn (0.3.11)
     pygments.rb (0.6.3)
@@ -83,7 +103,7 @@ GEM
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     redcarpet (3.3.4)
-    rmagick (2.15.4)
+    rmagick (2.16.0)
     rouge (1.11.1)
     ruby-nuggets (1.0.0)
       nuggets (= 1.0.0)
@@ -106,12 +126,13 @@ DEPENDENCIES
   jekyll-feed
   jekyll-gist
   jekyll-mentions (>= 0.2.1)
-  jekyll-paginate
   jekyll-redirect-from
   jekyll-sitemap
   jekyll-srcset!
   jekyll-tagging-related_posts
   jemoji
+  octopress-hooks!
+  octopress-paginate!
   pygments.rb
   redcarpet
 
