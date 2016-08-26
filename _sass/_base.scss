@@ -12,6 +12,25 @@
     }
 }
 
+article.post {
+	margin-bottom: 2rem;
+}
+
+footer {
+	border-top: 1px solid #eee;
+
+	.links {
+		padding-top: 2rem;
+    	padding-bottom: 2rem;
+	}
+
+	.related {
+		border: none;
+		font-size: 14px;
+		opacity: .5;
+	}
+}
+
 .masthead-title {
 	small {
 		display: block;
