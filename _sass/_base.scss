@@ -12,8 +12,15 @@
     }
 }
 
-
 .container {
+	.back {
+		display: block;
+		padding-top: 23px;
+		padding-bottom: 23px;
+		font-size: 14px;
+		opacity: .5;
+	}
+
 	ul.posts {
 		list-style-type: none; 
 		padding: 0;
