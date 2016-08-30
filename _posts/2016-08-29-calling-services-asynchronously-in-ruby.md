@@ -1,7 +1,7 @@
 ---
 layout: post
-title: How to call services ansynchonously in Ruby?
-series: calling-services-ansynchonously
+title: How to call services asynchronously in Ruby?
+series: calling-services-asynchronously
 tags:
 - ruby
 - threads

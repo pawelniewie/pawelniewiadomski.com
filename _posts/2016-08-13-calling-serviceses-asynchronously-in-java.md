@@ -1,7 +1,7 @@
 ---
 layout: post
-title: How to call services ansynchonously in Java?
-series: calling-services-ansynchonously
+title: How to call services asynchronously in Java?
+series: calling-services-asynchronously
 tags:
 - java
 - threads
