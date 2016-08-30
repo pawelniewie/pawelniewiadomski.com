@@ -15,3 +15,5 @@ Using [machine learning](https://github.com/arielf/weight-loss) to manage weight
 I used to write apps for iOS and Mac so this report got my full attention - [Selling on the App Store VS Building Your Own Theme Park](http://devmate.com/mac-dev-survey). Great insight into the market and distrubution channels.
 
 [Airbnb: The Growth Story You Didn't Know](https://growthhackers.com/growth-studies/airbnb) - great story on bootstrapping your company. Seeling breakfast cereal and other craziness. This is pure drive in life!
+
+Ever wanted to have a database per branch in your Rails projects? [Branchinator](https://github.com/pawelniewie/branchinator) helps you with that.
