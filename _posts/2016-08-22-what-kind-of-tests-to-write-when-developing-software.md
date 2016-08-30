@@ -41,7 +41,7 @@ Well, maybe yes, if it was a system operating on real time data that has a monet
 
 In other cases? Probably not.
 
-What if you work in a start up, just got another round of funding and you're still ahead of "stabilising". Would you care about tests?
+What if you work in a start up, just got another round of funding and you're still ahead of "stabilizing". Would you care about tests?
 
 In that case I would say some smoke tests would be enough.
 
