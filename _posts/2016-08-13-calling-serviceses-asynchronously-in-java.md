@@ -7,7 +7,7 @@ tags:
 - threads
 - concurrency
 ---
-Imagine you are building some aggreggation service of some sort. It could be a stock exchange monitor, or a news website that needs to read data from different sources.
+Imagine you are building some aggregation service of some sort. It could be a stock exchange monitor, or a news website that needs to read data from different sources.
 
 I guess there are couple of things you would want it to do. First you want it to deliver results as soon as possible. You also don't want it to get blocked when one of the sources is unusually slow.
 
@@ -17,7 +17,7 @@ Let me start with Java first as I have a working code already. In next posts I'm
 
 Of course our application needs to be a REST service. For the sake of presentation services that are being called will be mocked.
 
-You can [jump right to the code](https://github.com/pawelniewie/calling-services-asynchronously/tree/master/java) or read about the most interesting part (executing and mointoring tasks):
+You can [jump right to the code](https://github.com/pawelniewie/calling-services-asynchronously/tree/master/java) or read about the most interesting part (executing and monitoring tasks):
 
 ```java
 package async.aggregate;
