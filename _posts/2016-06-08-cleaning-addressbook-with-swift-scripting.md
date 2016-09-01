@@ -14,7 +14,7 @@ I decided to give it a stop and clean it a bit. I'm on holidays, what else would
 
 I thought it would be a good idea to: play with Xcode playgrounds, Swift and run this as a script!
 
-So far it was a smooth ride, I read a few books on Swift before (without much coding). I found API for AddressBook and voila, I have a script that cleaned my addess book.
+So far it was a smooth ride, I read a few books on Swift before (without much coding). I found API for AddressBook and voila, I have a script that cleaned my address book.
 
 What it does exactly?
 

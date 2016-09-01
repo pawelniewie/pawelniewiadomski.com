@@ -44,7 +44,7 @@ I think one of the points of Ruby is to be a great language for creating domain 
 connect_to_server use_https ? "https://#{server}" : "http://#{server}"
 ```
 
-In case like this you actually want the trinary operator to be evaluated first, then the method to be exectued. I can imagine also:
+In case like this you actually want the trinary operator to be evaluated first, then the method to be executed. I can imagine also:
 
 ```ruby
 connect_to_server ((use_https || force_https) && can_use_https) ? "https://#{server}" : "http://#{server}"
