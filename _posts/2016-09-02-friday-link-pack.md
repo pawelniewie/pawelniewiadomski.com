@@ -8,7 +8,7 @@ series: monday-link-pack
 ---
 I love Active Record for its flexibility. [Advanced SQL in Rails](http://brewhouse.io/2016/08/04/sql-in-rails.html) shows you how to use views and window functions.
 
-Good software starts with a good design. Here's an interesting example of good design in real life - [australian pedestrian button](http://www.australiangeographic.com.au/blogs/dr-karl-need-to-know/2016/08/the-pedestrian-button/). Used I many times. Now I know how much thought was put into it!
+Good software starts with a good design. Here's an interesting example of good design in real life - [australian pedestrian button](http://www.australiangeographic.com.au/blogs/dr-karl-need-to-know/2016/08/the-pedestrian-button/). I used it many times. Now I know how much thought was put into it!
 
 Using [machine learning](https://github.com/arielf/weight-loss) to manage weight! Awesome real life hack. I wasn't surprised with results thought. I'm an avid [Authority Nutrition](http://authoritynutrition.com) reader and I know how to eat healthy - fats are your friend not the enemy!
 
