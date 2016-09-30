@@ -56,7 +56,7 @@ Grab all of them as [YouTube playlist](https://www.youtube.com/playlist?list=PLx
 
 <iframe width="853" height="480" src="https://www.youtube-nocookie.com/embed/oANurUSaOFs?list=PLe9psSNJBf76DOOKMkDpyo_A5PfZk7JWc" frameborder="0" allowfullscreen></iframe>
 
-*Securing Docker containers. Ben Hall goes through many options available in Docker that will make your infrastructure more secure.*
+*Ben Hall goes through many options available in Docker that will make your infrastructure more secure.*
 
 # 5 for your lazy Sunday
 
@@ -78,4 +78,4 @@ Grab all of them as [YouTube playlist](https://www.youtube.com/playlist?list=PLx
 
 <iframe width="853" height="480" src="https://www.youtube-nocookie.com/embed/wtURpqTgtUs?list=PLe9psSNJBf76DOOKMkDpyo_A5PfZk7JWc" frameborder="0" allowfullscreen></iframe>
 
-*Falcor - GraphQL alternative.*
+*[Falcor](https://github.com/Netflix/falcor) - GraphQL alternative.*
