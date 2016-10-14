@@ -1,6 +1,6 @@
 ---
 layout: post
-permalink: /products
+permalink: /products/
 ---
 # What has Pawel made?
 
