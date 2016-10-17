@@ -30,7 +30,7 @@ Usually when developers know the end goal they can make better decision about th
 
 # Constant fire fighting and running in circle
 
-Perfect example is grooming stories just to ignore them in the next sprint. Or redoing what was done recently because something was implemented not the right way. The worst case is being swamped with bugs, business side emergencies - it makes PO looks like she doesn't understand what's going on and doesn't have control over it.
+Perfect example is grooming stories just to ignore them in the next sprint. Or redoing what was done recently because something was implemented not the right way. The worst case is being swamped with bugs, business side emergencies - it makes PO look like she doesn't understand what's going on and doesn't have control over it.
 
 It makes people frustrated. There's no way to plan anything meaningful.
 
