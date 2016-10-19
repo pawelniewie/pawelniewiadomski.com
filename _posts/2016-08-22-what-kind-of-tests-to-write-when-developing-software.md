@@ -69,6 +69,8 @@ So my favorite are functional tests or BDD as some call them - for a web project
 
 They usually represent a real life scenario supported by business needs. So every product owner understands their value.
 
+{% include newsletter.html %}
+
 Thinking about tests there's also another aspect. It is the cost of maintenance. Every test you have means slower dev loop, more headache when you are revamping the functioning of the system. Changing they way it works not refactoring.
 
 The other thing is what if your tests always pass? Do they bring any value? Initially you would say yes they are as they are making you feel confident. But think twice.
