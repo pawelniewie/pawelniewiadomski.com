@@ -64,6 +64,8 @@ Also don't forget that many engineering tasks result in the team becoming more e
 
 It also sends a signal that improvements (small or big) are welcome. Kaizen.
 
+{% include newsletter.html %}
+
 # Ignoring velocity, putting too much into sprints
 
 Remember it's not a sprint, it's a marathon. Putting too much staff into the sprint and making it actually a sprint might be good once or twice. But if you run every sprint like that you hurt your team. Some slack time is good. Many great ideas appear when someone has time to play with things.
