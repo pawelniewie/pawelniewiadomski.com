@@ -43,4 +43,8 @@ secret_key = "YYY"
 
 PS
 
+If you are interested I deploy the site to S3 using Wercker with [following configuration](https://github.com/pawelniewie/pawelniewiadomski.com/blob/master/wercker.yml). Continuous deployments FTW!
+
+PPS
+
 If you don't want to go through all the hops you an use [GitHub Pages](https://pages.github.com) to host a static site as well.
