@@ -16,7 +16,7 @@ But I found a better way. I didn't know that before but **AWS offers free, autom
 
 ### So what's Terraform anyway and why did I use it?
 
-I'm really keen on the concept of having a configuration driven infrastructure and Terraform is an tool that lets achieve that. It supports AWS, DigitalOcean and others. It's popular and widely used.
+I'm really keen on the concept of having a configuration driven infrastructure and Terraform is a tool that lets achieve that. It supports AWS, DigitalOcean and others. It's popular and widely used.
 
 ### Making it work
 
