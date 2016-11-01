@@ -37,13 +37,13 @@ So why I don't like this pattern? There's couple of reasons.
 
 `@` in instance variables name has a purpose! Why would you want to resign from it only to save some time typing it. Is it really that hard?
 
-`@` denotes that this `thing` comes from within the class. That's a really important information as Ruby is really dynamic and methods can come from different places. It saves you brain ticks 😉
+`@thing` denotes that this `thing` comes from within the class. That's a really important information as Ruby is really dynamic and methods can come from different places. It saves you brain ticks 😉
 
 It's the scope marker - you instantly see what's the scope for the `thing`. 
 
 Also you see it's not a method call so it doesn't have any side effects. The least side effects you have in your code the better as it's easier to understand what influences what.
 
-Usually `private` section is at the end of file and the initialiser is on top. So either you need to open members dialog in RubyMine or read the whole file.
+Usually `private` section is at the end of file while the initializer is on top. So either you need to open members dialog in RubyMine or read the whole file.
 
 I even saw code like that:
 
@@ -51,7 +51,7 @@ I even saw code like that:
 IDS.map do |id|
   @payout = Payout.find_by(backoffice_id: id)
   if payout.present? && is_a_pending_payoneer_payout?
-    # other code around ommited for brewity
+    # other code around omitted for brevity
     create_new_payoneer_payout
   end
 end
@@ -67,7 +67,7 @@ To make it worse the data flow needs to be read from the code instead of being v
 IDS.each do |id|
   payout = Payout.find_by(backoffice_id: id)
   if payout.present? && is_a_pending_payoneer_payout?(payout)
-    # other code around ommited for brewity
+    # other code around omitted for brevity
     create_new_payoneer_payout(payout)
   end
 end
@@ -75,5 +75,5 @@ end
 
 Now with a glimpse you can see that `is_a_pending_payoneer_payout?` and `create_new_payoneer_payout` take and operate on the payout.
 
-What other bad practises have you found in the code you're working with? Let me know at [twitter](https://twitter.com/devonsteroids).
+What other bad practices have you found in the code you're working with? Let me know at [twitter](https://twitter.com/devonsteroids).
 
