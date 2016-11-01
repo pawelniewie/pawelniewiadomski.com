@@ -43,6 +43,8 @@ It's the scope marker - you instantly see what's the scope for the `thing`.
 
 Also you see it's not a method call so it doesn't have any side effects. The least side effects you have in your code the better as it's easier to understand what influences what.
 
+{% include newsletter.html %}
+
 Usually `private` section is at the end of file while the initializer is on top. So either you need to open members dialog in RubyMine or read the whole file.
 
 I even saw code like that:

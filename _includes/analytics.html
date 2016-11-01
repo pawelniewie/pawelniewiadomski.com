@@ -31,3 +31,18 @@ jQuery(function() {
 });
 </script>
 <script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
