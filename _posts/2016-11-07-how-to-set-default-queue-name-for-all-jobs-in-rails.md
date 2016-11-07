@@ -33,6 +33,8 @@ I expected there should be a way in Rails to set the default queue name for all 
 
 The documentation mentioned `config.active_job.default_queue_name` and looking at the code it should be picked up. But as I found out the default is picked up too early before the application can override it.
 
+{% include newsletter.html %}
+
 The most interesting code is in `ActiveJob::QueueName`
 
 ```ruby
@@ -76,3 +78,14 @@ config.active_job.queue_name = Proc.new { 'customer-feedback' }
 ```
 
 Now all jobs can use a proper queue, even without an explicit `queue_as`.
+
+PS 
+
+You can also set a queue and other attributes when executing the queue:
+
+```ruby
+VideoJob.set(
+  queue: :some_queue, 
+  wait: 5.minutes
+).perform_later(Video.last)
+```
