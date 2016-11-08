@@ -81,7 +81,7 @@ Now all jobs can use a proper queue, even without an explicit `queue_as`.
 
 PS 
 
-You can also set a queue and other attributes when executing the queue:
+You can also set a queue name and other attributes when executing the job:
 
 ```ruby
 VideoJob.set(
