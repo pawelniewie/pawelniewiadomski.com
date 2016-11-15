@@ -37,3 +37,5 @@ end
 The trick here was to use `AS itinerary_flights` at the end to match the table name so all other automatically generated conditions would still work.
 
 With this simple trick you can easily use models with views, stored procedures, or dynamically created queries like in my case!
+
+{% include newsletter.html %}
