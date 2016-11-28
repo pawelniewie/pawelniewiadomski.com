@@ -87,3 +87,7 @@ Also it's good to speak with one voice so talking with your team leader and help
 The most important thing is that both sides should understand each other and their constraints, communication is important. We all want to succeed.
 
 Let me know if there's anything you would like to add to the list, or you have some ideas how to solve the problems I mentioned. Reach me on [Twitter](https://twitter.com/devonsteroids)
+
+PS
+
+Here's a good article on [10 ways POs can earn the respect and trust](https://hackernoon.com/10-ways-pms-can-earn-the-respect-and-trust-of-their-team-98353b693b4a#.tllnb5eca)
