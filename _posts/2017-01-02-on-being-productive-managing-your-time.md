@@ -5,7 +5,10 @@ tags:
 - teams
 - management
 - sprints
+thumbnail: /media/2017/stars.jpg
 ---
+{% image_tag src="/media/2017/stars.jpg" width="572" %}
+
 I just read a wonderful article about [managing your own productivity](https://www.theguardian.com/technology/2016/dec/22/why-time-management-is-ruining-our-lives). Or more about a trap you can fall into when trying to be more productive.
 
 It's a really great read so I encourage you to check it out. Yes, it it very long. It will take a lot of your precious time. And it will make you less productive ;-)
