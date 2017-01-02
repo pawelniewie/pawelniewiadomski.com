@@ -42,3 +42,7 @@ Also from a personal note - when was the last time you just sit and did nothing?
 It's the most productive time of my day for me. A few minutes pass and I'm full of great ideas, new connections, reflections, and positive thoughts.
 
 I wish I did it more often though as I'm so busy doing "work".
+
+PS
+
+As [Łukasz](http://wookieb.pl) pointed out I'm referring to [DIFFUSED thinking](https://staciechoice1010.wordpress.com/2014/08/08/focused-vs-diffused-mode/)
