@@ -4,7 +4,7 @@ build:
         - script:
             name: rvm install
             code: |-
-                rvm install ruby-2.3.1
+                rvm install ruby-2.3.3
         - bundle-install
         - script:
             name: Build site with jekyll
