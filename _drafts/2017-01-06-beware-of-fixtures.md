@@ -22,3 +22,20 @@ Finding a fixture that would match your test case scenario can be time consuming
 
 This is actually where fixtures come handy - feature tests and 
 
+- factories
+
+Usually you expect a factory to create valid entries only, with many associations between models it can be really tricky. It's easier sometimes to copy an existing fixture, adapt it and be done with it.
+
+- code bloat
+
+Factories are additional code in your project.
+
+- fixtures can help you debug the problem - if you use them also in development
+
+- creating fixtures helps you prepare data for testing
+
+- fixtures more and more - kind of muddying things - if something changes to the model (i.e. validations, extra column), there’s a lot of fixtures you need to change
+
+- what often strikes me is that some codes who prefer fixtures kind of dismiss factories out of hand, and then they sometimes end up building a factory inside the spec
+ 
+- factories - you can create dynamic values

@@ -1,19 +1,19 @@
 GIT
-  remote: git://github.com/octopress/hooks.git
+  remote: https://github.com/octopress/hooks.git
   revision: ac460266254ed23e7d656767ec346eea63b29788
   specs:
     octopress-hooks (2.6.2)
       jekyll (>= 2.0)
 
 GIT
-  remote: git://github.com/octopress/paginate.git
+  remote: https://github.com/octopress/paginate.git
   revision: b441961dfab85a3200d23d4d6405c29ca3a73ced
   specs:
     octopress-paginate (1.2.0)
       octopress-hooks
 
 GIT
-  remote: git://github.com/pawelniewie/jekyll-srcset.git
+  remote: https://github.com/pawelniewie/jekyll-srcset.git
   revision: cc7ea47bf6d92c31c2b4791583813ed1003453ee
   branch: feature/site-url-in-img-tag
   specs:
@@ -119,20 +119,20 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  html-pipeline
-  jekyll
-  jekyll-feed
-  jekyll-gist
-  jekyll-mentions (>= 0.2.1)
-  jekyll-redirect-from
-  jekyll-sitemap
+  html-pipeline!
+  jekyll!
+  jekyll-feed!
+  jekyll-gist!
+  jekyll-mentions (>= 0.2.1)!
+  jekyll-redirect-from!
+  jekyll-sitemap!
   jekyll-srcset!
-  jekyll-tagging-related_posts
-  jemoji
+  jekyll-tagging-related_posts!
+  jemoji!
   octopress-hooks!
   octopress-paginate!
-  pygments.rb
-  redcarpet
+  pygments.rb!
+  redcarpet!
 
 RUBY VERSION
    ruby 2.3.3p222
