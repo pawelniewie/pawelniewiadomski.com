@@ -158,3 +158,6 @@ You want to try it out? There's [the code available](https://github.com/pawelnie
 
 Have comments? Share them with me [@devonsteroids](https://twitter.com/devonsteroids)
 
+PS
+
+Looking at Ruby's source code `array.c` you can find it uses an optimized `rb_equal_opt` which is defined in `vm_insnhelper.c` which finally uses `obj_eq_func` - it has special handling for integers, floats, numbers and strings, but doesn't have any for symbols. Haven't debugged it yet but that could be the reason.
