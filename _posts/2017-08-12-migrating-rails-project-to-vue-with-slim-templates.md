@@ -10,6 +10,8 @@ thumbnail: /media/2017/vue.png
 ---
 {% image_tag src="/media/2017/vue.png" width="572" %}
 
+**Update 14th of August** just found out that my setup was still broken, so I had to update but now supports template compilation as well!
+
 Sometimes the most consuming part of the tasks is setting it up all together. Then coding is simple once all the puzzles fit it. So in the hope I can help someone having a similar problem I'm publishing a post on gluing Vue, Rails and Slim altogether.
 
 I spent part of Friday setting up Vue in our Rails app. It's yet another framework we want to try out. We already have a homegrown framework, React, and now Vue. We're trying out Vue in the hope of giving us a decent framework that will be easier to integrate with the existing code.
@@ -22,7 +24,7 @@ It was quite easy to start with `rails webpacker::install::vue`.  I started crea
 
 But I got stuck with one and quite important thing for me - how to use existing `slim` templates? We use slim and I'm really found of it. Also having support on Vue side would be great - it would help us move existing stuff (and maybe share some parts?).
 
-Finding slim support was quite easy, there's [slim-lang-loader](https://github.com/MaxPleaner/slim-lang-loader) ♥️
+Finding slim support was quite easy, there's [slim-lang-loader](https://github.com/MaxPleaner/slim-lang-loader) ♥️ *But then I had to [fix it](https://github.com/GetSilverfin/slim-lang-loader) to create templates acceptable by `vue compiler`*
 
 But how to use it in the vue file? I know you can add support for additional languages in [vue-loader](https://vue-loader.vuejs.org/en/) and use syntax like (in `vue` file):
 
@@ -49,25 +51,38 @@ You may need an appropriate loader to handle this file type.
 
 So part of it was working - rendering HTML from Slim! Yay! But I was still missing some loader, but which one?
 
-I tried to come up with search keywords, trying `inline-loader`, `file-loader` and others. None worked. Finally I found the missing one `raw-loader`!!!
+I tried to come up with search keywords, trying `inline-loader`, `file-loader` and others. None worked. Finally I found the missing one `raw-loader` *but then found `vue-template-compiler-loader`*!!!
 
-So with a simple file `config/webpack/loaders/slim.js`
+So with a simple file `config/webpack/loaders/slim.js` *updated*
 
 ```js
 module.exports = {
   test: /.slim$/,
-  loader: ['raw-loader', 'slim-lang-loader'],
+  loader: [{
+    loader: 'vue-template-compiler-loader'
+  }, {
+    // requires custom slim-lang-loader from 
+    // https://github.com/GetSilverfin/slim-lang-loader
+    loader: 'slim-lang-loader',
+    options: {
+      slimOptions: {
+        disable_escape: true
+      }
+    }
+  }]
 }
 ```
 
-I made it work!
+I made it work! *updated*
 
 ```html
 <script>
   import Modal from './modal'
 
+  import template from './filter-modal.slim' 
+
   export default {
-    template: require('./filter-modal.slim'),
+    mixins: [template],
 
     props: ['hideModal', 'saveFilter', 'canSave'],
 
@@ -78,20 +93,6 @@ I made it work!
 </script>
 ```
 
-Well, there was one change needed as well, in `config/webpack/shared.js` I had to use vue version that supports runtime template compilation with:
-
-```js
-resolve: {
-    extensions: settings.extensions,
-    modules: [
-      resolve(settings.source_path),
-      'node_modules'
-    ],
-    // missing piece
-    alias: {
-      vue: 'vue/dist/vue.common.js'
-    }
-},
-```
+Well, there was one change needed as well, in `config/webpack/shared.js` I had to use vue version that supports runtime template compilation - *update no longer needed!!! (Rick voice on) Template precompilation!!! (Rick voice off)*
 
 Such a small change (in terms of the code) but such a big step forward! Now I can't wait to make something bigger with Vue.
