@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 
+title: Migrating rails project to Vue with Slim templates
 tags:
 - rails
 - vue
