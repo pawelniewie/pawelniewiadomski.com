@@ -1,5 +1,5 @@
 ---
-title: How I decided to manage my dotfiles with dotbot
+title: How I decided to manage my dot files with dotbot
 layout: post
 tags:
 - shell
