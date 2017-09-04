@@ -30,9 +30,9 @@ If you're in a situation like me - thinking which one to choose here's my short 
 
 `antigen`, `antibody`, `antigen-hs`, etc. - plugin managers for oh-my-zsh and bash. Known to be slow, generally a bloatware. Overkill in my opinion.
 
-`dotdrop`, `dotfiles` and `dotdrop` - the simplest idea ever - create a repo, put a script and your files into it, then check it out, run the script and you have everything linked into home dir. You manage it via git. 
+`dotdrop`, `dotfiles` and `dotbot` - the simplest idea ever - create a repo, put a script and your files into it, then check it out, run the script and you have everything linked into home dir. You manage it via git. 
 
-From those `dotdrop` was the one that didn't require any dependencies, had the easiest script to run. One drawback is that there's `install.conf.yml` that you need to maintain. But thanks to that you can also add additional commands you want to run, mini provisioning system!
+From those `dotbot` was the one that didn't require any dependencies, had the easiest script to run. One drawback is that there's `install.conf.yml` that you need to maintain. But thanks to that you can also add additional commands you want to run, mini provisioning system!
 
 Also it has [some basic plugins](https://github.com/anishathalye/dotbot/wiki/Plugins) and a tutorial on having [dot files per machine](https://github.com/anishathalye/dotbot/wiki/Tips-and-Tricks) if you ever wanted that. Or [auto update](https://github.com/anishathalye/dotbot/wiki/Tips-and-Tricks#automatically-install-or-update-dotfiles-when-sshing-into-a-remote-machine-or-let-my-dotfiles-follow-me) the dotbot repo when you log in via ssh (haven't tried yet).
 
