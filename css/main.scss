@@ -14,6 +14,8 @@ $grey-color:       #828282;
 	}
 }
 
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+
 body {
-	font-family: 'Roboto Mono', monospace;
+	font-family: 'Inconsolata', 'Roboto Mono', monospace;
 }
