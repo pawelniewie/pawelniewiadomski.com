@@ -36,7 +36,7 @@ avatar:	/media/avatar.jpg
 feed:
   path: atom.xml
 
-gems:
+plugins:
 - jekyll-mentions
 - jemoji
 - jekyll-redirect-from
