@@ -1,7 +1,7 @@
 ruby '2.6.3'
 
 source 'https://rubygems.org' do
-	gem 'jekyll'
+	gem 'jekyll', '~> 3.8.0'
 	gem 'jekyll-mentions', '>=0.2.1'
 	gem 'jemoji'
 	gem 'html-pipeline'
