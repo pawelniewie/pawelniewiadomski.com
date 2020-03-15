@@ -18,6 +18,9 @@ jobs:
       # Checkout the source from the `master` branch.
       - uses: actions/checkout@v2
 
+      - name: Install bundler
+        run: gem install bundler:1.17.3
+
       # Invoke this action against the newly checked out source code.
       - uses: EdricChan03/action-build-deploy-ghpages@v2
         with:
