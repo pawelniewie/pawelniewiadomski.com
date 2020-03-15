@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Bad patterns in Ruby - using private attr_accessor">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2016/10/31/bad-patterns-in-ruby-using-private-attr_accessor/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2016-10-31T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include-set-array/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Bad patterns in Ruby - using private attr_accessor &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2016/10/31/bad-patterns-in-ruby-using-private-attr_accessor/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Bad patterns in Ruby - using private attr_accessor</h1>
+    
+      <span class="post-date">31 Oct 2016</span>
+    
+    <p>I'm working on an existing Rails application and there's one pattern I see repeating often that I hate. It's especially common in service objects.</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">BuildAndroidPushNotification</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">claim_id</span><span class="p">,</span> <span class="n">device_token</span><span class="p">)</span>
+    <span class="vi">@claim</span> <span class="o">=</span> <span class="no">Claim</span><span class="o">.</span><span class="n">find</span> <span class="n">claim_id</span>
+    <span class="vi">@device_token</span> <span class="o">=</span> <span class="n">device_token</span>
+  <span class="k">end</span>
+
+  <span class="c1"># many methods here</span>
+
+  <span class="kp">private</span>
+
+  <span class="kp">attr_accessor</span> <span class="ss">:claim</span><span class="p">,</span> <span class="ss">:device_token</span>
+
+  <span class="c1"># other methods here</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>And inside the class there are methods that use those fields via accessors like:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">def</span> <span class="nf">pending_documents?</span>
+  <span class="no">DocumentRequest</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">claim_id</span><span class="p">:</span> <span class="n">claim</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">pending</span><span class="o">.</span><span class="n">any?</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>So why I don't like this pattern? There's couple of reasons.</p>
+
+<p><code>@</code> in instance variables name has a purpose! Why would you want to resign from it only to save some time typing it. Is it really that hard?</p>
+
+<p><code>@thing</code> denotes that this <code>thing</code> comes from within the class. That's a really important information as Ruby is really dynamic and methods can come from different places. It saves you brain ticks 😉</p>
+
+<p>It's the scope marker - you instantly see what's the scope for the <code>thing</code>. </p>
+
+<p>Also you see it's not a method call so it doesn't have any side effects. The least side effects you have in your code the better as it's easier to understand what influences what.</p>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+</p>
+<div id="mc_embed_signup">
+<form action="//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;id=5759e18390" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <h2>Get my newsletter for software people</h2>
+<div class="mc-field-group">
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" required placeholder="Your e-mail (required)">
+</div>
+<div class="mc-field-group">
+    <input type="text" value="" name="NAME" class="" id="mce-NAME" placeholder="Your first name">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_30d4688f6cd649994b08f1974_5759e18390" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe!" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<p>Usually <code>private</code> section is at the end of file while the initializer is on top. So either you need to open members dialog in RubyMine or read the whole file.</p>
+
+<p>I even saw code like that:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">IDS</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span>
+  <span class="vi">@payout</span> <span class="o">=</span> <span class="no">Payout</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">backoffice_id</span><span class="p">:</span> <span class="nb">id</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">payout</span><span class="o">.</span><span class="n">present?</span> <span class="o">&amp;&amp;</span> <span class="n">is_a_pending_payoneer_payout?</span>
+    <span class="c1"># other code around omitted for brevity</span>
+    <span class="n">create_new_payoneer_payout</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>So basically here you have a function call (<code>map</code>) that modifies instance variable so it can be used in <code>create_new_payoneer_payout</code> <span title="Horror!">😱</span></p>
+
+<p>What's even worse. Not only you have a function that has side effects. It leaves the instance in a <strong>dirty</strong> state (as it doesn't clean the instance variable at the end).</p>
+
+<p>To make it worse the data flow needs to be read from the code instead of being visible in a glimpse, here's a better version:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">IDS</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span>
+  <span class="n">payout</span> <span class="o">=</span> <span class="no">Payout</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">backoffice_id</span><span class="p">:</span> <span class="nb">id</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">payout</span><span class="o">.</span><span class="n">present?</span> <span class="o">&amp;&amp;</span> <span class="n">is_a_pending_payoneer_payout?</span><span class="p">(</span><span class="n">payout</span><span class="p">)</span>
+    <span class="c1"># other code around omitted for brevity</span>
+    <span class="n">create_new_payoneer_payout</span><span class="p">(</span><span class="n">payout</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Now with a glimpse you can see that <code>is_a_pending_payoneer_payout?</code> and <code>create_new_payoneer_payout</code> take and operate on the payout.</p>
+
+<p>What other bad practices have you found in the code you're working with? Let me know at <a href="https://twitter.com/devonsteroids">twitter</a>.</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

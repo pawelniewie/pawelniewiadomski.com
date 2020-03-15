@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How to call services asynchronously in Ruby?">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2016/08/29/calling-services-asynchronously-in-ruby/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2016-08-29T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/08/13/calling-serviceses-asynchronously-in-java/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include-set-array/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How to call services asynchronously in Ruby? &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2016/08/29/calling-services-asynchronously-in-ruby/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How to call services asynchronously in Ruby?</h1>
+    
+      <span class="post-date">29 Aug 2016</span>
+    
+    <p>That's a second part of the series where I present how to call multiple services at once in a different languages. It's not a production ready code but something that can be a fun exercise. Would you want to know why it's not production ready?</p>
+
+<p>In Ruby there's <code>timeout</code> which I initially thought would solve the case. I was impressed first when I noticed it. But later realized what a <a href="http://jvns.ca/blog/2015/11/27/why-rubys-timeout-is-dangerous-and-thread-dot-raise-is-terrifying/">piece of crap it is</a>.</p>
+
+<p>So I'm not going to use it in my example. I initially went to look for a better <code>timeout</code>. I found two different libraries solving some of the problems with the original.</p>
+
+<p>Found <a href="https://github.com/ledestin/frugal_timeout">frugal_timeout</a> and <a href="https://github.com/mikel/terminator">terminator</a> but they are useless for my example.</p>
+
+<p>I then turned to <a href="https://github.com/ruby-concurrency/concurrent-ruby">concurrent-ruby</a> and I felt at home. Because it's mostly Java API rewritten in Ruby ;-)</p>
+
+<p>Check this out:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="nb">require</span> <span class="s1">'concurrent'</span>
+
+<span class="k">class</span> <span class="nc">AggregationService</span>
+  <span class="no">MAX_WAIT_TIME</span> <span class="o">=</span> <span class="mi">5</span>
+
+  <span class="kp">include</span> <span class="no">Dry</span><span class="o">::</span><span class="no">Monads</span><span class="o">::</span><span class="no">Either</span><span class="o">::</span><span class="no">Mixin</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">clients</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+    <span class="vi">@clients</span> <span class="o">=</span> <span class="n">clients</span> <span class="o">||</span> <span class="o">[</span><span class="no">ClientA</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="no">ClientB</span><span class="o">.</span><span class="n">new</span><span class="o">]</span>
+    <span class="vi">@pool</span> <span class="o">=</span> <span class="no">Concurrent</span><span class="o">::</span><span class="no">ThreadPoolExecutor</span><span class="o">.</span><span class="n">new</span><span class="p">({</span>
+      <span class="ss">min_threads</span><span class="p">:</span> <span class="vi">@clients</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+      <span class="ss">max_threads</span><span class="p">:</span> <span class="no">Concurrent</span><span class="o">.</span><span class="n">processor_count</span>
+    <span class="p">})</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">results</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="no">Concurrent</span><span class="o">::</span><span class="no">CountDownLatch</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@clients</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="n">futures</span> <span class="o">=</span> <span class="vi">@clients</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">client</span><span class="o">|</span>
+      <span class="no">Concurrent</span><span class="o">::</span><span class="no">Future</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="ss">executor</span><span class="p">:</span> <span class="vi">@pool</span><span class="p">)</span> <span class="k">do</span>
+        <span class="k">begin</span>
+          <span class="n">client</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
+        <span class="k">ensure</span>
+          <span class="n">lock</span><span class="o">.</span><span class="n">count_down</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="n">lock</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="no">MAX_WAIT_TIME</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">futures</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">fulfilled?</span> <span class="p">}</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:value</span><span class="p">)</span>
+
+    <span class="p">{</span>
+      <span class="ss">results</span><span class="p">:</span> <span class="n">results</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">either</span><span class="o">|</span> <span class="n">either</span><span class="o">.</span><span class="n">success?</span> <span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span> <span class="n">r</span><span class="o">.</span><span class="n">right</span> <span class="p">},</span>
+      <span class="ss">errors</span><span class="p">:</span> <span class="n">results</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">either</span><span class="o">|</span> <span class="n">either</span><span class="o">.</span><span class="n">failure?</span> <span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">l</span><span class="o">|</span> <span class="n">l</span><span class="o">.</span><span class="n">left</span> <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>It looks really similar to <a href="/2016/08/13/calling-serviceses-asynchronously-in-java/">Java version</a>.</p>
+
+<p>The biggest difference is that I'm using a <code>CountDownLatch</code> to make sure code waits for threads to finish (with a timeout). </p>
+
+<p>To spice things up I'm using <code>Either</code> from <code>dry-monads</code>.</p>
+
+<p>Why <code>Either</code>? That's a great way to pass different data when the call succeeds or fails. It has also some fun methods and operators that let you combine different <code>Eithers</code> into another <code>Either</code>. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>HTTP/1.1 200 OK
+Content-Length: 27
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+
+{
+    "errors": [], 
+    "results": [
+        2
+    ]
+}
+
+http http://localhost:4567  0.20s user 0.05s system 4% cpu 5.298 total
+</code></pre></div>
+<p>As you can see it will wait for the result up for 5 seconds and return anything it got during that time.</p>
+
+<p><a href="https://github.com/pawelniewie/calling-services-asynchronously/tree/master/ruby">Check the source code</a> for details, it's a simple sinatra app.</p>
+
+<div class="seriesNote">
+    <p>This article is <strong>Part 2</strong> in a <strong>2-Part</strong> Series.</p>
+    <ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 1 - 
+        
+            <a href="/2016/08/13/calling-serviceses-asynchronously-in-java/">How to call services asynchronously in Java?</a>
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 2 - 
+        
+            This Article
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+</div>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How to build BitBucket Cloud add-on in Rails &rarr; installation">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2016/05/30/building-bitbucket-add-on-in-rails-part-3/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2016-05-30T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/06/building-bitbucket-add-on-in-rails-part-7/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/03/building-bitbucket-add-on-in-rails-part-6/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/01/building-bitbucket-add-on-in-rails-part-5/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How to build BitBucket Cloud add-on in Rails &rarr; installation &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2016/05/30/building-bitbucket-add-on-in-rails-part-3/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How to build BitBucket Cloud add-on in Rails &rarr; installation</h1>
+    
+      <span class="post-date">30 May 2016</span>
+    
+    <p>Time to install our plugin in BitBucket!</p>
+
+<div class="seriesNote">
+    <p>This article is <strong>Part 3</strong> in a <strong>7-Part</strong> Series.</p>
+    <ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 1 - 
+        
+            <a href="/2016/05/28/building-bitbucket-add-on-in-rails-part-1/">How to build BitBucket Cloud add-on in Rails &rarr; bootstraping rails</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 2 - 
+        
+            <a href="/2016/05/29/building-bitbucket-add-on-in-rails-part-2/">How to build BitBucket Cloud add-on in Rails &rarr; add-on descriptor</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 3 - 
+        
+            This Article
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 4 - 
+        
+            <a href="/2016/05/31/building-bitbucket-add-on-in-rails-part-4/">How to build BitBucket Cloud add-on in Rails &rarr; lifecycle</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 5 - 
+        
+            <a href="/2016/06/01/building-bitbucket-add-on-in-rails-part-5/">How to build BitBucket Cloud add-on in Rails &rarr; user interface</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 6 - 
+        
+            <a href="/2016/06/03/building-bitbucket-add-on-in-rails-part-6/">How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from JavaScript</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 7 - 
+        
+            <a href="/2016/06/06/building-bitbucket-add-on-in-rails-part-7/">How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from the server</a>
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+</div>
+
+<div style="border-radius: 3px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <i class="fa fa-star-o" aria-hidden="true" style="margin-right: 5px;"></i>
+    <a href="https://marketplace.atlassian.com/plugins/stars/cloud/overview">Enable this plugin for your BitBucket Cloud account!</a>
+</div>
+
+<p>First I need to make sure that BitBucket will be able to access our service running locally. For that I&#39;m running <a href="https://ngrok.com">ngrok</a> client:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>ngrok http 3000
+</code></pre></div>
+<p>Executing the command will print out the external address service can be accessed, something like <code>https://cf462fda.ngrok.io</code></p>
+
+<p>Go to https://bitbucket.org/account/user/yourusername/addon-management and click <code>Install add-on from URL</code></p>
+
+<p><img src="https://pawelniewiadomski.com/media/2016/05/install-add-on-1318x720.png" width="572" srcset="https://pawelniewiadomski.com/media/2016/05/install-add-on-1318x720.png 1x, https://pawelniewiadomski.com/media/2016/05/install-add-on-1318x720.png 2x, https://pawelniewiadomski.com/media/2016/05/install-add-on-1318x720.png 3x"></p>
+
+<p>It will fail with following error:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>The add-on server returned invalid data. Please contact the add-on vendor for help. Here&#39;s the error we encountered - Invalid JSON: u&#39;example.org&#39; does not match &#39;^https://&#39; at baseUrl
+</code></pre></div>
+<p>When you go <a href="https://pawelniewiadomski.com/2016/05/29/building-bitbucket-add-on-in-rails-part-2/#descriptor">back to the descriptor</a> I created you can see that there&#39;s an invalid value for <code>&quot;baseUrl&quot;: &quot;example.org&quot;</code></p>
+
+<p>Time to fix that. Change <code>config/initializers/application_controller_renderer.rb</code></p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="c1"># Be sure to restart your server when you modify this file.</span>
+
+<span class="no">ApplicationController</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">defaults</span><span class="o">.</span><span class="n">merge!</span><span class="p">(</span>
+  <span class="ss">http_host</span><span class="p">:</span> <span class="s1">&#39;cf462fda.ngrok.io&#39;</span><span class="p">,</span>
+  <span class="ss">https</span><span class="p">:</span> <span class="kp">true</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Edit <code>app/controllers/bitbucket_controller.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">BitbucketController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+
+    <span class="k">def</span> <span class="nf">descriptor</span>
+        <span class="n">render</span> <span class="ss">:descriptor</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span> 
+            <span class="ss">base_url</span><span class="p">:</span> <span class="s1">&#39;https://&#39;</span> <span class="o">+</span> <span class="no">ApplicationController</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">defaults</span><span class="o">[</span><span class="ss">:http_host</span><span class="o">]</span>
+        <span class="p">}</span>
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div>
+<p>I hard coded https as BitBucket doesn&#39;t support anything else. Try to install again and you will see a new screen:</p>
+
+<p><img src="https://pawelniewiadomski.com/media/2016/05/consent-screen-1298x1118.png" width="572" srcset="https://pawelniewiadomski.com/media/2016/05/consent-screen-1298x1118.png 1x, https://pawelniewiadomski.com/media/2016/05/consent-screen-1298x1118.png 2x, https://pawelniewiadomski.com/media/2016/05/consent-screen-1298x1118.png 3x"></p>
+
+<p>Click <code>Grant Access</code> and you will install the plugin!</p>
+
+<p><img src="https://pawelniewiadomski.com/media/2016/05/installed-1690x672.png" width="572" srcset="https://pawelniewiadomski.com/media/2016/05/installed-1690x672.png 1x, https://pawelniewiadomski.com/media/2016/05/installed-1690x672.png 2x, https://pawelniewiadomski.com/media/2016/05/installed-1690x672.png 3x"></p>
+
+<p>Now that I have the pipeline set up and I can start working on the real thing! That&#39;s in the next post.</p>
+
+<p><a href="https://github.com/pawelniewie/bitbucket-rails-add-on/tree/master/part-3">Get the source code</a></p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

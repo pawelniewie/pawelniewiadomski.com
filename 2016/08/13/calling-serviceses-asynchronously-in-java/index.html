@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How to call services asynchronously in Java?">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2016/08/13/calling-serviceses-asynchronously-in-java/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2016-08-13T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/08/29/calling-services-asynchronously-in-ruby/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include-set-array/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/05/27/using-streams-reduce-to-create-maps/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How to call services asynchronously in Java? &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2016/08/13/calling-serviceses-asynchronously-in-java/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How to call services asynchronously in Java?</h1>
+    
+      <span class="post-date">13 Aug 2016</span>
+    
+    <p>Imagine you are building some aggregation service of some sort. It could be a stock exchange monitor, or a news website that needs to read data from different sources.</p>
+
+<p>I guess there are couple of things you would want it to do. First you want it to deliver results as soon as possible. You also don't want it to get blocked when one of the sources is unusually slow.</p>
+
+<p>I think this is a good example to show how you can write code that executing in parallel. So let's write it!</p>
+
+<p>Let me start with Java first as I have a working code already. In next posts I'm going to follow up and show similar solutions in different languages.</p>
+
+<p>Of course our application needs to be a REST service. For the sake of presentation services that are being called will be mocked.</p>
+
+<p>You can <a href="https://github.com/pawelniewie/calling-services-asynchronously/tree/master/java">jump right to the code</a> or read about the most interesting part (executing and monitoring tasks):</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="kn">package</span> <span class="nn">async.aggregate</span><span class="o">;</span>
+
+<span class="c1">// imports ommitted</span>
+
+<span class="nd">@Slf4j</span>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AggregationService</span> <span class="kd">implements</span> <span class="n">DisposableBean</span><span class="o">,</span> <span class="n">InitializingBean</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">MAX_WAIT_TIME</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">ServiceClient</span><span class="o">&gt;</span> <span class="n">serviceClients</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">ThreadPoolExecutor</span> <span class="n">executor</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="n">ResultsDto</span> <span class="nf">getResults</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Future</span><span class="o">&lt;</span><span class="n">Either</span><span class="o">&lt;</span><span class="n">Exception</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="na">invokeAll</span><span class="o">(</span><span class="n">serviceClients</span>
+                <span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">serviceClient</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                            <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Either</span><span class="o">&lt;</span><span class="n">Exception</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">callable</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span>
+                                    <span class="n">serviceClient</span><span class="o">.</span><span class="na">getData</span><span class="o">();</span>
+                            <span class="k">return</span> <span class="n">callable</span><span class="o">;</span>
+                        <span class="o">}</span>
+                <span class="o">).</span><span class="na">collect</span><span class="o">(</span><span class="n">toList</span><span class="o">()),</span> <span class="n">MAX_WAIT_TIME</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+
+        <span class="c1">// get only all the successful results</span>
+        <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">connectionsForEachProvider</span> <span class="o">=</span> <span class="n">Eithers</span><span class="o">.</span><span class="na">filterRight</span><span class="o">(</span><span class="n">results</span>
+                <span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">Future</span><span class="o">::</span><span class="n">isDone</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">future</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="n">Either</span><span class="o">.&lt;</span><span class="n">Exception</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span><span class="n">left</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">})</span>
+                <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">toList</span><span class="o">()));</span>
+
+        <span class="k">return</span> <span class="n">ResultsDto</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">results</span><span class="o">(</span><span class="n">copyOf</span><span class="o">(</span><span class="n">concat</span><span class="o">(</span><span class="n">connectionsForEachProvider</span><span class="o">)))</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">executor</span><span class="o">.</span><span class="na">shutdownNow</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterPropertiesSet</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">executor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ThreadPoolExecutor</span><span class="o">(</span><span class="n">serviceClients</span><span class="o">.</span><span class="na">size</span><span class="o">(),</span> <span class="n">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span>
+                <span class="mi">60L</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span>
+                <span class="k">new</span> <span class="n">SynchronousQueue</span><span class="o">&lt;&gt;());</span>
+        <span class="c1">// it will immediately create threads</span>
+        <span class="n">executor</span><span class="o">.</span><span class="na">prestartAllCoreThreads</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>It may look unfamiliar at first but when you look closely I bet you can undestand it.</p>
+
+<p><code>serviceClients</code> is a list of clients we are going to use to retrieve data from remote services.</p>
+
+<p><code>ThreadPoolExecutor</code> is a great class that allows to spin up and manage pool of threads that can do work for us.</p>
+
+<p><code>afterPropertiesSet</code> is a method called when the bean gets created in Spring. So we can spin up our <code>ThreadPoolExecutor</code>. It will create n threads based on size of <code>serviceClients</code>. It will keep them running even if there's no job for them.</p>
+
+<p><code>destroy</code> will be called when the bean gets removed from Spring.</p>
+
+<p><code>executor.invokeAll</code> executes all requests and waits for results up to <code>MAX_TIME</code> seconds. So if the service is slow we will skip it.</p>
+
+<p><code>List&lt;Future&lt;Either&lt;Exception, String&gt;&gt;&gt;</code> is a list of future results that will be either Exception (in case the call fails) or String (the real result).</p>
+
+<p>Now lets test it with:</p>
+
+<p><code>time http http://localhost:8080</code></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Date: Thu, 11 Aug 2016 18:27:26 GMT
+Server: Apache-Coyote/1.1
+Transfer-Encoding: chunked
+
+{
+    "results": [
+        "4000", 
+        "1000"
+    ]
+}
+
+http http://localhost:8080  0.20s user 0.05s system 4% cpu 5.281 total
+</code></pre></div>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Date: Thu, 11 Aug 2016 19:05:24 GMT
+Server: Apache-Coyote/1.1
+Transfer-Encoding: chunked
+
+{
+    "results": []
+}
+
+http http://localhost:8080  0.20s user 0.05s system 4% cpu 5.269 total
+</code></pre></div>
+<div class="seriesNote">
+    <p>This article is <strong>Part 1</strong> in a <strong>2-Part</strong> Series.</p>
+    <ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 1 - 
+        
+            This Article
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 2 - 
+        
+            <a href="/2016/08/29/calling-services-asynchronously-in-ruby/">How to call services asynchronously in Ruby?</a>
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+</div>
+
+<p>PS
+<a href="http://httpie.org">Grab http if you already don't have it</a></p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

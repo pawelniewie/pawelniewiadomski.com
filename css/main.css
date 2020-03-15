@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css?family=Inconsolata");
+header.masthead {
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  padding-bottom: 0; }
+  header.masthead nav.top {
+    margin-top: 0.5rem; }
+    header.masthead nav.top ul {
+      display: block;
+      padding: 0; }
+      header.masthead nav.top ul li {
+        display: inline;
+        padding: 5px 20px 5px 20px; }
+        header.masthead nav.top ul li:first-child {
+          padding: 5px 20px 5px 0; }
+    @media screen and (max-width: 800px) {
+      header.masthead nav.top {
+        font-size: 20px;
+        line-height: 1.8; }
+        header.masthead nav.top ul {
+          padding: 10px; }
+          header.masthead nav.top ul li {
+            display: block;
+            padding: 0; }
+            header.masthead nav.top ul li:first-child {
+              padding: 0; } }
+
+.masthead-title small {
+  display: block; }
+
+footer {
+  border-top: 1px solid #eee; }
+  footer .links {
+    padding-top: 2rem;
+    padding-bottom: 2rem; }
+  footer .related {
+    border: none;
+    font-size: 14px;
+    opacity: .5; }
+
+#mc_embed_signup {
+  border: solid 1px #d1d1d1;
+  background: #f9f9f9;
+  clear: left;
+  font: 14px Helvetica,Arial,sans-serif;
+  margin-bottom: 25px; }
+  #mc_embed_signup .powered-by {
+    opacity: .7; }
+
+.icon > svg {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle; }
+  .icon > svg path {
+    fill: #828282; }
+
+article.post {
+  margin-bottom: 2rem; }
+
+.container .back {
+  display: block;
+  padding-top: 23px;
+  padding-bottom: 23px;
+  font-size: 14px;
+  opacity: .5; }
+.container ul.posts {
+  list-style-type: none;
+  padding: 0; }
+  .container ul.posts li {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
+
+.sidebar-nav .icon {
+  color: #828282; }
+
+body {
+  font-family: 'Inconsolata', 'Roboto Mono', monospace; }

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Queued Mac integration for buffer released">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2013/05/03/queued-mac-integration-for-buffer-released/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2013-05-03T20:48:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/05/15/queued-for-buffer-mac-system-bar/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/05/26/new-queued-version-is-available-for-download/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/04/01/reordering-your-posts-with-buffer-sdk/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Queued Mac integration for buffer released &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2013/05/03/queued-mac-integration-for-buffer-released/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Queued Mac integration for buffer released</h1>
+    
+      <span class="post-date">03 May 2013</span>
+    
+    <img src="/tumblr_files/tumblr_mm8pszztr61s8nah1o2_r1_1280.png"/><br/><img src="/tumblr_files/tumblr_mm8pszztr61s8nah1o1_1280.png"/><br/><br/><p>It&#8217;s alive! Just released my MVP for <a href="http://queuedupdates.appspot.com/binaries/Queued-0.4.zip">Queued</a> a nice addition to <a href="http://bufferapp.com" target="_blank">Buffer</a>.</p>
+<p>Your Buffer queue is now a click away. No need to check your email to see notifications from Buffer, or use your browser to see what you have already scheduled.</p>
+<p>Currently you can see all your pending updates for each profile (updated every 30 seconds).</p>
+<p>What&#8217;s great - you can also reorder scheduled updates by dragging them. You can reorder items only within one profile (something that will be solved in the future).</p>
+<p>If you schedule enough posts to keep Buffer happy the icon will turn green!</p>
+<p>Coming soon - ability to remove scheduled posts, refresh button, anything more you need?</p>
+<p>Right click on the icon to send me feedback (or check for updates).</p>
+<p><a href="http://queuedupdates.appspot.com/binaries/Queued-0.4.zip">Download it now!</a> (requires Mac OS X 10.8 Mountain Lion)</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

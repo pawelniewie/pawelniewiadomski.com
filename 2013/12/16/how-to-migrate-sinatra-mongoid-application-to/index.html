@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How to migrate Sinatra + Mongoid application to Rails + Mongoid?">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2013/12/16/how-to-migrate-sinatra-mongoid-application-to/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2013-12-16T19:43:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/09/09/do-you-really-need-asset-management-in-your/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/20/pitfalls-of-ruby-memoization-pattern/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How to migrate Sinatra + Mongoid application to Rails + Mongoid? &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2013/12/16/how-to-migrate-sinatra-mongoid-application-to/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How to migrate Sinatra + Mongoid application to Rails + Mongoid?</h1>
+    
+      <span class="post-date">16 Dec 2013</span>
+    
+    <p>This weekend was all about converting one of the site we use in <a href="http://teamstatus.tv">TeamStatus.TV</a></p>
+<p>Working with Sinatra is great, but when your app is growing and you want to make more complex stuff like database migrations, proper asset management (having your own version of resources instead of using public CDNs) and so on it&#8217;s a sign it&#8217;s time to move to Rails.</p>
+<p>The only reason I didn&#8217;t go with Rails in the first place was that picking up Sinatra is much easier. You can be productive in minutes. In Rails you&#8217;re productive too, but first you need to comprehend the whole structure of the app.</p>
+<p>I&#8217;m not going to write a step by step instruction because each app is different but I&#8217;m going to document my process from what I remember. It wasn&#8217;t that hard to be honest.</p>
+<p>The most helpful resource for me was <a href="http://requiremind.com/riding-rails-4-along-with-mongoid-and-ruby-2-dot-0/">this guide</a>.</p>
+<p>I started copying existing git repo, creating a branch and nuking everything inside, then I copied a skeleton created by rails command line.</p>
+<p>I&#8217;ve divided my app to controllers, each of them needs to be placed in a separate file, they will not be served until you update routes.rb, if you&#8217;re creating simple CRUD app use resource routes.</p>
+<p>If you have any helpers in your controllers put them into helpers directory, you can put them each in a separate file, they will be auto-loaded.</p>
+<p>Separate your models into separate files, name files as you name the model (user.rb for User, and so on). They will also be automatically loaded.</p>
+<p>I have embedded documents that I wish to put into a namespace it was so easy - Board has Widgets, you achieve it with:</p>
+<p><code>embeds_many :widgets, class_name: "Board::Widget"</code></p>
+<p>Each controller has a separate directory for views, you name files like index.html.haml, there&#8217;s a separate format for building JSON representation too (index.json.jbuilder)!</p>
+<p>If you take Mongoid URL from ENV you need to do a trick in mongoid.yml</p>
+<p><code>uri: &lt;%= ENV['MONGOHQ_URL'] ? ENV['MONGOHQ_URL'] : "mongodb://localhost/teamstatus" %&gt;</code></p>
+<p>So when you run rake without proper ENV it will still work.</p>
+<p>Many things are pre-packages for Rails like there&#8217;s bootstrap-rails, query-rails, and others. It&#8217;s easy to use them.</p>
+<p>If you&#8217;re hosting on heroku without CDN add rails_12factor to Gemfile - it will allow Rails to server static files (which it doesn&#8217;t by default).</p>
+<p>If you want to user bower to install some dependencies and you don&#8217;t want to put those files to your repo you&#8217;ll have to hack Rakefile to download them:</p>
+<p><code>task "bower_install" do </code></p>
+<p><code>  `(cd /tmp &amp;&amp; curl -O <a href="https://heroku-buildpack-nodejs.s3.amazonaws.com/nodejs-0.10.20.tgz">https://heroku-buildpack-nodejs.s3.amazonaws.com/nodejs-0.10.20.tgz</a>)` </code></p>
+<p><code>  `(rm -rf bin/nodejs &amp;&amp; mkdir -p bin/nodejs &amp;&amp; cd bin/nodejs &amp;&amp; tar xzf /tmp/nodejs-0.10.20.tgz)` </code></p>
+<p><code>  `bin/nodejs/bin/node bin/nodejs/bin/npm install` </code></p>
+<p><code>end </code></p>
+<p><code>task "assets:precompile" =&gt; "bower_install"</code></p>
+<p>You need to create package.json too:</p>
+<p><code>{ </code></p>
+<p><code>  "name": "teamstatus-console", </code></p>
+<p><code>  "version": "0.1.0", </code></p>
+<p><code>  "description": "TeamStatus.TV board display engine", </code></p>
+<p><code>  "dependencies": { "bower": "*" }, </code></p>
+<p><code>  "scripts": { </code></p>
+<p><code>    "postinstall": "./node_modules/bower/bin/bower install" </code></p>
+<p><code>  } </code></p>
+<p><code>}</code></p>
+<p>And in bower.json put your dependencies.</p>
+
+<p>It took me two full days to migrate it, unfortunately after deploying it to heroku I discovered there&#8217;s a known bug in Moped/Mongoid that breaks the connection. Waiting for a fix and this app will be ready to launch!</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

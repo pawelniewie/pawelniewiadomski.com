@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from JavaScript">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2016/06/03/building-bitbucket-add-on-in-rails-part-6/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2016-06-03T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/06/building-bitbucket-add-on-in-rails-part-7/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/01/building-bitbucket-add-on-in-rails-part-5/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/05/31/building-bitbucket-add-on-in-rails-part-4/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from JavaScript &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2016/06/03/building-bitbucket-add-on-in-rails-part-6/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from JavaScript</h1>
+    
+      <span class="post-date">03 Jun 2016</span>
+    
+    <p>There&#39;s only one major part missing in my app - calling back the service and storing results.</p>
+
+<div class="seriesNote">
+    <p>This article is <strong>Part 6</strong> in a <strong>7-Part</strong> Series.</p>
+    <ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 1 - 
+        
+            <a href="/2016/05/28/building-bitbucket-add-on-in-rails-part-1/">How to build BitBucket Cloud add-on in Rails &rarr; bootstraping rails</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 2 - 
+        
+            <a href="/2016/05/29/building-bitbucket-add-on-in-rails-part-2/">How to build BitBucket Cloud add-on in Rails &rarr; add-on descriptor</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 3 - 
+        
+            <a href="/2016/05/30/building-bitbucket-add-on-in-rails-part-3/">How to build BitBucket Cloud add-on in Rails &rarr; installation</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 4 - 
+        
+            <a href="/2016/05/31/building-bitbucket-add-on-in-rails-part-4/">How to build BitBucket Cloud add-on in Rails &rarr; lifecycle</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 5 - 
+        
+            <a href="/2016/06/01/building-bitbucket-add-on-in-rails-part-5/">How to build BitBucket Cloud add-on in Rails &rarr; user interface</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 6 - 
+        
+            This Article
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 7 - 
+        
+            <a href="/2016/06/06/building-bitbucket-add-on-in-rails-part-7/">How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from the server</a>
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+</div>
+
+<div style="border-radius: 3px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <i class="fa fa-star-o" aria-hidden="true" style="margin-right: 5px;"></i>
+    <a href="https://marketplace.atlassian.com/plugins/stars/cloud/overview">Enable this plugin for your BitBucket Cloud account!</a>
+</div>
+
+<p>I added a new model called <code>Repo</code> that will be used to store stars:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">CreateRepos</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span><span class="o">[</span><span class="mi">5</span><span class="o">.</span><span class="mi">0</span><span class="o">]</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">create_table</span> <span class="ss">:repos</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:jwt_token_id</span><span class="p">,</span> <span class="ss">null</span><span class="p">:</span> <span class="kp">false</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:repo_name</span><span class="p">,</span> <span class="ss">null</span><span class="p">:</span> <span class="kp">false</span>
+    <span class="k">end</span>
+
+    <span class="n">add_foreign_key</span> <span class="ss">:repos</span><span class="p">,</span> <span class="ss">:jwt_tokens</span><span class="p">,</span> <span class="ss">on_delete</span><span class="p">:</span> <span class="ss">:cascade</span>
+
+    <span class="n">add_index</span><span class="p">(</span><span class="ss">:repos</span><span class="p">,</span> <span class="o">[</span><span class="ss">:repo_name</span><span class="p">,</span> <span class="ss">:jwt_token_id</span><span class="o">]</span><span class="p">,</span> <span class="ss">unique</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Next I had to figure out how can I authenticate requests made from the iframe back to the server. Here&#39;s the full source code of the controller:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">StarsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+
+  <span class="kp">include</span> <span class="no">AtlassianJwtAuthentication</span>
+
+  <span class="c1"># will respond with head(:unauthorized) if verification fails</span>
+  <span class="n">before_action</span> <span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:show</span><span class="p">,</span> <span class="ss">:save</span><span class="o">]</span> <span class="k">do</span> <span class="o">|</span><span class="n">controller</span><span class="o">|</span>
+    <span class="n">controller</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:verify_jwt</span><span class="p">,</span> <span class="no">PluginKeyService</span><span class="o">::</span><span class="no">PLUGIN_KEY</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">show</span>
+    <span class="n">repo_name</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:repoPath</span><span class="p">)</span><span class="o">[</span><span class="s1">&#39;repoPath&#39;</span><span class="o">]</span>
+    <span class="n">locals</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="ss">session_token</span><span class="p">:</span> <span class="n">create_session_token</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">merge!</span> <span class="p">(</span><span class="no">Repo</span><span class="o">.</span><span class="n">number_of_stars</span><span class="p">(</span><span class="n">current_jwt_auth</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">))</span>
+    <span class="n">render</span> <span class="ss">:show</span><span class="p">,</span> <span class="ss">locals</span><span class="p">:</span> <span class="n">locals</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">save</span>
+    <span class="n">repo_name</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:repoPath</span><span class="p">)</span><span class="o">[</span><span class="s1">&#39;repoPath&#39;</span><span class="o">]</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="no">Repo</span><span class="o">.</span><span class="n">find_or_initialize_by</span><span class="p">(</span><span class="ss">repo_name</span><span class="p">:</span> <span class="n">repo_name</span><span class="p">,</span> <span class="ss">jwt_token_id</span><span class="p">:</span> <span class="n">current_jwt_auth</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">repo</span><span class="o">.</span><span class="n">new_record?</span>
+      <span class="n">repo</span><span class="o">.</span><span class="n">save</span>
+      <span class="n">starred</span> <span class="o">=</span> <span class="kp">true</span>
+    <span class="k">else</span>
+      <span class="n">repo</span><span class="o">.</span><span class="n">destroy</span>
+      <span class="n">starred</span> <span class="o">=</span> <span class="kp">false</span>
+    <span class="k">end</span>
+    <span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="p">{</span>
+        <span class="ss">repo_name</span><span class="p">:</span> <span class="n">repo_name</span><span class="p">,</span>
+        <span class="ss">count</span><span class="p">:</span> <span class="no">Repo</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">repo_name</span><span class="p">:</span> <span class="n">repo_name</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+        <span class="ss">starred</span><span class="p">:</span> <span class="n">starred</span>
+    <span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">create_session_token</span>
+    <span class="n">issued_at</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">utc</span><span class="o">.</span><span class="n">to_i</span>
+
+    <span class="no">JWT</span><span class="o">.</span><span class="n">encode</span><span class="p">({</span>
+                   <span class="ss">iss</span><span class="p">:</span> <span class="n">current_jwt_auth</span><span class="o">.</span><span class="n">client_key</span><span class="p">,</span>
+                   <span class="ss">iat</span><span class="p">:</span> <span class="n">issued_at</span><span class="p">,</span>
+                   <span class="ss">aud</span><span class="p">:</span> <span class="o">[</span><span class="n">current_jwt_auth</span><span class="o">.</span><span class="n">addon_key</span><span class="o">]</span>
+               <span class="p">},</span> <span class="n">current_jwt_auth</span><span class="o">.</span><span class="n">shared_secret</span><span class="p">)</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div>
+<p>I use <code>before_action</code> to make sure I can authenticate requests - so I know which tenant/user is trying to access the page.</p>
+
+<p>In <code>show</code> you can see I&#39;m passing a session token back to the view, this will be used to authenticate requests made from the view back to the server. </p>
+
+<p><code>create_session_token</code> creates a similar token BitBucket would create to call the service. This one doesn&#39;t use expiration so please refer to <code>atlassian-jwt-authentication</code> for a safer way that includes expiration.</p>
+
+<p>I intentionally decided to leave out the expiration - the feature is trivial and this is just a sample application.</p>
+
+<p>In the view I take the token and use it when sending requests back:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="s1">&#39;#{stars_url}&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s1">&#39;Authorization&#39;</span><span class="o">:</span> <span class="s1">&#39;JWT &#39;</span> <span class="o">+</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">token</span>
+    <span class="p">},</span>
+</code></pre></div>
+<p>I hope you enjoyed the tutorial. If you have any questions feel free to <a href="https://twitter.com/devonsteroids">contact me</a>.</p>
+
+<p><a href="https://github.com/pawelniewie/bitbucket-rails-add-on/tree/tutorial/part-6">Get the source code</a></p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

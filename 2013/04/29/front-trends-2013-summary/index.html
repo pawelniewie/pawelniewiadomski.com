@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Front Trends 2013 summary">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2013/04/29/front-trends-2013-summary/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2013-04-29T11:05:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/04/27/front-trends-2013-report-links/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/11/11/euruko-videos-worth-watching/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/10/03/fullstackfest-videos-worth-watching/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Front Trends 2013 summary &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2013/04/29/front-trends-2013-summary/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Front Trends 2013 summary</h1>
+    
+      <span class="post-date">29 Apr 2013</span>
+    
+    <p>It&#8217;s was my first time attending Front Trends. The idea was to get a glimpse of the new and upcoming stuff that will happen on the web. Or just go outside the building and see what cool kids are doing these days as I&#8217;m pretty much chained to the chair with this wonderful stack we use at Atlassian.</p>
+<p>I learned couple of things that were fascinating.</p>
+<p><strong>JavaScript is dead, long live VM</strong></p>
+<p>Seems JavaScript VM (JSVM) is now a destination platform for many new languages. As it happened with Java VM people got bored either with the flaky syntax or the execution performance and led new efforts to fix both.</p>
+<p>So there&#8217;s stuff like <a href="http://coffeescript.org/" target="_blank">CoffeScript</a> that gives you a nice object oriented language on top of JavaScript VM.</p>
+<p>There&#8217;s also <a href="http://asmjs.org/" target="_blank">asm.js</a> (more <a href="http://ejohn.org/blog/asmjs-javascript-compile-target/" target="_blank">here</a>) that lets you treat JSVM as a processor/computer architecture so you can compile your rusty C or C++ into JavaScript and execute it blazingly fast (almost running on bare metal). </p>
+<p>There&#8217;s also other things like <a href="https://github.com/olov/defs" target="_blank">defs.js</a> that give you ability to transform JavaScript to JavaScript! WTF you would ask? Yeah, me too. But it has a reason - defs.js lets you compile and use EcmaScript 6 goodies on old browsers that don&#8217;t support ES6 (all of them).</p>
+<p>And talking about goodies - there are <a href="http://kishorelive.com/2011/11/22/ecmascript-6-looks-promising/" target="_blank">let and const</a> that will finally make resolving variable scope sane. Throw vars out of the window!</p>
+<p><strong>Source maps</strong></p>
+<p>You&#8217;d ask that it&#8217;s great to have a new language on JSVM but what about maintainability, that must suck, right? Right!</p>
+<p>But with <a href="https://wiki.mozilla.org/DevTools/Features/SourceMap" target="_blank">source maps</a> it sucks less! You can add special additional files that will help you translate your generated JavaScript code into sth readable - say you minimized your JavaScript but now want to debug it? Use source maps.</p>
+<p>Or did you actually wrote your app in CoffeScript? Use source maps.</p>
+<p><strong>Localization in 21st century</strong></p>
+<p>How many things go into writing a great, localized product? Does having key-value maps is sufficient to create outstanding apps that speak the user&#8217;s language?</p>
+<p>Yes or no? Well, we thought key-value pairs are enough. At least for a long time.</p>
+<p>But guess what, it&#8217;s the least you can do. If you really want to talk to you users and really show that you care and you don&#8217;t want to introduce user experience failures it&#8217;s time to use something better.</p>
+<p>And here comes the project from Mozilla, they are building Firefox OS which wants to talk to the users (and is built on JavaScript+HTML) so they had to figure out how to create sth better than gettext and friends.</p>
+<p><a href="https://github.com/l20n" target="_blank">With L20n</a> you can separate your application with translation, you can add arbitrary logic to each language (you know that they have their own sometimes incompatible rules?) then render it server side or client side, and what&#8217;s better (when done on the client) you can even make it respond to events (like device orientation change).</p>
+<p>This is a responsive design!</p>
+<p><strong>CSS is bigger than you think</strong></p>
+<p>So this is an overall impression. Knowing only bits of CSS I was amazed by the power it comes with it - doing animations? Use CSS for that! <span>Use Transitions? CSS! Really complex UI layout? CSS!</span></p>
+<p>Want to have responsive pages? There&#8217;s plenty of new stuff that will help you (flex boxes, etc.).</p>
+<p>There are even proposal for adding stuff from print design - like following paragraphs that let&#8217;s you totally separate text from the presentation and make your text flow from arbitrary DOM elements to another (Pages anyone?).</p>
+<p><strong>Building software from blocks</strong></p>
+<p>There&#8217;s plenty of tools that let&#8217;s use create your MVP from scratch in less time than you can use to think up the idea. I loved the idea of moving this even step further, with <a href="http://hood.ie" target="_blank">hood.ie</a> you get not only nice back-end server with common stuff already implemented (like sign-ups, password reminders, etc.) but you even get JavaScript API to use it!</p>
+<p>That&#8217;s really making it easy to stack up blocks to create an app. Love the concept!</p>
+<p><strong>The venue</strong></p>
+<p>It was refreshing and inspiring to see all those people presenting their ideas. The organization of the venue was really good.</p>
+<p>There were some quirks - like that rest area was a glass house so it&#8217;s really hot. And the presentation area being really chilly.</p>
+<p>The food was great (at least from observation),  the party was even better (with free beer), and the beer was free also during the days.</p>
+<p>There were some really poor presentations (4 in total), especially day one was a bit of a disappointment. But on the other hand there were some great like the one done by <a href="https://twitter.com/jaffathecake" target="_blank">Jake Archibald</a>.</p>
+<p>In summary I&#8217;ve got what I came for which is food for thought. I think I should more often come and visit conferences like that.</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

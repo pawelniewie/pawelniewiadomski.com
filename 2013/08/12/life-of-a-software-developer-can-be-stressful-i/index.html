@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Life of a software developer can be stressful">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2013/08/12/life-of-a-software-developer-can-be-stressful-i/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2013-08-12T04:01:40+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/03/25/mac-software-that-i-most-often-use/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Life of a software developer can be stressful &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2013/08/12/life-of-a-software-developer-can-be-stressful-i/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Life of a software developer can be stressful</h1>
+    
+      <span class="post-date">12 Aug 2013</span>
+    
+    <img src="/tumblr_files/tumblr_mr1remND371s8nah1o1_1280.jpg"/><br/><p>Life of a software developer can be stressful. I realized recently that one of my policies - update often, commit often - became a pain not a benefit.</p>
+<p>I repeated &#8220;update often, commit often&#8221; like a mantra and encouraged everyone to follow and now I realized I don&#8217;t want to follow it myself. The realities have changed.</p>
+<p>Basically I always believed that you need to do constant integration, that&#8217;s it&#8217;s better to break things from time to time (like builds) but benefit from the fact that every is on the same page. That the code is rolling, everyone can see what&#8217;s going on. That also helped avoid any merge hell, reduce bus hit factor (when someone is hit by a bus but haven&#8217;t committed their stuff), etc.</p>
+<p>It worked well in teams I usually worked in - a few people working on the same small or large code base. Usually in the same office.</p>
+<p>But times have changed, currently in JIRA we have a team of a few dozen people (not going to count them now, but 50 rings a bell), many of them work on the same code tree.</p>
+<p>And we have a lot of builds which they become a &#8220;sea of red&#8221; if you break anything. And that&#8217;s really stressful. Especially if you&#8217;re think your done because first builds went green but a day later or two you get new failures.</p>
+<p>Add to that that someone&#8217;s always working on the code (the team is geographically spread) so you cannot leave it red and fix it next day, you also cannot commit whenever you want - you need to have time to fix if anything breaks<span>.</span></p>
+<p><span>So I&#8217;m changing my mind. Recently we did a project on a branch and it was so much better. Not only I didn&#8217;t have to worry about breaking others stuff, but also we were able to control what we merged from the master. It was much cleaner.</span></p>
+<p>Now when we&#8217;re done and moved back to master to finish and do final fixes I noticed how bad it is (ok, maybe not bad, but not as good as it was).</p>
+<p>So, I&#8217;m changing my mantra to &#8220;update often, commit/push daily&#8221; that seems to work fine.</p>
+<p>And when we figure out how to easily handle branches for all builds maybe I&#8217;ll start using feature branches for everything?</p>
+<p><a href="http://www.flickr.com/photos/riebart/4466482623/">Photo courtesty of Riebart, on Flickr</a></p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

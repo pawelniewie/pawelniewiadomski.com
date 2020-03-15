@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Avoiding technical debt should be treated as an insurance">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2013/05/24/update-your-dependencies/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2013-05-24T10:57:54+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/05/28/being-a-blogger-is-not-fun/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/05/27/get-to-know-people-you-build-your-software-for/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/05/22/being-a-developer-is-all-about-being-a-good-writer/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Avoiding technical debt should be treated as an insurance &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2013/05/24/update-your-dependencies/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Avoiding technical debt should be treated as an insurance</h1>
+    
+      <span class="post-date">24 May 2013</span>
+    
+    <p>I was going to start this post with a story how JIRA used Velocity 1.4 long after it was dead twice. Not to mention other old and crappy libraries. But having old Velocity was special PITA because I was creating a plugin writing most of HTML in Velocity with a lot of components that should be easily shared between templates and I wasn&#8217;t able to use macros and share them across all of the templates.</p>
+<p>We could investigate and spent time choosing different template engine but because we had already so much templates in Velocity which we were going to update/refresh only we haven&#8217;t made that decision. Probably from a time perspective knowing that the project grew in scope and time we could have made that switch at the start. But who would know?</p>
+<p>But that actually made me think about broader issue that actually led to this state - being too much focused on providing the value, and being obsessed on direct return on investment. One of sins that many companies do.</p>
+<p>We tell ourselves &#8220;if it works doesn&#8217;t touch it&#8221;, &#8220;good is enough&#8221;, and so on. We tell ourselves we always need to bring a value to the customer (XP) and so on. And a bunch of other &#8220;mottos&#8221; that lead to the state in which you don&#8217;t do anything that doesn&#8217;t provide direct ROI.</p>
+<p>That&#8217;s a trap. Because if you miss the train it can be too late. Like for example a commercial product using an obsolete, unmaintained by anyone framework, or a library that has a lot of bugs that are solved already in a newer versions but because it would be too much time and risk to upgrade you&#8217;re stuck.</p>
+<p>It&#8217;s easier to upgrade stuff bit by bit at the start of each iteration (just to let it soke in). This way if you&#8217;re going to run a big and long running project you actually avoid risk of staying in the back.</p>
+<p>By spending now you actually save yourself from big spending in the future. Treat it as insurance.</p>
+<p>Go update your dependencies. Don&#8217;t let them rot.</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

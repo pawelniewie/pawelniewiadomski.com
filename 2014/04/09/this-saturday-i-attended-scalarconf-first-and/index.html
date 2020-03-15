@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Scalaconf 2014 retrospective, or why I no longer like Scala">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2014/04/09/this-saturday-i-attended-scalarconf-first-and/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2014-04-09T11:57:23+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Scalaconf 2014 retrospective, or why I no longer like Scala &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2014/04/09/this-saturday-i-attended-scalarconf-first-and/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Scalaconf 2014 retrospective, or why I no longer like Scala</h1>
+    
+      <span class="post-date">09 Apr 2014</span>
+    
+    <img src="/tumblr_files/tumblr_n3rijnujmX1s8nah1o1_1280.jpg"/><br/><img src="/tumblr_files/tumblr_n3rijnujmX1s8nah1o2_1280.jpg"/><br/><br/><p>This Saturday I attended ScalarConf first (and free) Scala conference organized in Poland. I was going there as a Scala enthusiast just to leave it with an impression that we should stop using Scala :-)</p>
+<p>Our team&#8217;s history with Scala started like a year ago when we started using it mostly for tests in one of the plugins. We are forced to use Java 1.6 but we can use Scala, so it was obvious choice. Scala&#8217;s less verbose syntax is what we were after.</p>
+<p>We enjoyed using it that way so we decided to try it on a bigger scale and wrote a whole JIRA plugin in it (not the first one in JIRA, but first done by us).</p>
+<p>We also enjoyed it, but we started to notice sharp edges. Especially when browsing and reading code from an older plugin that uses Scala - there were some parts really hard to understand (but we ignored this bad sign back there).</p>
+<p>We wrote the plugin using Scala with no additions like Scalaz, etc. We tried to keep the code clean. Although we did introduce a bunch of implicits (there&#8217;s a lot of places when we map values from one type to another and they were handy for that).</p>
+<p>So we happily signed up for ScalaConf thinking it would be a great learning experience and it was. We learned not to use Scala ;-)</p>
+<p>There are couple of issues that struck us.</p>
+<p>Like the code presented as &#8220;readable&#8221; or &#8220;cool&#8221; was actually not. There was a great example of a code validating a form written in Scala, then refactored in Scalaz, and once again for the third time refactored a bit.</p>
+<p>Version 1 was ugly, version 2 was uglier, version 3 was a mess.</p>
+<p>Scalaz looks like a maintenance nightmare. I would not want to read code written using it. Never.</p>
+<p>Another great example was about creating domain specific language in Scala on an example of <a class="external-link" href="http://spray.io/" rel="nofollow">Spray.io</a>, it was ok at first glimpse, but why was there a strange operator combining those GET/POST rules together? Because we can ;-)</p>
+<p>Compare it to the great Sinatra or Ruby On Rails DSL and you see that once again Scala folks made it wrong :-/</p>
+<p>There was also a great presentation about good and bad sides of Scala with awesome list of resources at the end. Here are couple of them. Watch them if you&#8217;re thinking whether or not to use Scala.</p>
+<p><iframe frameborder="0" height="315" src="//www.youtube.com/embed/uiJycy6dFSQ" width="560"></iframe></p>
+<p>They persuaded me not to pursue Scala further (and I was not the only one leaving with this impression). Referring to the video above - if people creating the language say how bad it is it&#8217;s a sign that the whole product is mismanaged and you should avoid it.</p>
+<p>Look the code should be simple and understandable. The more complex it gets the harder it is to maintain it and we all maintain code - ever got a bug report from someone or CI?</p>
+<p>Scala (meaning everything it offers) is a great way to boost your ego proving how clever you are <a class="external-link" href="http://michid.wordpress.com/2011/06/12/union-types/" rel="nofollow">using all those funky abstracts</a>. But I don&#8217;t give a shit - I want to see a readable code.</p>
+<p>Haven&#8217;t we learned from PERL? Well, maybe it&#8217;s a history for some but I still remember reading PERL code and it was shit. I don&#8217;t want to go back there.</p>
+<p>So, I&#8217;ll pass.</p>
+<p>I don&#8217;t think any software company that cares about long term future should actually invest their time in Scala. I believe there are better alternatives that make code actually look decent and terse.</p>
+<p>Because if you&#8217;re going to introduce Scala no one&#8217;s stopping &#8220;clever folks&#8221; doing crazy shit in it.</p>
+<p>We&#8217;re going probably to investigate a few alternatives in the future (like Kotlin), also in some time we&#8217;ll be allowed to upgrade our product to modern Java 8 and maybe this will be good enough?</p>
+<p>But for sure I&#8217;m not longer going to advocate for Scala&#8230;</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

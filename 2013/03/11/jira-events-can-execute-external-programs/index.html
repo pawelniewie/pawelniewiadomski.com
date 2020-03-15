@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="JIRA events can execute external programs!">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2013/03/11/jira-events-can-execute-external-programs/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2013-03-11T21:28:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/06/04/openid-authentication-for-jira/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/03/14/velocity-is-broken-in-jira-6-0/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/03/12/making-jira-more-social-using-linkedin-log-in/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      JIRA events can execute external programs! &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2013/03/11/jira-events-can-execute-external-programs/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">JIRA events can execute external programs!</h1>
+    
+      <span class="post-date">11 Mar 2013</span>
+    
+    <p>Ever wondered how to automate JIRA server and execute external scripts when events are triggered? Here&#8217;s a simple example that will tell you exactly that!</p>
+
+<p>You didn&#8217;t know that&#8217;s possible? Sure it is with a help from <a href="https://marketplace.atlassian.com/plugins/com.pawelniewiadomski.devs.jira.automat">Automat</a> my little JIRA plugin.</p>
+
+<p>Each JIRA issue operation triggers an internal event - when for example issue is updated, or created, or commented, there&#8217;s plenty of different event types. So why not to use that to enhancing your workflow?</p>
+
+<p>I thought about that. The only thing you need to do is installing <a href="https://marketplace.atlassian.com/plugins/com.pawelniewiadomski.devs.jira.automat">Automat</a> then your can put scripts in your JIRA-home directory and they will be automatically run. No other configuration is required!</p>
+
+<p>Put the script file for each event into JIRA-home/automat subdirectory, each file needs to follow a naming convention (which is described in the plugin itself) for example issueCreated.sh will be executed whenever issue is updated. When you open a configuration page for the plugin you&#8217;ll see a list of handled events with respective filenames.</p>
+
+<p>But what if you don&#8217;t want to use Shell to create your hooks in? There&#8217;s simple. Here&#8217;s an example of a simple hook that I created in python! Here&#8217;s issueUpdated.sh (arguments are following: JIRA site URL, issue key, user that performed the action):</p>
+
+<blockquote>
+<p>#!/usr/bin/env python</p>
+<p>import sys</p>
+
+<p>try:</p>
+<p><span class="Apple-tab-span"> </span>import requests</p>
+<p>except:</p>
+<p><span class="Apple-tab-span"> </span>print &#8220;run sudo easy_install requests&#8221;</p>
+<p><span class="Apple-tab-span"> </span>exit(1)</p>
+
+<p>USERNAME = &#8220;admin&#8221;</p>
+<p>PASSWORD = &#8220;admin&#8221;</p>
+
+<p>def issueUpdatedAt(jiraUrl, issueKey):</p>
+<p><span class="Apple-tab-span"> </span># ignore other projects than TST</p>
+<p><span class="Apple-tab-span"> </span>if (not issueKey.startswith(&#8220;TST&#8221;)):</p>
+<p><span class="Apple-tab-span"> </span>return</p>
+<p><span class="Apple-tab-span"> </span>issueUrl = &#8220;%s/rest/api/2/issue/%s&#8221; % (jiraUrl, issueKey)</p>
+<p><span class="Apple-tab-span"> </span>issue = requests.get(issueUrl, auth=(USERNAME, PASSWORD)).json()</p>
+<p><span class="Apple-tab-span"> </span># dump issue details to a file</p>
+<p><span class="Apple-tab-span"> </span>with open(&#8220;/tmp/test.txt&#8221;, &#8220;w+&#8221;) as f:</p>
+<p><span class="Apple-tab-span"> </span>f.write(str(issue))</p>
+
+<p>if __name__ == &#8220;__main__&#8221;:</p>
+<p><span class="Apple-tab-span"> </span>issueUpdatedAt(sys.argv[1], sys.argv[2]) </p>
+</blockquote>
+<p>It will connect back to the JIRA to obtain more details about the issue being updated. You can easily use any JIRA REST endpoint so scripts can be really smart!</p>
+
+<p>Hope you found this tutorial useful. If you have any questions fell free to contact me.</p>
+
+<p><a href="https://marketplace.atlassian.com/plugins/com.pawelniewiadomski.devs.jira.automat">Go to the plugin page.</a></p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

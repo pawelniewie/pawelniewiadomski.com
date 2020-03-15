@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How too much modularization can lead to poor performance">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2015/03/25/how-modularization-can-lead-to-poor-performance/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2015-03-25T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include-set-array/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How too much modularization can lead to poor performance &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2015/03/25/how-modularization-can-lead-to-poor-performance/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How too much modularization can lead to poor performance</h1>
+    
+      <span class="post-date">25 Mar 2015</span>
+    
+    <p>I&#39;ve been leading a team working on improving JIRA&#39;s performance for large customers for a few months. I think it&#39;s time to share some observations about the changes we did and the overall way to make applications fast. This will be the first post in the series in which I&#39;m going to describe the landscape.</p>
+
+<p>JIRA has more than 12 years so you can imagine many different patterns in the code, it is like geological eras laying one on top of the other. You can see all those different ways of crafting the code that were once popular. So you have simple POJOs, Smart Objects, Managers, Services, Web Actions, different templating systems (like Soy, Velocity and Webwork JSPs), you have two way to handle dependency injection PICO for internals and Spring for external plugins.</p>
+
+<p>Now when I mention plugins you need to understand JIRA is a product with multiple extension points, you can do a lof of things with plugins, actually half of the product is built as plugins for it - so you understand how powerful the plugin system is.</p>
+
+<p>There&#39;s a huge number of different APIs you can use to write a plugin. Because JIRA is so popular and so many customers built their own plugins there had to be an API for everything ;-)</p>
+
+<p>And this is the first problem, that I&#39;m going to discuss.</p>
+
+<p>You see generic APIs lead to generic performance. Modularization and de-coupling is great. But imagine an action that uses multiple components to do its job, each of them queries the database, and say they are actually getting objects that are tight closely (for example all backed by tables that are sharing foreign keys).</p>
+
+<p>Now the code is nice and simple to follow, but the performance is not - each of those separate components queries could be potentially replaced with one single JOIN. But that would be totally against this modularization, also this would probably be a specialized method that the plugin needs, so it should not land in the official API.</p>
+
+<p>To make things worse because those APIs can be used by plugins and those plugins also do complex stuff there needs to be a lot of caching done because otherwise performance would be tragic.</p>
+
+<p>So you see what I&#39;m getting at - at some point modularization can be really expensive in terms of overall performance.</p>
+
+<p>That&#39;s why I like the idea Ruby on Rails uses that encourages writing real queries against the database and discurages you from creating any managers/services. You see in Java you usually write a service that runs validation, inserting and updating, then you have some stupid POJOs that are written/read from the db. You need to have this mid layer.</p>
+
+<p>In Rails contrary the idea is that the object that gets stored in the database handles all the validation, publishes events which can be consumed by other parts and so on, that gives you a way to escape away from this middle layer, so you can write queries whenever you like, real SQL (ok, not real, but via nice abstraction model).</p>
+
+<p>I believe this approach scales better, now we&#39;ll have to figure our how to combine it with the existing code and persistence framework.</p>
+
+<p>But in case you&#39;re starting from scratch you can try using <a href="http://javalite.io">ActiveJDBC</a> or <a href="https://github.com/activejpa/activejpa">ActiveJPA</a> which offer the same model for Java! </p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

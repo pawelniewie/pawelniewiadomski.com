@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Making Ruby's Array.include? faster for symbols">
+
+<meta property="og:type" content="article">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/2017/turbo.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2017-03-21T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include-set-array/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2015/03/25/how-modularization-can-lead-to-poor-performance/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Making Ruby's Array.include? faster for symbols &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Making Ruby's Array.include? faster for symbols</h1>
+    
+      <span class="post-date">21 Mar 2017</span>
+    
+    <p>It&#39;s all started doing some refactoring - I was playing with <code>Array</code> and <code>Set</code> and something tempted me do to a simple benchmark that revealed strange results. That&#39;s a second part in which I describe how I fixed it. It&#39;s about building Ruby&#39;s code, debugging it with <code>lldb</code> and making it faster!</p>
+
+<div class="seriesNote">
+    <p>This article is <strong>Part 2</strong> in a <strong>2-Part</strong> Series.</p>
+    <ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 1 - 
+        
+            <a href="/2017/03/20/performance-comparison-on-include-set-array/">Performance comparison of Ruby's Array and Set with strings and symbols</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 2 - 
+        
+            This Article
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+</div>
+
+<p>It all started with <a href="https://github.com/pawelniewie/benchmark-set-array-contains/blob/master/ruby/array_include.rb">benchmarking <code>Array.include?()</code></a></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Comparison:
+               array:  1332567.6 i/s
+       array symbols:  1154135.9 i/s - 1.15x  slower
+</code></pre></div>
+<p>Isn&#39;t that strange that array of symbols is slower than one with strings? Symbols are supposed to be fast!</p>
+
+<p>I downloaded <a href="https://github.com/ruby/ruby">Ruby&#39;s source code</a> and started looking at it.</p>
+
+<p>I initially though the problem was with Symbol&#39;s <code>==</code> so I went looking for it. I found one for String easily in <code>string.c</code></p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="n">rb_define_method</span><span class="p">(</span><span class="n">rb_cString</span><span class="p">,</span> <span class="s">&quot;==&quot;</span><span class="p">,</span> <span class="n">rb_str_equal</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+<p>But <code>symbol.c</code> didn&#39;t follow the pattern, because it&#39;s also in <code>string.c</code> :-)</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="n">rb_define_method</span><span class="p">(</span><span class="n">rb_cSymbol</span><span class="p">,</span> <span class="s">&quot;==&quot;</span><span class="p">,</span> <span class="n">sym_equal</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+<p>It was also simple to figure out where array is, that&#39;s a no brainer:</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="n">rb_define_method</span><span class="p">(</span><span class="n">rb_cArray</span><span class="p">,</span> <span class="s">&quot;include?&quot;</span><span class="p">,</span> <span class="n">rb_ary_includes</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="n">VALUE</span>
+<span class="nf">rb_ary_includes</span><span class="p">(</span><span class="n">VALUE</span> <span class="n">ary</span><span class="p">,</span> <span class="n">VALUE</span> <span class="n">item</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">long</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">VALUE</span> <span class="n">e</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">RARRAY_LEN</span><span class="p">(</span><span class="n">ary</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">RARRAY_AREF</span><span class="p">(</span><span class="n">ary</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">rb_equal_opt</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">item</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="nl">Qundef</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rb_equal</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">item</span><span class="p">))</span> <span class="k">return</span> <span class="n">Qtrue</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nl">Qtrue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Qtrue</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">Qfalse</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>That lead me to <code>vm_insnhelper.c</code> <code>rb_equal_opt</code> then to <code>opt_eq_func</code> and something didn&#39;t feel right:</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="k">static</span>
+<span class="cp">#ifndef NO_BIG_INLINE</span>
+<span class="kr">inline</span>
+<span class="cp">#endif</span>
+<span class="n">VALUE</span>
+<span class="n">opt_eq_func</span><span class="p">(</span><span class="n">VALUE</span> <span class="n">recv</span><span class="p">,</span> <span class="n">VALUE</span> <span class="n">obj</span><span class="p">,</span> <span class="n">CALL_INFO</span> <span class="n">ci</span><span class="p">,</span> <span class="n">CALL_CACHE</span> <span class="n">cc</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="cp">#define BUILTIN_CLASS_P(x, k) (!SPECIAL_CONST_P(x) &amp;&amp; RBASIC_CLASS(x) == k)</span>
+<span class="cp">#define EQ_UNREDEFINED_P(t) BASIC_OP_UNREDEFINED_P(BOP_EQ, t##_REDEFINED_OP_FLAG)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">FIXNUM_2_P</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">EQ_UNREDEFINED_P</span><span class="p">(</span><span class="n">INTEGER</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">recv</span> <span class="o">==</span> <span class="n">obj</span><span class="p">)</span> <span class="o">?</span> <span class="nl">Qtrue</span> <span class="p">:</span> <span class="n">Qfalse</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">FLONUM_2_P</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">EQ_UNREDEFINED_P</span><span class="p">(</span><span class="n">FLOAT</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">recv</span> <span class="o">==</span> <span class="n">obj</span><span class="p">)</span> <span class="o">?</span> <span class="nl">Qtrue</span> <span class="p">:</span> <span class="n">Qfalse</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">BUILTIN_CLASS_P</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="n">rb_cFloat</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">EQ_UNREDEFINED_P</span><span class="p">(</span><span class="n">FLOAT</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">rb_float_equal</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">BUILTIN_CLASS_P</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="n">rb_cString</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">EQ_UNREDEFINED_P</span><span class="p">(</span><span class="n">STRING</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">rb_str_equal</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+<span class="cp">#undef EQ_UNREDEFINED_P</span>
+<span class="cp">#undef BUILTIN_CLASS_P</span>
+
+    <span class="p">{</span>
+    <span class="n">vm_search_method</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">recv</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">check_cfunc</span><span class="p">(</span><span class="n">cc</span><span class="o">-&gt;</span><span class="n">me</span><span class="p">,</span> <span class="n">rb_obj_equal</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">recv</span> <span class="o">==</span> <span class="n">obj</span> <span class="o">?</span> <span class="nl">Qtrue</span> <span class="p">:</span> <span class="n">Qfalse</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">Qundef</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><em>I was going to say I hate formatting like that but turned out it&#39;s because they mix spaces and tabs in the file. Duh!</em></p>
+
+<p>Looking at the code it&#39;s pretty obvious - there&#39;s no special case for symbols. I guess I kinda expected that Ruby has optimized methods written in C. Now it was time to figure out how to write the missing one.</p>
+
+<p>First, some set up. Run once to prepare make files (Mac OS X):</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>autoconf
+CFLAGS=&quot;-O0 -ggdb&quot; ./configure --prefix=/usr/local/opt/rbenv/versions/2.5.0 --with-openssl-dir=&quot;$(brew --prefix openssl)&quot;  --disable-install-doc
+</code></pre></div>
+<p>Then to compile:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>make &amp;&amp; make check &amp;&amp; make install
+</code></pre></div>
+<p><a href="https://silverhammermba.github.io/emberb/c/">The Ruby C API guide</a> is a good starting point to understand what&#39;s going on in the code. The most important lesson - you cannot <code>printf</code> a <code>VALUE</code>, there&#39;s <code>rb_p</code> for that.</p>
+
+<p>Also you can debug stuff with <code>lldb</code> and it&#39;s pretty simple (it&#39;s not <code>gdb</code> though so <a href="https://lldb.llvm.org/tutorial.html">commands are different</a>):</p>
+
+<p><code>lldb /usr/local/opt/rbenv/versions/2.5.0/bin/ruby -- -e &quot;if [:test, :another].include?(:test); puts &#39;A&#39;; end&quot;</code></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>breakpoint set --file vm_insnhelper.c --line 1279
+process launch
+process continue
+</code></pre></div>
+<p>Of course I was so eager that I tried many things before I finally searched for The Ruby C API guide :-D I thought it&#39;s easy to understand and I could deal with C code as it was back in the days.</p>
+
+<p>When I read the guide it was obvious that I had to use <code>SYMBOL_P</code>:</p>
+<div class="highlight"><pre><code class="language-diff" data-lang="diff"><span></span><span class="gh">diff --git a/vm_insnhelper.c b/vm_insnhelper.c</span>
+<span class="gh">index a991e59..476b5e2 100644</span>
+<span class="gd">--- a/vm_insnhelper.c</span>
+<span class="gi">+++ b/vm_insnhelper.c</span>
+<span class="gu">@@ -1296,6 +1296,11 @@ opt_eq_func(VALUE recv, VALUE obj, CALL_INFO ci, CALL_CACHE cc)</span>
+        return rb_str_equal(recv, obj);
+    }
+     }
+<span class="gi">+    else if (SYMBOL_P(recv) &amp;&amp; SYMBOL_P(obj)) {</span>
+<span class="gi">+        if (EQ_UNREDEFINED_P(SYMBOL)) {</span>
+<span class="gi">+       return rb_obj_equal(recv, obj);</span>
+<span class="gi">+   }</span>
+<span class="gi">+    }</span>
+ #undef EQ_UNREDEFINED_P
+ #undef BUILTIN_CLASS_P
+</code></pre></div>
+<p>Now running the benchmark again:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Comparison:
+       array symbols:  1630417.3 i/s
+               array:  1372269.7 i/s - 1.19x  slower
+</code></pre></div>
+<p>Symbols are now faster! That&#39;s how it should work from the beginning.</p>
+
+<p>As you can see it&#39;s easy to browse C code. Also if you see something sticking out in your benchmarks it could be just a simple bug in the code. You need to remember there are two layers in Ruby - Ruby code and C code. If your Ruby code looks good could be C code that&#39;s faulty.</p>
+
+<p>Created <a href="https://github.com/ruby/ruby/pull/1540">PR with a fix</a>.</p>
+
+<p>If you have any comments share them with <a href="https://twitter.com/devonsteroids">me</a>.</p>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;id=5759e18390" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <h2>Get my newsletter for software people</h2>
+<div class="mc-field-group">
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" required placeholder="Your e-mail (required)">
+</div>
+<div class="mc-field-group">
+    <input type="text" value="" name="NAME" class="" id="mce-NAME" placeholder="Your first name">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_30d4688f6cd649994b08f1974_5759e18390" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe!" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div></p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

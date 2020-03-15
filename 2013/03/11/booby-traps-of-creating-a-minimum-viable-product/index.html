@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Booby traps of creating a minimum viable product">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2013/03/11/booby-traps-of-creating-a-minimum-viable-product/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2013-03-11T21:34:10+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/03/25/mac-software-that-i-most-often-use/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/05/16/how-not-to-build-a-product/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/03/11/dont-optimize-your-data-model-prematurely/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Booby traps of creating a minimum viable product &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2013/03/11/booby-traps-of-creating-a-minimum-viable-product/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Booby traps of creating a minimum viable product</h1>
+    
+      <span class="post-date">11 Mar 2013</span>
+    
+    <p>I&#8217;m working on <a href="http://hoopoeapp.com">Hoopoe App</a> in my spare. It&#8217;s a twitter client with a great support for queuing your tweets via <a href="http://bufferapp.com" target="_blank">Buffer</a>. I&#8217;ve used TweetDeck for a long time but the annoying thing is that scheduling tweets using it is not so fun. And I&#8217;d really want to improve it for myself.</p>
+
+<p>So I thought I could kill two birds with a stone - I&#8217;d love to learn how to program for Mac, and fix my tweeter issue.</p>
+
+<p>I started working on this app, keeping in mind that it&#8217;s MVP, it want only one feature - to retweet using Buffer. It&#8217;s been going fine.</p>
+
+<p>First I used my Mac accounts to get tweets, then I created a simple view for showing a stream for an account. Then I showed all streams for each account. Then I thought - hey it would be great to resize those streams to match the window.</p>
+
+<p>So I spent couple of evenings trying to figure it out, it works, but it&#8217;s buggy still. And then it hit me.</p>
+
+<p>Dude, what are you doing? You&#8217;re wasting your time on something that&#8217;s not crucial for you. Sure it would be nice to let the user resize the window and make everything smooth. But are you really going to use that?</p>
+
+<p>No. So WTF are you wasting your precious time on this. This is something we developers fail to do. We think about MVP, we focus on delivering the fix for the real problem first. But sometimes we derange. </p>
+
+<p>We&#8217;ve saw so many good apps, so many things we treat as obvious, a standard to follow, that we lose time on doing them, even if they don&#8217;t bring the real value.</p>
+
+<p>So what I&#8217;m going to do now is just hard code the size for the window (you won&#8217;t be able to resize it), hard code the size of the streams, and it will work fine.</p>
+
+<p>Sure, it will not be great. But as a first version that&#8217;s good enough. I want to retweet things to Buffer, not to resize them.</p>
+
+<p>Focus and cut to the chase.</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

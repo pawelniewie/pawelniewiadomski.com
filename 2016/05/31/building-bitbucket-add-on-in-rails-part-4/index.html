@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How to build BitBucket Cloud add-on in Rails &rarr; lifecycle">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2016/05/31/building-bitbucket-add-on-in-rails-part-4/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2016-05-31T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/06/building-bitbucket-add-on-in-rails-part-7/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/03/building-bitbucket-add-on-in-rails-part-6/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/01/building-bitbucket-add-on-in-rails-part-5/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How to build BitBucket Cloud add-on in Rails &rarr; lifecycle &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2016/05/31/building-bitbucket-add-on-in-rails-part-4/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How to build BitBucket Cloud add-on in Rails &rarr; lifecycle</h1>
+    
+      <span class="post-date">31 May 2016</span>
+    
+    <p>Time to handle authentication between the service and BitBucket itself.</p>
+
+<div class="seriesNote">
+    <p>This article is <strong>Part 4</strong> in a <strong>7-Part</strong> Series.</p>
+    <ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        <li>Part 1 - 
+        
+            <a href="/2016/05/28/building-bitbucket-add-on-in-rails-part-1/">How to build BitBucket Cloud add-on in Rails &rarr; bootstraping rails</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 2 - 
+        
+            <a href="/2016/05/29/building-bitbucket-add-on-in-rails-part-2/">How to build BitBucket Cloud add-on in Rails &rarr; add-on descriptor</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 3 - 
+        
+            <a href="/2016/05/30/building-bitbucket-add-on-in-rails-part-3/">How to build BitBucket Cloud add-on in Rails &rarr; installation</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 4 - 
+        
+            This Article
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 5 - 
+        
+            <a href="/2016/06/01/building-bitbucket-add-on-in-rails-part-5/">How to build BitBucket Cloud add-on in Rails &rarr; user interface</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 6 - 
+        
+            <a href="/2016/06/03/building-bitbucket-add-on-in-rails-part-6/">How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from JavaScript</a>
+        
+        </li>
+    
+    
+    
+        
+        <li>Part 7 - 
+        
+            <a href="/2016/06/06/building-bitbucket-add-on-in-rails-part-7/">How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from the server</a>
+        
+        </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+</div>
+
+<p>I&#39;m not going to go into <a href="https://developer.atlassian.com/bitbucket/concepts/authentication.html">details about authentication</a> as it is well described already.</p>
+
+<p>Just a reminder - to authenticate requests made by the add-on I need to obtain JWT when it is <a href="https://developer.atlassian.com/bitbucket/concepts/authentication.html#sign-lifecycle">installed by the user</a>.</p>
+
+<p>I need to add additional routes to <code>config/routes.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">post</span> <span class="s1">&#39;/installed&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="s1">&#39;lifecycle#installed&#39;</span>
+<span class="n">post</span> <span class="s1">&#39;/uninstalled&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="s1">&#39;lifecycle#uninstalled&#39;</span>
+</code></pre></div>
+<p><a href="https://github.com/MeisterLabs/atlassian-jwt-authentication">Atlassian JWT authentication</a> does the heavy lifting for me:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">LifecycleController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+    <span class="kp">include</span> <span class="no">AtlassianJwtAuthentication</span><span class="o">::</span><span class="no">Filters</span>
+
+    <span class="n">before_action</span> <span class="ss">:on_add_on_installed</span><span class="p">,</span> <span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:installed</span><span class="o">]</span>
+    <span class="n">before_action</span> <span class="ss">:on_add_on_uninstalled</span><span class="p">,</span> <span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:uninstalled</span><span class="o">]</span>
+
+    <span class="k">def</span> <span class="nf">installed</span>
+        <span class="n">head</span><span class="p">(</span><span class="ss">:no_content</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">uninstalled</span>
+        <span class="n">head</span><span class="p">(</span><span class="ss">:no_content</span><span class="p">)</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Remove and install the add-on again and you will see that this time Rails will store the token for future use:</p>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span></span><span class="go">Started POST &quot;/installed&quot; for 104.192.143.193 at 2016-05-31 21:31:13 +0200</span>
+<span class="go">Processing by LifecycleController#installed as */*</span>
+<span class="go">  Parameters: {&quot;productType&quot;=&gt;&quot;bitbucket&quot;, &quot;principal&quot;=&gt;{&quot;username&quot;=&gt;&quot;pawelniewiadomski&quot;, &quot;website&quot;=&gt;nil, &quot;display_name&quot;=&gt;&quot;Pawel Niewiadomski&quot;, &quot;uuid&quot;=&gt;&quot;{e503b860-9bee-4011-82d4-95a84c0f2743}&quot;, &quot;links&quot;=&gt;{&quot;self&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://api.bitbucket.org/2.0/users/pawelniewiadomski&quot;}, &quot;html&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/pawelniewiadomski/&quot;}, &quot;avatar&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/account/pawelniewiadomski/avatar/32/&quot;}}, &quot;created_on&quot;=&gt;&quot;2012-05-22T21:01:29.056667+00:00&quot;, &quot;location&quot;=&gt;nil, &quot;type&quot;=&gt;&quot;user&quot;}, &quot;eventType&quot;=&gt;&quot;installed&quot;, &quot;baseUrl&quot;=&gt;&quot;https://bitbucket.org&quot;, &quot;publicKey&quot;=&gt;&quot;MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCBFq+6Iq5J9AZzTZQfZEba9udHTIJToJnoDvWVHk8jKZIrMrVT1oJoAec84+nBhiO/8neqvbTlD7MeIb5aTDZo8YVhBKmQuEJ5RY56EakoR4x5oILsz/Ki5O4nGWSeTCCG1hj4heVsUi77umkYG5sZyHKNO+P+SwctTH1GEBDwswIDAQAB&quot;, &quot;user&quot;=&gt;{&quot;username&quot;=&gt;&quot;pawelniewiadomski&quot;, &quot;website&quot;=&gt;nil, &quot;display_name&quot;=&gt;&quot;Pawel Niewiadomski&quot;, &quot;uuid&quot;=&gt;&quot;{e503b860-9bee-4011-82d4-95a84c0f2743}&quot;, &quot;links&quot;=&gt;{&quot;self&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://api.bitbucket.org/2.0/users/pawelniewiadomski&quot;}, &quot;html&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/pawelniewiadomski/&quot;}, &quot;avatar&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/account/pawelniewiadomski/avatar/32/&quot;}}, &quot;created_on&quot;=&gt;&quot;2012-05-22T21:01:29.056667+00:00&quot;, &quot;location&quot;=&gt;nil, &quot;type&quot;=&gt;&quot;user&quot;}, &quot;key&quot;=&gt;&quot;stars.development&quot;, &quot;baseApiUrl&quot;=&gt;&quot;https://api.bitbucket.org&quot;, &quot;clientKey&quot;=&gt;&quot;connection:308533&quot;, &quot;sharedSecret&quot;=&gt;&quot;WOZ+mJsDKswFotc4yhdRyKoUdJc64KXbDG7Lm2BYCUw&quot;, &quot;lifecycle&quot;=&gt;{&quot;productType&quot;=&gt;&quot;bitbucket&quot;, &quot;principal&quot;=&gt;{&quot;username&quot;=&gt;&quot;pawelniewiadomski&quot;, &quot;website&quot;=&gt;nil, &quot;display_name&quot;=&gt;&quot;Pawel Niewiadomski&quot;, &quot;uuid&quot;=&gt;&quot;{e503b860-9bee-4011-82d4-95a84c0f2743}&quot;, &quot;links&quot;=&gt;{&quot;self&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://api.bitbucket.org/2.0/users/pawelniewiadomski&quot;}, &quot;html&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/pawelniewiadomski/&quot;}, &quot;avatar&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/account/pawelniewiadomski/avatar/32/&quot;}}, &quot;created_on&quot;=&gt;&quot;2012-05-22T21:01:29.056667+00:00&quot;, &quot;location&quot;=&gt;nil, &quot;type&quot;=&gt;&quot;user&quot;}, &quot;eventType&quot;=&gt;&quot;installed&quot;, &quot;baseUrl&quot;=&gt;&quot;https://bitbucket.org&quot;, &quot;publicKey&quot;=&gt;&quot;MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCBFq+6Iq5J9AZzTZQfZEba9udHTIJToJnoDvWVHk8jKZIrMrVT1oJoAec84+nBhiO/8neqvbTlD7MeIb5aTDZo8YVhBKmQuEJ5RY56EakoR4x5oILsz/Ki5O4nGWSeTCCG1hj4heVsUi77umkYG5sZyHKNO+P+SwctTH1GEBDwswIDAQAB&quot;, &quot;user&quot;=&gt;{&quot;username&quot;=&gt;&quot;pawelniewiadomski&quot;, &quot;website&quot;=&gt;nil, &quot;display_name&quot;=&gt;&quot;Pawel Niewiadomski&quot;, &quot;uuid&quot;=&gt;&quot;{e503b860-9bee-4011-82d4-95a84c0f2743}&quot;, &quot;links&quot;=&gt;{&quot;self&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://api.bitbucket.org/2.0/users/pawelniewiadomski&quot;}, &quot;html&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/pawelniewiadomski/&quot;}, &quot;avatar&quot;=&gt;{&quot;href&quot;=&gt;&quot;https://bitbucket.org/account/pawelniewiadomski/avatar/32/&quot;}}, &quot;created_on&quot;=&gt;&quot;2012-05-22T21:01:29.056667+00:00&quot;, &quot;location&quot;=&gt;nil, &quot;type&quot;=&gt;&quot;user&quot;}, &quot;key&quot;=&gt;&quot;stars.development&quot;, &quot;baseApiUrl&quot;=&gt;&quot;https://api.bitbucket.org&quot;, &quot;clientKey&quot;=&gt;&quot;connection:308533&quot;, &quot;sharedSecret&quot;=&gt;&quot;WOZ+mJsDKswFotc4yhdRyKoUdJc64KXbDG7Lm2BYCUw&quot;}}</span>
+<span class="go">  JwtToken Load (25.9ms)  SELECT  &quot;jwt_tokens&quot;.* FROM &quot;jwt_tokens&quot; WHERE &quot;jwt_tokens&quot;.&quot;client_key&quot; = $1 AND &quot;jwt_tokens&quot;.&quot;addon_key&quot; = $2 ORDER BY &quot;jwt_tokens&quot;.&quot;id&quot; ASC LIMIT $3  [[&quot;client_key&quot;, &quot;connection:308533&quot;], [&quot;addon_key&quot;, &quot;stars.development&quot;], [&quot;LIMIT&quot;, 1]]</span>
+<span class="go">Unpermitted parameters: productType, principal, eventType, baseUrl, publicKey, user, key, baseApiUrl, sharedSecret, lifecycle</span>
+<span class="go">Unpermitted parameters: productType, principal, eventType, baseUrl, publicKey, user, baseApiUrl, clientKey, sharedSecret, lifecycle</span>
+<span class="go">   (0.1ms)  BEGIN</span>
+<span class="go">  SQL (6.0ms)  INSERT INTO &quot;jwt_tokens&quot; (&quot;addon_key&quot;, &quot;client_key&quot;, &quot;shared_secret&quot;, &quot;product_type&quot;) VALUES ($1, $2, $3, $4) RETURNING &quot;id&quot;  [[&quot;addon_key&quot;, &quot;stars.development&quot;], [&quot;client_key&quot;, &quot;connection:308533&quot;], [&quot;shared_secret&quot;, &quot;WOZ+mJsDKswFotc4yhdRyKoUdJc64KXbDG7Lm2BYCUw&quot;], [&quot;product_type&quot;, &quot;atlassian:bitbucket&quot;]]</span>
+<span class="go">   (1.1ms)  COMMIT</span>
+<span class="go">Completed 204 No Content in 92ms (ActiveRecord: 69.2ms)</span>
+</code></pre></div>
+<p><a href="https://github.com/pawelniewie/bitbucket-rails-add-on/tree/tutorial/part-4">Get the source code</a></p>
+
+<div style="border-radius: 3px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <i class="fa fa-star-o" aria-hidden="true" style="margin-right: 5px;"></i>
+    <a href="https://marketplace.atlassian.com/plugins/stars/cloud/overview">Enable this plugin for your BitBucket Cloud account!</a>
+</div>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

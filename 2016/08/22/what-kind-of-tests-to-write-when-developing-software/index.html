@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="What kind of tests should I write as a software developer?">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2016/08/22/what-kind-of-tests-to-write-when-developing-software/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2016-08-22T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/08/31/decided-to-manage-my-dotfiles-with-dotbot/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/06/22/how-to-make-jira-board-color-cards-based-on-time/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2013/04/08/writing-down-testing-notes-makes-me-a-better/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      What kind of tests should I write as a software developer? &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2016/08/22/what-kind-of-tests-to-write-when-developing-software/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">What kind of tests should I write as a software developer?</h1>
+    
+      <span class="post-date">22 Aug 2016</span>
+    
+    <p>In over 16 years of my career as a software developer I wrote thousands of tests. Tests in C, C++, PHP, Python, Java, Ruby and not so much in JavaScript ;-)</p>
+
+<p>As you can expect some projects were similar some were different. Small, large, complex, easy, API, libraries for customers, web sites, etc.</p>
+
+<p>Also team sizes were different from a one person projects up to over one hundred people working on the code base. People located in the same place or in many places around the globe</p>
+
+<p>In this time I realized my own approach to testing which I&#39;m going to share with you.</p>
+
+<p>But first I need to start with the iron triangle of software development:</p>
+
+<p><a href="http://www.ambysoft.com/essays/brokenTriangle.html"><img src="https://pawelniewiadomski.com/media/2016/08/iron-triangle-534x335.jpg" width="572" srcset="https://pawelniewiadomski.com/media/2016/08/iron-triangle-534x335.jpg 1x, https://pawelniewiadomski.com/media/2016/08/iron-triangle-534x335.jpg 2x, https://pawelniewiadomski.com/media/2016/08/iron-triangle-534x335.jpg 3x"></a></p>
+
+<p>Read about it <a href="http://www.brighthubpm.com/agile/50212-the-agile-triangle-value-quality-and-constraints/#imgn_0">here</a> and <a href="https://www.projectsmart.co.uk/project-management-scope-triangle.php">here</a>.</p>
+
+<p>Now my philosophy is simple and driven by the triangle.</p>
+
+<p>Producing each software costs money.  Each software can have different qualities. First quality is the cost. Scope is another one. Time it takes to develop it is next, and quality is meeting all those qualities in some sweet spot.</p>
+
+<p>This is the context you operate in and what you do should follow it - the code you create and the tests you write.</p>
+
+<p>Lets start with JIRA - this is a perfect example of a good developer practise as you would say. Because JIRA has thousands of tests. On each level - it has unit tests, functional tests, integration tests, front end tests. Those tests run on different OSes, databases, LDAPs, etc. If you would run them on one machine it would probably take a week to finish (or more).</p>
+
+<p>Is it justified? I would say in most of the cases it is but not all. This is a complex software, very powerful, it can be customized a lot. It has also a lot of integration points that need to be functional. It&#39;s also a software that is crucial to customers, some of them have businesses built on JIRA. So anything goes wrong and you upset customers. That&#39;s why you want to make sure that with every release you still deliver.</p>
+
+<p>Also JIRA is a desktop software so anything goes wrong and you need to release a new version and ask customers to upgrade which is a pain for them. Also you cannot monitor JIRA on customer premises, you don&#39;t have metrics, logs, db access, etc.</p>
+
+<p>On the other hand there&#39;s a lot of tests that are too low level, so refactoring takes time and make&#39;s developers life miserable (sometimes).</p>
+
+<p>Now lets imagine you&#39;re building an internal product that operates in SaaS model. You own the infrastructure, you even &quot;own&quot; customers because they work in the same office. You have all the monitoring and logging and tracking tools that you want. If anything breaks you will get an instant feedback. Your pipeline is simple and you can deploy a fix in minutes or hours (if it&#39;s a complex one). Would you want to follow the same testing regiment as in JIRA?</p>
+
+<p>Well, maybe yes, if it was a system operating on real time data that has a monetary value, imagine day time trading, or if there was 10 000 people that will get stuck if the system broke.</p>
+
+<p>In other cases? Probably not.</p>
+
+<p>What if you work in a start up, just got another round of funding and you&#39;re still ahead of &quot;stabilizing&quot;. Would you care about tests?</p>
+
+<p>In that case I would say some smoke tests would be enough.</p>
+
+<p>Or what if you were creating a new product that you&#39;re unsure of? Would you rather spend time writing tests or looking for customers?</p>
+
+<p>I bet tests would be the last thing you would want to spend time on (except a few smoke tests).</p>
+
+<p>Now you see the point. It all depends on the context and you cannot be fundamental about it. If you work in a team or with a product owner you want to discuss what kind of quality expectations there are and what you can do to deliver them (write tests or set up monitoring). You need to know and understand those constraints.</p>
+
+<p>You need to be aware also that people are different and some are risk awerse (many developers) or risk aware (me for example). So it&#39;s also part of the context.</p>
+
+<p>One thing for sure - always write regression tests. What I mean by that, if you released something and it was working fine and then some change broke it it means the code is fragile in this place.</p>
+
+<p>In this case you need to make sure to cover the case that made the system fail to make sure that the problem you faced will not repeat. Well actually you want to decrease the risk, you cannot be 100% sure if it will not repeat.</p>
+
+<p>It is for your sake, but mostly for your customers sake. It&#39;s really bad when your software breaks the same way few times in a row. That makes your customers loose trust in you. And trust is everything.</p>
+
+<p>Also for all those TDD fundamentalists - <a href="http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html">TDD is dead</a>. I don&#39;t see value in it. And I don&#39;t know many people that see the value.</p>
+
+<p>For the tests you should run. I see that most of the value is in functional tests. </p>
+
+<p>Unit tests are great when something is logically complex and you want to make sure that the algorithm works. But most of the time code is simple and you just want to make sure everything works fine together. So moving up and testing the system through different layers is what you want.</p>
+
+<p>So my favorite are functional tests or BDD as some call them - for a web projects this means a browser emulating the user doing all the stuff he would do. I love them. They are usually easy to write (if you have a way to establish a state for the application, which you should BTW) and provide good value for your time.</p>
+
+<p>They usually represent a real life scenario supported by business needs. So every product owner understands their value.</p>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;id=5759e18390" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <h2>Get my newsletter for software people</h2>
+<div class="mc-field-group">
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" required placeholder="Your e-mail (required)">
+</div>
+<div class="mc-field-group">
+    <input type="text" value="" name="NAME" class="" id="mce-NAME" placeholder="Your first name">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_30d4688f6cd649994b08f1974_5759e18390" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe!" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div></p>
+
+<p>Thinking about tests there&#39;s also another aspect. It is the cost of maintenance. Every test you have means slower dev loop, more headache when you are revamping the functioning of the system. Changing they way it works not refactoring.</p>
+
+<p>The other thing is what if your tests always pass? Do they bring any value? Initially you would say yes they are as they are making you feel confident. But think twice.</p>
+
+<p>If you&#39;re making changes and tests always pass. Isn&#39;t that a sign that you have useless tests that don&#39;t catch anything? You feel more confident but actually you didn&#39;t make it safer. It&#39;s an illusion.</p>
+
+<p>There&#39;s a great article on <a href="http://rbcs-us.com/documents/Why-Most-Unit-Testing-is-Waste.pdf">&quot;why most unit testing is waste&quot;</a> by James O Coplien which I found writing this article. I strongly suggest you read it from top to bottom as the extension on this article. I focused mostly on business value and understanding the context. James goes into information theory and detailed evaluation on which tests are good or bad.</p>
+
+<p>Despite the title James talks about all kinds of tests. We both agree that functional are the best. Something he advocates is recycling tests, I haven&#39;t tried this but I already see a point - the test base in long lived projects can grow so big it&#39;s a job itself to run it.</p>
+
+<p>I&#39;m copying his best practices here as I agree with them:</p>
+
+<blockquote>
+<ul>
+<li>Keep regression tests around for up to a year — but most of those will be system-level tests rather than unit tests.</li>
+<li>Keep unit tests that test key algorithms for which there is a broad, formal, independent oracle of correctness, and for which there is ascribable business value.</li>
+<li>Except for the preceding case, if X has business value and you can test X with either a system test or a unit test, use a system
+test — context is everything.</li>
+<li>Design a test with more care than you design the code.</li>
+<li>Turn most unit tests into assertions.</li>
+<li>Throw away tests that haven’t failed in a year.</li>
+<li>Testing can’t replace good development: a high test failure
+rate suggests you should shorten development intervals, perhaps radically, and make sure your architecture and design regimens have teeth</li>
+<li>If you find that individual functions being tested are trivial, double-check the way you incentivize developers’ performance. Rewarding coverage or other meaningless metrics can lead to rapid architecture decay.</li>
+<li>Be humble about what tests can achieve. Tests don’t improve quality: developers do.</li>
+</ul>
+</blockquote>
+
+<p>I would only extend on &quot;turn most unit tests into assertions&quot;. James writes about it but in case you skip it - having assertions in your application is a good thing! I see developers rarely add assertions but they are really useful. Not only they protect the code, set the context right, but also are a great documentation. People used to say that unit tests are great because they document what your code does. Assertions are even better because they do it exactly in the place you look into first!</p>
+
+<p>You can try out <a href="https://github.com/jorgemanrubia/solid_assert">solid_assert</a>for that!</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

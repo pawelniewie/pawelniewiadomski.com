@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How I decided to manage my dot files with dotbot">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2017/08/31/decided-to-manage-my-dotfiles-with-dotbot/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2017-08-31T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/03/15/better-shell-history/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/08/22/what-kind-of-tests-to-write-when-developing-software/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How I decided to manage my dot files with dotbot &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2017/08/31/decided-to-manage-my-dotfiles-with-dotbot/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How I decided to manage my dot files with dotbot</h1>
+    
+      <span class="post-date">31 Aug 2017</span>
+    
+    <p>I&#39;m developing on macOS on a daily basis (as many of you). I have MacBook Pro mid 2014. But my machine started to feel a bit underpowered, especially when trying to run a few docker containers, RubyMine, Intellij IDEA and a dozen of other apps at the same time.</p>
+
+<p>So I was eagerly waiting for a new MacBook Pro but then the disappointment happened - not only it is only a slightly improved version of the previous model but it also costs more. Sure touch bar and touch id are cool but not that cool, and USB-C everywhere, come on?! I&#39;m not paying for that (at least not now, still considering 13 inch version for the future).</p>
+
+<p>Also my kids are more into games nowadays, they are that age when Minecraft is no longer satisfying them, they want more and lets face it macOS isn&#39;t gamer beloved platform. I started to play occasionally as well (Call of Duty 2, anyone?)</p>
+
+<p>So I was looking for alternatives and I found this <a href="https://pcpartpicker.com/b/wbhypg">lovely spec</a> that could be a powerful workstation, run docker, Rails and other apps. Plus be a gaming monster. So far so good. I upped the spec a bit with 32GB RAM and more disk FTW!</p>
+
+<p>Now I&#39;m editing code on MBP but running it at the server. My first problem though was sharing my dot files.</p>
+
+<p>I tried to use <a href="https://github.com/technicalpickles/homesick">homesick</a> years before and actually had two repos with oh-my-zsh and jenv files. But I didn&#39;t grow a habit of making new ones, I preferred to keep everything on my Dropbox account, had a <code>Shell</code> directory there with everything I used. It was much simpler and easier.</p>
+
+<p>But I thought I can do better, found <a href="https://dotfiles.github.io">a nice summary of all the tools</a> people use and started going through them.</p>
+
+<p>TL;DR - I evaluated a few (mostly looked at the documentation, played with some) and decided to use one of the simplest ones - <a href="https://github.com/anishathalye/dotbot">dotbot</a>.</p>
+
+<p>If you&#39;re in a situation like me - thinking which one to choose here&#39;s my short summary, maybe it will save you some time.</p>
+
+<p><code>homesick</code> - dot files manager you can pull, push, etc. You manage one or few repos, you need to remember to push, pull, and link stuff. The idea is to use separate repos for different files, but you could eventually use a single one.</p>
+
+<p><code>vcsh</code>, <code>yadm</code> git wrappers similar to <code>homesick</code>, you keep the files in home (and not in some special directory. <code>yadm</code> has secret files support and alternative files support (for example separate files for Linux and macOS) which is nice, but still having to install something, etc. - too much hassle.</p>
+
+<p><code>antigen</code>, <code>antibody</code>, <code>antigen-hs</code>, etc. - plugin managers for oh-my-zsh and bash. Known to be slow, generally a bloatware. Overkill in my opinion.</p>
+
+<p><code>dotdrop</code>, <code>dotfiles</code> and <code>dotbot</code> - the simplest idea ever - create a repo, put a script and your files into it, then check it out, run the script and you have everything linked into home dir. You manage it via git. </p>
+
+<p>From those <code>dotbot</code> was the one that didn&#39;t require any dependencies, had the easiest script to run. One drawback is that there&#39;s <code>install.conf.yml</code> that you need to maintain. But thanks to that you can also add additional commands you want to run, mini provisioning system!</p>
+
+<p>Also it has <a href="https://github.com/anishathalye/dotbot/wiki/Plugins">some basic plugins</a> and a tutorial on having <a href="https://github.com/anishathalye/dotbot/wiki/Tips-and-Tricks">dot files per machine</a> if you ever wanted that. Or <a href="https://github.com/anishathalye/dotbot/wiki/Tips-and-Tricks#automatically-install-or-update-dotfiles-when-sshing-into-a-remote-machine-or-let-my-dotfiles-follow-me">auto update</a> the dotbot repo when you log in via ssh (haven&#39;t tried yet).</p>
+
+<p>So far I&#39;m happy with it. It is very easy to use, just:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>git clone https://github.com/pawelniewie/dotfiles/
+./install
+</code></pre></div>
+<p>The one drawback I found is that if you want to enforce the order of linking (I link first oh-my-zsh then some custom plugins into it) you need to have multiple <code>list</code> entries in your file, as each <code>list</code> is a hash and doesn&#39;t have an order when evaluated.</p>
+
+<p>All your dependencies like oh-my-zsh or its plugins are just git submodules. Simplicity FTW!</p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

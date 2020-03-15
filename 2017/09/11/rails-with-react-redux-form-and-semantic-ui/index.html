@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="How to integrate Rails and Devise with React, Redux Form and Semantic UI">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2017/09/11/rails-with-react-redux-form-and-semantic-ui/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2017-09-11T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/08/12/migrating-rails-project-to-vue-with-slim-templates/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/20/pitfalls-of-ruby-memoization-pattern/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      How to integrate Rails and Devise with React, Redux Form and Semantic UI &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2017/09/11/rails-with-react-redux-form-and-semantic-ui/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">How to integrate Rails and Devise with React, Redux Form and Semantic UI</h1>
+    
+      <span class="post-date">11 Sep 2017</span>
+    
+    <p><img src="https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png" width="572" srcset="https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png 1x, https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png 2x, https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png 3x"></p>
+
+<p>So I&#39;m working on this pet project of mine where we use Rails, React, Redux, Redux Form and Semantic UI. Recently I had to tie everything up and create a sign up form for Devise. Here&#39;s how I did it in case you&#39;re in a similar situation. I saw some posts about &quot;this and that&quot; but I didn&#39;t found a go to solution. I hope it will save you some time.</p>
+
+<p>Lets start with a form itself.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>import React from &#39;react&#39;;
+import { Form, Message } from &#39;semantic-ui-react&#39;;
+import { Field } from &#39;redux-form&#39;;
+import FocusedTask, { FocusedTaskContent } from &#39;app/layouts/FocusedTask&#39;;
+import SemanticInput from &#39;../../../components/SemanticInput&#39;;
+
+require(&#39;./OrganizationForm.scss&#39;);
+
+const OrganizationForm = (props) =&gt; {
+    const { error, handleSubmit, pristine, submitting } = props;
+    return (
+        &lt;FocusedTask&gt;
+            &lt;FocusedTaskContent&gt;
+                &lt;Message attached header=&quot;Create a new organisation!&quot;
+                         content=&quot;Fill in the form to create an organization, you&#39;ll become an admin automatically.&quot;/&gt;
+
+                &lt;Form onSubmit={handleSubmit} className=&quot;attached fluid segment&quot;&gt;
+                    {error &amp;&amp; &lt;strong&gt;{error}&lt;/strong&gt;}
+
+                    &lt;Form.Field&gt;
+                        &lt;label&gt;Organisation name&lt;/label&gt;
+                        &lt;Field name=&quot;organization.name&quot; component={SemanticInput} placeholder=&quot;Put a name here&quot;/&gt;
+                    &lt;/Form.Field&gt;
+                    &lt;Form.Field&gt;
+                        &lt;label&gt;Subdomain&lt;/label&gt;
+                        &lt;Field name=&quot;organization.slug&quot; component={SemanticInput} placeholder=&quot;Your subdomain&quot;/&gt;
+                    &lt;/Form.Field&gt;
+                    &lt;Form.Field&gt;
+                        &lt;label&gt;E-mail&lt;/label&gt;
+                        &lt;Field name=&quot;email&quot; component={SemanticInput} placeholder=&quot;Your business e-mail&quot;/&gt;
+                    &lt;/Form.Field&gt;
+                    &lt;Form.Field&gt;
+                        &lt;label&gt;Password&lt;/label&gt;
+                        &lt;Field name=&quot;password&quot; component={SemanticInput} placeholder=&quot;Make it at least 8 characters&quot; type=&quot;password&quot;/&gt;
+                    &lt;/Form.Field&gt;
+                    &lt;Form.Field&gt;
+                        &lt;label&gt;First name&lt;/label&gt;
+                        &lt;Field name=&quot;first_name&quot; component={SemanticInput} placeholder=&quot;First name&quot;/&gt;
+                    &lt;/Form.Field&gt;
+                    &lt;Form.Field&gt;
+                        &lt;label&gt;Last name&lt;/label&gt;
+                        &lt;Field name=&quot;last_name&quot; component={SemanticInput} placeholder=&quot;Last name&quot;/&gt;
+                    &lt;/Form.Field&gt;
+                    &lt;Form.Button primary disabled={pristine || submitting}&gt;Create&lt;/Form.Button&gt;
+                &lt;/Form&gt;
+            &lt;/FocusedTaskContent&gt;
+        &lt;/FocusedTask&gt;
+    );
+};
+
+export default OrganizationForm;
+</code></pre></div>
+<p>The thing about the form - as you can see Fields are coming from Redux Form but for every I use <code>component={SemanticInput}</code> meaning that Redux Form will use this component class to render the input, it will pass the same props as given to the <code>Field</code> component.</p>
+
+<p>You can think of Redux Form as a meta layer that manages state of the underlaying component at the same time providing some decent default implementation if you don&#39;t want to use your own one.</p>
+
+<p><code>SemanticInput</code> is quite simple - it uses <code>Input</code> from Semantic UI to render proper markup, plus error handling and some sugar for easier testing <code>data-field-name</code></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>import React from &#39;react&#39;;
+import { Input } from &#39;semantic-ui-react&#39;;
+import FieldErrors from &#39;./FieldErrors&#39;;
+
+const SemanticInput = (props) =&gt; {
+    const { meta: { touched, error }, input } = props;
+    return (
+        &lt;div data-field-name={input.name}&gt;
+            &lt;Input onChange={(e, { value }) =&gt; input.onChange(value)} {...props}/&gt;
+            {touched &amp;&amp; error &amp;&amp; &lt;FieldErrors errors={error}/&gt;}
+        &lt;/div&gt;
+    );
+};
+
+export default SemanticInput;
+</code></pre></div>
+<p>I saw somewhere someone trying to create and use this uber Semantic UI wrapper that would emit every component, but I like a simpler approach, if I need more components I will created additional files and name the appropriately.</p>
+
+<p>You may wonder what&#39;s <code>FieldErrors</code>:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>import React from &#39;react&#39;;
+import { Message } from &#39;semantic-ui-react&#39;;
+
+const FieldErrors = (props) =&gt; {
+    const { errors } = props;
+    return (
+        &lt;Message error visible&gt;
+            &lt;Message.List&gt;
+                {errors.map((error) =&gt; (&lt;Message.Item key={error} content={error}/&gt;))}
+            &lt;/Message.List&gt;
+        &lt;/Message&gt;);
+};
+
+export default FieldErrors;
+</code></pre></div>
+<p>Again simple wrapper for Semantic components.</p>
+
+<p>Now you probably wonder how form submission is handled? You might haven noticed that the form is getting <code>handleSubmit</code> in props, this is a special handler provided by Redux Form which then delegates to <code>onSubmit</code>, here&#39;s a component that wraps all together.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>import { connect } from &#39;react-redux&#39;;
+import prepareModelForRails from &#39;app/utils/prepareModelForRails&#39;;
+import railsErrorsForReduxForm from &#39;app/utils/railsErrorsForReduxForm&#39;;
+import OrganizationForm from &#39;./OrganizationForm&#39;;
+import React from &#39;react&#39;;
+import { compose, withApollo } from &#39;react-apollo&#39;;
+import { reduxForm, SubmissionError } from &#39;redux-form&#39;;
+
+const NewOrganizationPage = compose(
+    withApollo,
+    connect(
+        (state) =&gt; ({}),
+        (dispatch, ownProps) =&gt; {
+            return {
+                onSubmit: (values) =&gt; {
+                    return fetch(&#39;/users.json&#39;, {
+                        method: &#39;POST&#39;,
+                        headers: {
+                            &#39;Content-Type&#39;: &#39;application/json&#39;
+                        },
+                        body: JSON.stringify({
+                            user: prepareModelForRails(values, [&quot;organization&quot;])
+                        }),
+                        credentials: &#39;same-origin&#39;
+                    })
+                        .then(response =&gt; response.json())
+                        .then(json =&gt; {
+                            if (json.errors) {
+                                throw new SubmissionError(railsErrorsForReduxForm(json.errors));
+                            } else {
+                                ownProps.client.resetStore();
+                                window.location.assign(json.user.organization.url);
+                            }
+                        });
+                }
+            }
+        }
+    ),
+    reduxForm({
+        form: &#39;newOrganization&#39;
+    })
+)(OrganizationForm);
+
+export default NewOrganizationPage;
+</code></pre></div>
+<p>Now the trick is in <code>prepareModelForRails</code> and <code>railsErrorsForReduxForm</code> - as you can see <code>onSubmit</code> will get inputs from the form and call Devise&#39;s <code>users</code> controller. In case there are any errors it will throw <code>SubmissionError</code> which is a special class handled by Redux Form.</p>
+
+<p><code>prepareModelForRails</code> helps me handle nested models (in case of my form creating first user means also creating an organization/tenant):</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="kr">import</span> <span class="nx">reduce</span> <span class="nx">from</span> <span class="s1">&#39;lodash/reduce&#39;</span>
+<span class="kr">import</span> <span class="nx">isArray</span> <span class="nx">from</span> <span class="s1">&#39;lodash/isArray&#39;</span>
+<span class="kr">import</span> <span class="nx">indexOf</span> <span class="nx">from</span> <span class="s1">&#39;lodash/indexOf&#39;</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nx">prepareModelForRails</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">force</span> <span class="o">=</span> <span class="p">[])</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">model</span> <span class="o">!==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">model</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">model</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">model</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span> <span class="nx">m</span> <span class="p">=&gt;</span> <span class="nx">prepareModelForRails</span><span class="p">(</span><span class="nx">m</span><span class="p">,</span> <span class="nx">force</span><span class="p">)</span> <span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">reduce</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">||</span> <span class="nx">indexOf</span><span class="p">(</span><span class="nx">force</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">result</span><span class="p">[</span><span class="sb">`</span><span class="si">${</span><span class="nx">key</span><span class="si">}</span><span class="sb">_attributes`</span><span class="p">]</span> <span class="o">=</span> <span class="nx">prepareModelForRails</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">force</span><span class="p">)</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">result</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">prepareModelForRails</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">force</span><span class="p">)</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">result</span>
+            <span class="p">},</span> <span class="p">{})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><code>railsErrorsForReduxForm</code> will prepare proper model for Redux Form, the trick here is that it will translate Rails errors:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="p">{</span>
+    <span class="s2">&quot;organization.name&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;error&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Into Redux Form format:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="p">{</span>
+    <span class="nx">organization</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And that basically what&#39;s needed!</p>
+
+<p>In case you want to see the whole code in action check out <a href="https://github.com/pawelniewie/zen2/tree/aa66e728f20df5dd684b6fa4416396f6fff1229f/app/javascript/packs/client/utils">utils</a> and <a href="https://github.com/pawelniewie/zen2/tree/aa66e728f20df5dd684b6fa4416396f6fff1229f/app/javascript/packs/client/pages/organizations/new">organizations</a> folders in my project.</p>
+
+<p>If anything is not clear ask me on <a href="https://twitter.com/devonsteroids">twitter</a></p>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;id=5759e18390" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <h2>Get my newsletter for software people</h2>
+<div class="mc-field-group">
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" required placeholder="Your e-mail (required)">
+</div>
+<div class="mc-field-group">
+    <input type="text" value="" name="NAME" class="" id="mce-NAME" placeholder="Your first name">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_30d4688f6cd649994b08f1974_5759e18390" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe!" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div></p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>

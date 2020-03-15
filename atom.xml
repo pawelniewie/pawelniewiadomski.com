@@ -1,0 +1,1373 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="https://pawelniewiadomski.com/atom.xml" rel="self" type="application/atom+xml" /><link href="https://pawelniewiadomski.com/" rel="alternate" type="text/html" /><updated>2020-03-15T15:36:05+00:00</updated><id>https://pawelniewiadomski.com/atom.xml</id><title type="html">Pawel Niewiadomski</title><subtitle>A few observations on world of software development, life and all the things.</subtitle><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><entry><title type="html">How to integrate Rails and Devise with React, Redux Form and Semantic UI</title><link href="https://pawelniewiadomski.com/2017/09/11/rails-with-react-redux-form-and-semantic-ui/" rel="alternate" type="text/html" title="How to integrate Rails and Devise with React, Redux Form and Semantic UI" /><published>2017-09-11T00:00:00+00:00</published><updated>2017-09-11T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/09/11/rails-with-react-redux-form-and-semantic-ui</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/09/11/rails-with-react-redux-form-and-semantic-ui/">&lt;p&gt;&lt;img src=&quot;https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png&quot; width=&quot;572&quot; srcset=&quot;https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png 1x, https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png 2x, https://pawelniewiadomski.com/media/2017/organizations-new-3006x1486.png 3x&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;So I&amp;#39;m working on this pet project of mine where we use Rails, React, Redux, Redux Form and Semantic UI. Recently I had to tie everything up and create a sign up form for Devise. Here&amp;#39;s how I did it in case you&amp;#39;re in a similar situation. I saw some posts about &amp;quot;this and that&amp;quot; but I didn&amp;#39;t found a go to solution. I hope it will save you some time.&lt;/p&gt;
+
+&lt;p&gt;Lets start with a form itself.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;import React from &amp;#39;react&amp;#39;;
+import { Form, Message } from &amp;#39;semantic-ui-react&amp;#39;;
+import { Field } from &amp;#39;redux-form&amp;#39;;
+import FocusedTask, { FocusedTaskContent } from &amp;#39;app/layouts/FocusedTask&amp;#39;;
+import SemanticInput from &amp;#39;../../../components/SemanticInput&amp;#39;;
+
+require(&amp;#39;./OrganizationForm.scss&amp;#39;);
+
+const OrganizationForm = (props) =&amp;gt; {
+    const { error, handleSubmit, pristine, submitting } = props;
+    return (
+        &amp;lt;FocusedTask&amp;gt;
+            &amp;lt;FocusedTaskContent&amp;gt;
+                &amp;lt;Message attached header=&amp;quot;Create a new organisation!&amp;quot;
+                         content=&amp;quot;Fill in the form to create an organization, you&amp;#39;ll become an admin automatically.&amp;quot;/&amp;gt;
+
+                &amp;lt;Form onSubmit={handleSubmit} className=&amp;quot;attached fluid segment&amp;quot;&amp;gt;
+                    {error &amp;amp;&amp;amp; &amp;lt;strong&amp;gt;{error}&amp;lt;/strong&amp;gt;}
+
+                    &amp;lt;Form.Field&amp;gt;
+                        &amp;lt;label&amp;gt;Organisation name&amp;lt;/label&amp;gt;
+                        &amp;lt;Field name=&amp;quot;organization.name&amp;quot; component={SemanticInput} placeholder=&amp;quot;Put a name here&amp;quot;/&amp;gt;
+                    &amp;lt;/Form.Field&amp;gt;
+                    &amp;lt;Form.Field&amp;gt;
+                        &amp;lt;label&amp;gt;Subdomain&amp;lt;/label&amp;gt;
+                        &amp;lt;Field name=&amp;quot;organization.slug&amp;quot; component={SemanticInput} placeholder=&amp;quot;Your subdomain&amp;quot;/&amp;gt;
+                    &amp;lt;/Form.Field&amp;gt;
+                    &amp;lt;Form.Field&amp;gt;
+                        &amp;lt;label&amp;gt;E-mail&amp;lt;/label&amp;gt;
+                        &amp;lt;Field name=&amp;quot;email&amp;quot; component={SemanticInput} placeholder=&amp;quot;Your business e-mail&amp;quot;/&amp;gt;
+                    &amp;lt;/Form.Field&amp;gt;
+                    &amp;lt;Form.Field&amp;gt;
+                        &amp;lt;label&amp;gt;Password&amp;lt;/label&amp;gt;
+                        &amp;lt;Field name=&amp;quot;password&amp;quot; component={SemanticInput} placeholder=&amp;quot;Make it at least 8 characters&amp;quot; type=&amp;quot;password&amp;quot;/&amp;gt;
+                    &amp;lt;/Form.Field&amp;gt;
+                    &amp;lt;Form.Field&amp;gt;
+                        &amp;lt;label&amp;gt;First name&amp;lt;/label&amp;gt;
+                        &amp;lt;Field name=&amp;quot;first_name&amp;quot; component={SemanticInput} placeholder=&amp;quot;First name&amp;quot;/&amp;gt;
+                    &amp;lt;/Form.Field&amp;gt;
+                    &amp;lt;Form.Field&amp;gt;
+                        &amp;lt;label&amp;gt;Last name&amp;lt;/label&amp;gt;
+                        &amp;lt;Field name=&amp;quot;last_name&amp;quot; component={SemanticInput} placeholder=&amp;quot;Last name&amp;quot;/&amp;gt;
+                    &amp;lt;/Form.Field&amp;gt;
+                    &amp;lt;Form.Button primary disabled={pristine || submitting}&amp;gt;Create&amp;lt;/Form.Button&amp;gt;
+                &amp;lt;/Form&amp;gt;
+            &amp;lt;/FocusedTaskContent&amp;gt;
+        &amp;lt;/FocusedTask&amp;gt;
+    );
+};
+
+export default OrganizationForm;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The thing about the form - as you can see Fields are coming from Redux Form but for every I use &lt;code&gt;component={SemanticInput}&lt;/code&gt; meaning that Redux Form will use this component class to render the input, it will pass the same props as given to the &lt;code&gt;Field&lt;/code&gt; component.&lt;/p&gt;
+
+&lt;p&gt;You can think of Redux Form as a meta layer that manages state of the underlaying component at the same time providing some decent default implementation if you don&amp;#39;t want to use your own one.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;SemanticInput&lt;/code&gt; is quite simple - it uses &lt;code&gt;Input&lt;/code&gt; from Semantic UI to render proper markup, plus error handling and some sugar for easier testing &lt;code&gt;data-field-name&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;import React from &amp;#39;react&amp;#39;;
+import { Input } from &amp;#39;semantic-ui-react&amp;#39;;
+import FieldErrors from &amp;#39;./FieldErrors&amp;#39;;
+
+const SemanticInput = (props) =&amp;gt; {
+    const { meta: { touched, error }, input } = props;
+    return (
+        &amp;lt;div data-field-name={input.name}&amp;gt;
+            &amp;lt;Input onChange={(e, { value }) =&amp;gt; input.onChange(value)} {...props}/&amp;gt;
+            {touched &amp;amp;&amp;amp; error &amp;amp;&amp;amp; &amp;lt;FieldErrors errors={error}/&amp;gt;}
+        &amp;lt;/div&amp;gt;
+    );
+};
+
+export default SemanticInput;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I saw somewhere someone trying to create and use this uber Semantic UI wrapper that would emit every component, but I like a simpler approach, if I need more components I will created additional files and name the appropriately.&lt;/p&gt;
+
+&lt;p&gt;You may wonder what&amp;#39;s &lt;code&gt;FieldErrors&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;import React from &amp;#39;react&amp;#39;;
+import { Message } from &amp;#39;semantic-ui-react&amp;#39;;
+
+const FieldErrors = (props) =&amp;gt; {
+    const { errors } = props;
+    return (
+        &amp;lt;Message error visible&amp;gt;
+            &amp;lt;Message.List&amp;gt;
+                {errors.map((error) =&amp;gt; (&amp;lt;Message.Item key={error} content={error}/&amp;gt;))}
+            &amp;lt;/Message.List&amp;gt;
+        &amp;lt;/Message&amp;gt;);
+};
+
+export default FieldErrors;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Again simple wrapper for Semantic components.&lt;/p&gt;
+
+&lt;p&gt;Now you probably wonder how form submission is handled? You might haven noticed that the form is getting &lt;code&gt;handleSubmit&lt;/code&gt; in props, this is a special handler provided by Redux Form which then delegates to &lt;code&gt;onSubmit&lt;/code&gt;, here&amp;#39;s a component that wraps all together.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;import { connect } from &amp;#39;react-redux&amp;#39;;
+import prepareModelForRails from &amp;#39;app/utils/prepareModelForRails&amp;#39;;
+import railsErrorsForReduxForm from &amp;#39;app/utils/railsErrorsForReduxForm&amp;#39;;
+import OrganizationForm from &amp;#39;./OrganizationForm&amp;#39;;
+import React from &amp;#39;react&amp;#39;;
+import { compose, withApollo } from &amp;#39;react-apollo&amp;#39;;
+import { reduxForm, SubmissionError } from &amp;#39;redux-form&amp;#39;;
+
+const NewOrganizationPage = compose(
+    withApollo,
+    connect(
+        (state) =&amp;gt; ({}),
+        (dispatch, ownProps) =&amp;gt; {
+            return {
+                onSubmit: (values) =&amp;gt; {
+                    return fetch(&amp;#39;/users.json&amp;#39;, {
+                        method: &amp;#39;POST&amp;#39;,
+                        headers: {
+                            &amp;#39;Content-Type&amp;#39;: &amp;#39;application/json&amp;#39;
+                        },
+                        body: JSON.stringify({
+                            user: prepareModelForRails(values, [&amp;quot;organization&amp;quot;])
+                        }),
+                        credentials: &amp;#39;same-origin&amp;#39;
+                    })
+                        .then(response =&amp;gt; response.json())
+                        .then(json =&amp;gt; {
+                            if (json.errors) {
+                                throw new SubmissionError(railsErrorsForReduxForm(json.errors));
+                            } else {
+                                ownProps.client.resetStore();
+                                window.location.assign(json.user.organization.url);
+                            }
+                        });
+                }
+            }
+        }
+    ),
+    reduxForm({
+        form: &amp;#39;newOrganization&amp;#39;
+    })
+)(OrganizationForm);
+
+export default NewOrganizationPage;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now the trick is in &lt;code&gt;prepareModelForRails&lt;/code&gt; and &lt;code&gt;railsErrorsForReduxForm&lt;/code&gt; - as you can see &lt;code&gt;onSubmit&lt;/code&gt; will get inputs from the form and call Devise&amp;#39;s &lt;code&gt;users&lt;/code&gt; controller. In case there are any errors it will throw &lt;code&gt;SubmissionError&lt;/code&gt; which is a special class handled by Redux Form.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;prepareModelForRails&lt;/code&gt; helps me handle nested models (in case of my form creating first user means also creating an organization/tenant):&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;reduce&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lodash/reduce&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;isArray&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lodash/isArray&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;indexOf&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lodash/indexOf&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;kr&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;prepareModelForRails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;object&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;isArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;prepareModelForRails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;isArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;indexOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_attributes`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;prepareModelForRails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;prepareModelForRails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;railsErrorsForReduxForm&lt;/code&gt; will prepare proper model for Redux Form, the trick here is that it will translate Rails errors:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;organization.name&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&amp;quot;error&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Into Redux Form format:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;organization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And that basically what&amp;#39;s needed!&lt;/p&gt;
+
+&lt;p&gt;In case you want to see the whole code in action check out &lt;a href=&quot;https://github.com/pawelniewie/zen2/tree/aa66e728f20df5dd684b6fa4416396f6fff1229f/app/javascript/packs/client/utils&quot;&gt;utils&lt;/a&gt; and &lt;a href=&quot;https://github.com/pawelniewie/zen2/tree/aa66e728f20df5dd684b6fa4416396f6fff1229f/app/javascript/packs/client/pages/organizations/new&quot;&gt;organizations&lt;/a&gt; folders in my project.&lt;/p&gt;
+
+&lt;p&gt;If anything is not clear ask me on &lt;a href=&quot;https://twitter.com/devonsteroids&quot;&gt;twitter&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;link href=&quot;//cdn-images.mailchimp.com/embedcode/classic-10_7.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+    #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+&lt;/style&gt;
+&lt;div id=&quot;mc_embed_signup&quot;&gt;
+&lt;form action=&quot;//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;amp;id=5759e18390&quot; method=&quot;post&quot; id=&quot;mc-embedded-subscribe-form&quot; name=&quot;mc-embedded-subscribe-form&quot; class=&quot;validate&quot; target=&quot;_blank&quot; novalidate&gt;
+    &lt;div id=&quot;mc_embed_signup_scroll&quot;&gt;
+    &lt;h2&gt;Get my newsletter for software people&lt;/h2&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;email&quot; value=&quot;&quot; name=&quot;EMAIL&quot; class=&quot;required email&quot; id=&quot;mce-EMAIL&quot; required placeholder=&quot;Your e-mail (required)&quot;&gt;
+&lt;/div&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;text&quot; value=&quot;&quot; name=&quot;NAME&quot; class=&quot;&quot; id=&quot;mce-NAME&quot; placeholder=&quot;Your first name&quot;&gt;
+&lt;/div&gt;
+    &lt;div id=&quot;mce-responses&quot; class=&quot;clear&quot;&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-error-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-success-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;position: absolute; left: -5000px;&quot; aria-hidden=&quot;true&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;b_30d4688f6cd649994b08f1974_5759e18390&quot; tabindex=&quot;-1&quot; value=&quot;&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;clear&quot;&gt;&lt;input type=&quot;submit&quot; value=&quot;Subscribe!&quot; name=&quot;subscribe&quot; id=&quot;mc-embedded-subscribe&quot; class=&quot;button&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="rails" /><category term="react" /><category term="redux" /><category term="semantic" /><summary type="html"></summary></entry><entry><title type="html">How I decided to manage my dot files with dotbot</title><link href="https://pawelniewiadomski.com/2017/08/31/decided-to-manage-my-dotfiles-with-dotbot/" rel="alternate" type="text/html" title="How I decided to manage my dot files with dotbot" /><published>2017-08-31T00:00:00+00:00</published><updated>2017-08-31T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/08/31/decided-to-manage-my-dotfiles-with-dotbot</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/08/31/decided-to-manage-my-dotfiles-with-dotbot/">&lt;p&gt;I&amp;#39;m developing on macOS on a daily basis (as many of you). I have MacBook Pro mid 2014. But my machine started to feel a bit underpowered, especially when trying to run a few docker containers, RubyMine, Intellij IDEA and a dozen of other apps at the same time.&lt;/p&gt;
+
+&lt;p&gt;So I was eagerly waiting for a new MacBook Pro but then the disappointment happened - not only it is only a slightly improved version of the previous model but it also costs more. Sure touch bar and touch id are cool but not that cool, and USB-C everywhere, come on?! I&amp;#39;m not paying for that (at least not now, still considering 13 inch version for the future).&lt;/p&gt;
+
+&lt;p&gt;Also my kids are more into games nowadays, they are that age when Minecraft is no longer satisfying them, they want more and lets face it macOS isn&amp;#39;t gamer beloved platform. I started to play occasionally as well (Call of Duty 2, anyone?)&lt;/p&gt;
+
+&lt;p&gt;So I was looking for alternatives and I found this &lt;a href=&quot;https://pcpartpicker.com/b/wbhypg&quot;&gt;lovely spec&lt;/a&gt; that could be a powerful workstation, run docker, Rails and other apps. Plus be a gaming monster. So far so good. I upped the spec a bit with 32GB RAM and more disk FTW!&lt;/p&gt;
+
+&lt;p&gt;Now I&amp;#39;m editing code on MBP but running it at the server. My first problem though was sharing my dot files.&lt;/p&gt;
+
+&lt;p&gt;I tried to use &lt;a href=&quot;https://github.com/technicalpickles/homesick&quot;&gt;homesick&lt;/a&gt; years before and actually had two repos with oh-my-zsh and jenv files. But I didn&amp;#39;t grow a habit of making new ones, I preferred to keep everything on my Dropbox account, had a &lt;code&gt;Shell&lt;/code&gt; directory there with everything I used. It was much simpler and easier.&lt;/p&gt;
+
+&lt;p&gt;But I thought I can do better, found &lt;a href=&quot;https://dotfiles.github.io&quot;&gt;a nice summary of all the tools&lt;/a&gt; people use and started going through them.&lt;/p&gt;
+
+&lt;p&gt;TL;DR - I evaluated a few (mostly looked at the documentation, played with some) and decided to use one of the simplest ones - &lt;a href=&quot;https://github.com/anishathalye/dotbot&quot;&gt;dotbot&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;#39;re in a situation like me - thinking which one to choose here&amp;#39;s my short summary, maybe it will save you some time.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;homesick&lt;/code&gt; - dot files manager you can pull, push, etc. You manage one or few repos, you need to remember to push, pull, and link stuff. The idea is to use separate repos for different files, but you could eventually use a single one.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vcsh&lt;/code&gt;, &lt;code&gt;yadm&lt;/code&gt; git wrappers similar to &lt;code&gt;homesick&lt;/code&gt;, you keep the files in home (and not in some special directory. &lt;code&gt;yadm&lt;/code&gt; has secret files support and alternative files support (for example separate files for Linux and macOS) which is nice, but still having to install something, etc. - too much hassle.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;antigen&lt;/code&gt;, &lt;code&gt;antibody&lt;/code&gt;, &lt;code&gt;antigen-hs&lt;/code&gt;, etc. - plugin managers for oh-my-zsh and bash. Known to be slow, generally a bloatware. Overkill in my opinion.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;dotdrop&lt;/code&gt;, &lt;code&gt;dotfiles&lt;/code&gt; and &lt;code&gt;dotbot&lt;/code&gt; - the simplest idea ever - create a repo, put a script and your files into it, then check it out, run the script and you have everything linked into home dir. You manage it via git. &lt;/p&gt;
+
+&lt;p&gt;From those &lt;code&gt;dotbot&lt;/code&gt; was the one that didn&amp;#39;t require any dependencies, had the easiest script to run. One drawback is that there&amp;#39;s &lt;code&gt;install.conf.yml&lt;/code&gt; that you need to maintain. But thanks to that you can also add additional commands you want to run, mini provisioning system!&lt;/p&gt;
+
+&lt;p&gt;Also it has &lt;a href=&quot;https://github.com/anishathalye/dotbot/wiki/Plugins&quot;&gt;some basic plugins&lt;/a&gt; and a tutorial on having &lt;a href=&quot;https://github.com/anishathalye/dotbot/wiki/Tips-and-Tricks&quot;&gt;dot files per machine&lt;/a&gt; if you ever wanted that. Or &lt;a href=&quot;https://github.com/anishathalye/dotbot/wiki/Tips-and-Tricks#automatically-install-or-update-dotfiles-when-sshing-into-a-remote-machine-or-let-my-dotfiles-follow-me&quot;&gt;auto update&lt;/a&gt; the dotbot repo when you log in via ssh (haven&amp;#39;t tried yet).&lt;/p&gt;
+
+&lt;p&gt;So far I&amp;#39;m happy with it. It is very easy to use, just:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/pawelniewie/dotfiles/
+./install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The one drawback I found is that if you want to enforce the order of linking (I link first oh-my-zsh then some custom plugins into it) you need to have multiple &lt;code&gt;list&lt;/code&gt; entries in your file, as each &lt;code&gt;list&lt;/code&gt; is a hash and doesn&amp;#39;t have an order when evaluated.&lt;/p&gt;
+
+&lt;p&gt;All your dependencies like oh-my-zsh or its plugins are just git submodules. Simplicity FTW!&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="shell" /><category term="linux" /><category term="process" /><summary type="html">I&amp;#39;m developing on macOS on a daily basis (as many of you). I have MacBook Pro mid 2014. But my machine started to feel a bit underpowered, especially when trying to run a few docker containers, RubyMine, Intellij IDEA and a dozen of other apps at the same time.</summary></entry><entry><title type="html">Migrating rails project to Vue with Slim templates</title><link href="https://pawelniewiadomski.com/2017/08/12/migrating-rails-project-to-vue-with-slim-templates/" rel="alternate" type="text/html" title="Migrating rails project to Vue with Slim templates" /><published>2017-08-12T00:00:00+00:00</published><updated>2017-08-12T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/08/12/migrating-rails-project-to-vue-with-slim-templates</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/08/12/migrating-rails-project-to-vue-with-slim-templates/">&lt;p&gt;&lt;img src=&quot;https://pawelniewiadomski.com/media/2017/vue-1966x924.png&quot; width=&quot;572&quot; srcset=&quot;https://pawelniewiadomski.com/media/2017/vue-1966x924.png 1x, https://pawelniewiadomski.com/media/2017/vue-1966x924.png 2x, https://pawelniewiadomski.com/media/2017/vue-1966x924.png 3x&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Update 14th of August&lt;/strong&gt; just found out that my setup was still broken, so I had to update but now supports template compilation as well!&lt;/p&gt;
+
+&lt;p&gt;Sometimes the most consuming part of the tasks is setting it up all together. Then coding is simple once all the puzzles fit it. So in the hope I can help someone having a similar problem I&amp;#39;m publishing a post on gluing Vue, Rails and Slim altogether.&lt;/p&gt;
+
+&lt;p&gt;I spent part of Friday setting up Vue in our Rails app. It&amp;#39;s yet another framework we want to try out. We already have a homegrown framework, React, and now Vue. We&amp;#39;re trying out Vue in the hope of giving us a decent framework that will be easier to integrate with the existing code.&lt;/p&gt;
+
+&lt;p&gt;Earlier this week were fun - I was playing with Vue for the first time. Just putting everything into a single slim file coding and trying to make it work (which I did). All the components had templates in one place, not a good approach for the future but I was focused on making it work, not making it clean and well structured.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://bearmetal.eu/team/tarmo/&quot;&gt;Tarmo&lt;/a&gt; prepared a nice branch with webpacker and Rails 5.1.3 so I decided to move my stuff there, to give it some proper structure (&lt;code&gt;vue&lt;/code&gt; files) and finally use ES6 (still stuck in this project on CoffeeScript).&lt;/p&gt;
+
+&lt;p&gt;It was quite easy to start with &lt;code&gt;rails webpacker::install::vue&lt;/code&gt;.  I started creating new &lt;code&gt;vue&lt;/code&gt; files, splitting up my monolith to functional pieces.&lt;/p&gt;
+
+&lt;p&gt;But I got stuck with one and quite important thing for me - how to use existing &lt;code&gt;slim&lt;/code&gt; templates? We use slim and I&amp;#39;m really found of it. Also having support on Vue side would be great - it would help us move existing stuff (and maybe share some parts?).&lt;/p&gt;
+
+&lt;p&gt;Finding slim support was quite easy, there&amp;#39;s &lt;a href=&quot;https://github.com/MaxPleaner/slim-lang-loader&quot;&gt;slim-lang-loader&lt;/a&gt; ♥️ &lt;em&gt;But then I had to &lt;a href=&quot;https://github.com/GetSilverfin/slim-lang-loader&quot;&gt;fix it&lt;/a&gt; to create templates acceptable by &lt;code&gt;vue compiler&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;But how to use it in the vue file? I know you can add support for additional languages in &lt;a href=&quot;https://vue-loader.vuejs.org/en/&quot;&gt;vue-loader&lt;/a&gt; and use syntax like (in &lt;code&gt;vue&lt;/code&gt; file):&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;template lang=&amp;quot;slim&amp;quot;&amp;gt;
+    div
+        p
+            This works!
+&amp;lt;/template&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;But I don&amp;#39;t like this much, would prefer the view to be in a separate file (better IDE support, etc.).&lt;/p&gt;
+
+&lt;p&gt;So I tried to look up something on the net. Not much hints, except that simple &lt;code&gt;template: require(&amp;#39;file&amp;#39;)&lt;/code&gt; should work provided I have proper loaders configured in the project.&lt;/p&gt;
+
+&lt;p&gt;But it didn&amp;#39;t work out of the box. Was failing with:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;Module parse failed: .../node_modules/slim-lang-loader/index.js!.../app/javascript/packs/sky/filter-modal.slim Unexpected token (1:0)
+You may need an appropriate loader to handle this file type.
+| &amp;lt;modal @close=&amp;quot;hideModal&amp;quot;&amp;gt;&amp;lt;form class=&amp;quot;sf-form sf-form-full sf-below-4 sf-pad-3&amp;quot; slot=&amp;quot;body&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;sf-grid sf-grid-fluid&amp;quot;&amp;gt;&amp;lt;slot name=&amp;quot;form-body&amp;quot;&amp;gt;&amp;lt;/slot&amp;gt;&amp;lt;div class=&amp;quot;sf-row&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;sf-col sf-alignr&amp;quot;&amp;gt;&amp;lt;a :class=&amp;quot;{ &amp;amp;#39;sf-btn-disabled&amp;amp;#39;: !canSave }&amp;quot; @click.prevent=&amp;quot;$emit(&amp;amp;#39;save&amp;amp;#39;)&amp;quot; class=&amp;quot;sf-btn sf-btn-success&amp;quot; href=&amp;quot;#&amp;quot;&amp;gt;Save&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/form&amp;gt;&amp;lt;/modal&amp;gt;
+| 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;So part of it was working - rendering HTML from Slim! Yay! But I was still missing some loader, but which one?&lt;/p&gt;
+
+&lt;p&gt;I tried to come up with search keywords, trying &lt;code&gt;inline-loader&lt;/code&gt;, &lt;code&gt;file-loader&lt;/code&gt; and others. None worked. Finally I found the missing one &lt;code&gt;raw-loader&lt;/code&gt; &lt;em&gt;but then found &lt;code&gt;vue-template-compiler-loader&lt;/code&gt;&lt;/em&gt;!!!&lt;/p&gt;
+
+&lt;p&gt;So with a simple file &lt;code&gt;config/webpack/loaders/slim.js&lt;/code&gt; &lt;em&gt;updated&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/.slim$/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;loader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;loader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;vue-template-compiler-loader&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// requires custom slim-lang-loader from &lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// https://github.com/GetSilverfin/slim-lang-loader&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;loader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;slim-lang-loader&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;slimOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;disable_escape&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I made it work! &lt;em&gt;updated&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Modal&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;./modal&amp;#39;&lt;/span&gt;
+
+  &lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;template&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;./filter-modal.slim&amp;#39;&lt;/span&gt; 
+
+  &lt;span class=&quot;kr&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;mixins&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;hideModal&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;saveFilter&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;canSave&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;components&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;modal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Modal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Well, there was one change needed as well, in &lt;code&gt;config/webpack/shared.js&lt;/code&gt; I had to use vue version that supports runtime template compilation - &lt;em&gt;update no longer needed!!! (Rick voice on) Template precompilation!!! (Rick voice off)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Such a small change (in terms of the code) but such a big step forward! Now I can&amp;#39;t wait to make something bigger with Vue.&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="rails" /><category term="vue" /><category term="frontend" /><category term="migration" /><summary type="html"></summary></entry><entry><title type="html">Making Ruby’s Array.include? faster for symbols</title><link href="https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster/" rel="alternate" type="text/html" title="Making Ruby's Array.include? faster for symbols" /><published>2017-03-21T00:00:00+00:00</published><updated>2017-03-21T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/03/21/making-ruby-array-include-faster/">&lt;p&gt;It&amp;#39;s all started doing some refactoring - I was playing with &lt;code&gt;Array&lt;/code&gt; and &lt;code&gt;Set&lt;/code&gt; and something tempted me do to a simple benchmark that revealed strange results. That&amp;#39;s a second part in which I describe how I fixed it. It&amp;#39;s about building Ruby&amp;#39;s code, debugging it with &lt;code&gt;lldb&lt;/code&gt; and making it faster!&lt;/p&gt;
+
+&lt;div class=&quot;seriesNote&quot;&gt;
+    &lt;p&gt;This article is &lt;strong&gt;Part 2&lt;/strong&gt; in a &lt;strong&gt;2-Part&lt;/strong&gt; Series.&lt;/p&gt;
+    &lt;ul&gt;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        &lt;li&gt;Part 1 - 
+        
+            &lt;a href=&quot;/2017/03/20/performance-comparison-on-include-set-array/&quot;&gt;Performance comparison of Ruby's Array and Set with strings and symbols&lt;/a&gt;
+        
+        &lt;/li&gt;
+    
+    
+    
+        
+        &lt;li&gt;Part 2 - 
+        
+            This Article
+        
+        &lt;/li&gt;
+    
+    
+    
+    
+    
+    
+    
+    
+    &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It all started with &lt;a href=&quot;https://github.com/pawelniewie/benchmark-set-array-contains/blob/master/ruby/array_include.rb&quot;&gt;benchmarking &lt;code&gt;Array.include?()&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;Comparison:
+               array:  1332567.6 i/s
+       array symbols:  1154135.9 i/s - 1.15x  slower
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Isn&amp;#39;t that strange that array of symbols is slower than one with strings? Symbols are supposed to be fast!&lt;/p&gt;
+
+&lt;p&gt;I downloaded &lt;a href=&quot;https://github.com/ruby/ruby&quot;&gt;Ruby&amp;#39;s source code&lt;/a&gt; and started looking at it.&lt;/p&gt;
+
+&lt;p&gt;I initially though the problem was with Symbol&amp;#39;s &lt;code&gt;==&lt;/code&gt; so I went looking for it. I found one for String easily in &lt;code&gt;string.c&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_define_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_cString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;==&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb_str_equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;But &lt;code&gt;symbol.c&lt;/code&gt; didn&amp;#39;t follow the pattern, because it&amp;#39;s also in &lt;code&gt;string.c&lt;/code&gt; :-)&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_define_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_cSymbol&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;==&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sym_equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;It was also simple to figure out where array is, that&amp;#39;s a no brainer:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_define_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_cArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;include?&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb_ary_includes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;VALUE&lt;/span&gt;
+&lt;span class=&quot;nf&quot;&gt;rb_ary_includes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;VALUE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VALUE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;VALUE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RARRAY_LEN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RARRAY_AREF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_equal_opt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;Qundef&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Qtrue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;Qtrue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Qtrue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Qfalse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That lead me to &lt;code&gt;vm_insnhelper.c&lt;/code&gt; &lt;code&gt;rb_equal_opt&lt;/code&gt; then to &lt;code&gt;opt_eq_func&lt;/code&gt; and something didn&amp;#39;t feel right:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#ifndef NO_BIG_INLINE&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;inline&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#endif&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;VALUE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;opt_eq_func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;VALUE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VALUE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CALL_INFO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ci&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CALL_CACHE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#define BUILTIN_CLASS_P(x, k) (!SPECIAL_CONST_P(x) &amp;amp;&amp;amp; RBASIC_CLASS(x) == k)&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#define EQ_UNREDEFINED_P(t) BASIC_OP_UNREDEFINED_P(BOP_EQ, t##_REDEFINED_OP_FLAG)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FIXNUM_2_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EQ_UNREDEFINED_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTEGER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;Qtrue&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Qfalse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FLONUM_2_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EQ_UNREDEFINED_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FLOAT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;Qtrue&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Qfalse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BUILTIN_CLASS_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb_cFloat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EQ_UNREDEFINED_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FLOAT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb_float_equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BUILTIN_CLASS_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb_cString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EQ_UNREDEFINED_P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;STRING&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb_str_equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#undef EQ_UNREDEFINED_P&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#undef BUILTIN_CLASS_P&lt;/span&gt;
+
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;vm_search_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ci&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;check_cfunc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb_obj_equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;recv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;Qtrue&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Qfalse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Qundef&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;I was going to say I hate formatting like that but turned out it&amp;#39;s because they mix spaces and tabs in the file. Duh!&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Looking at the code it&amp;#39;s pretty obvious - there&amp;#39;s no special case for symbols. I guess I kinda expected that Ruby has optimized methods written in C. Now it was time to figure out how to write the missing one.&lt;/p&gt;
+
+&lt;p&gt;First, some set up. Run once to prepare make files (Mac OS X):&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;autoconf
+CFLAGS=&amp;quot;-O0 -ggdb&amp;quot; ./configure --prefix=/usr/local/opt/rbenv/versions/2.5.0 --with-openssl-dir=&amp;quot;$(brew --prefix openssl)&amp;quot;  --disable-install-doc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then to compile:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;make &amp;amp;&amp;amp; make check &amp;amp;&amp;amp; make install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;https://silverhammermba.github.io/emberb/c/&quot;&gt;The Ruby C API guide&lt;/a&gt; is a good starting point to understand what&amp;#39;s going on in the code. The most important lesson - you cannot &lt;code&gt;printf&lt;/code&gt; a &lt;code&gt;VALUE&lt;/code&gt;, there&amp;#39;s &lt;code&gt;rb_p&lt;/code&gt; for that.&lt;/p&gt;
+
+&lt;p&gt;Also you can debug stuff with &lt;code&gt;lldb&lt;/code&gt; and it&amp;#39;s pretty simple (it&amp;#39;s not &lt;code&gt;gdb&lt;/code&gt; though so &lt;a href=&quot;https://lldb.llvm.org/tutorial.html&quot;&gt;commands are different&lt;/a&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;lldb /usr/local/opt/rbenv/versions/2.5.0/bin/ruby -- -e &amp;quot;if [:test, :another].include?(:test); puts &amp;#39;A&amp;#39;; end&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;breakpoint set --file vm_insnhelper.c --line 1279
+process launch
+process continue
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Of course I was so eager that I tried many things before I finally searched for The Ruby C API guide :-D I thought it&amp;#39;s easy to understand and I could deal with C code as it was back in the days.&lt;/p&gt;
+
+&lt;p&gt;When I read the guide it was obvious that I had to use &lt;code&gt;SYMBOL_P&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-diff&quot; data-lang=&quot;diff&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gh&quot;&gt;diff --git a/vm_insnhelper.c b/vm_insnhelper.c&lt;/span&gt;
+&lt;span class=&quot;gh&quot;&gt;index a991e59..476b5e2 100644&lt;/span&gt;
+&lt;span class=&quot;gd&quot;&gt;--- a/vm_insnhelper.c&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+++ b/vm_insnhelper.c&lt;/span&gt;
+&lt;span class=&quot;gu&quot;&gt;@@ -1296,6 +1296,11 @@ opt_eq_func(VALUE recv, VALUE obj, CALL_INFO ci, CALL_CACHE cc)&lt;/span&gt;
+        return rb_str_equal(recv, obj);
+    }
+     }
+&lt;span class=&quot;gi&quot;&gt;+    else if (SYMBOL_P(recv) &amp;amp;&amp;amp; SYMBOL_P(obj)) {&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+        if (EQ_UNREDEFINED_P(SYMBOL)) {&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+       return rb_obj_equal(recv, obj);&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+   }&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+    }&lt;/span&gt;
+ #undef EQ_UNREDEFINED_P
+ #undef BUILTIN_CLASS_P
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now running the benchmark again:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;Comparison:
+       array symbols:  1630417.3 i/s
+               array:  1372269.7 i/s - 1.19x  slower
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Symbols are now faster! That&amp;#39;s how it should work from the beginning.&lt;/p&gt;
+
+&lt;p&gt;As you can see it&amp;#39;s easy to browse C code. Also if you see something sticking out in your benchmarks it could be just a simple bug in the code. You need to remember there are two layers in Ruby - Ruby code and C code. If your Ruby code looks good could be C code that&amp;#39;s faulty.&lt;/p&gt;
+
+&lt;p&gt;Created &lt;a href=&quot;https://github.com/ruby/ruby/pull/1540&quot;&gt;PR with a fix&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you have any comments share them with &lt;a href=&quot;https://twitter.com/devonsteroids&quot;&gt;me&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;link href=&quot;//cdn-images.mailchimp.com/embedcode/classic-10_7.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+    #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+&lt;/style&gt;
+&lt;div id=&quot;mc_embed_signup&quot;&gt;
+&lt;form action=&quot;//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;amp;id=5759e18390&quot; method=&quot;post&quot; id=&quot;mc-embedded-subscribe-form&quot; name=&quot;mc-embedded-subscribe-form&quot; class=&quot;validate&quot; target=&quot;_blank&quot; novalidate&gt;
+    &lt;div id=&quot;mc_embed_signup_scroll&quot;&gt;
+    &lt;h2&gt;Get my newsletter for software people&lt;/h2&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;email&quot; value=&quot;&quot; name=&quot;EMAIL&quot; class=&quot;required email&quot; id=&quot;mce-EMAIL&quot; required placeholder=&quot;Your e-mail (required)&quot;&gt;
+&lt;/div&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;text&quot; value=&quot;&quot; name=&quot;NAME&quot; class=&quot;&quot; id=&quot;mce-NAME&quot; placeholder=&quot;Your first name&quot;&gt;
+&lt;/div&gt;
+    &lt;div id=&quot;mce-responses&quot; class=&quot;clear&quot;&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-error-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-success-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;position: absolute; left: -5000px;&quot; aria-hidden=&quot;true&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;b_30d4688f6cd649994b08f1974_5759e18390&quot; tabindex=&quot;-1&quot; value=&quot;&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;clear&quot;&gt;&lt;input type=&quot;submit&quot; value=&quot;Subscribe!&quot; name=&quot;subscribe&quot; id=&quot;mc-embedded-subscribe&quot; class=&quot;button&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="ruby" /><category term="performance" /><category term="benchmark" /><summary type="html">It&amp;#39;s all started doing some refactoring - I was playing with Array and Set and something tempted me do to a simple benchmark that revealed strange results. That&amp;#39;s a second part in which I describe how I fixed it. It&amp;#39;s about building Ruby&amp;#39;s code, debugging it with lldb and making it faster!</summary></entry><entry><title type="html">Performance comparison of Ruby’s Array and Set with strings and symbols</title><link href="https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include-set-array/" rel="alternate" type="text/html" title="Performance comparison of Ruby's Array and Set with strings and symbols" /><published>2017-03-20T00:00:00+00:00</published><updated>2017-03-20T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include?-set-array</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/03/20/performance-comparison-on-include-set-array/">&lt;p&gt;&lt;img src=&quot;https://pawelniewiadomski.com/media/2017/turbo-1335x798.jpg&quot; width=&quot;572&quot; srcset=&quot;https://pawelniewiadomski.com/media/2017/turbo-1335x798.jpg 1x, https://pawelniewiadomski.com/media/2017/turbo-1335x798.jpg 2x, https://pawelniewiadomski.com/media/2017/turbo-1335x798.jpg 3x&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Yesterday I was refactoring a piece of code checking if we can handle an uploaded document. Users can upload different documents which sometimes aren&amp;#39;t well described - some miss an extension, some have an extension that doesn&amp;#39;t match the content (pdf files which are not pdfs, etc.). For some documents we want to generate previews so it&amp;#39;s really important to run this job on files that we know we can handle. So instead of relaying on the extension I added a simple content check using &lt;a href=&quot;https://github.com/minad/mimemagic&quot;&gt;mimemagic&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So later I was extending a function that decides can we generate a preview for a file, that&amp;#39;s a first version:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;needs_preview?&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;sx&quot;&gt;%w{&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/vnd.ms-excel&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/vnd.ms-powerpoint&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/vnd.openxmlformats-officedocument.presentationml.presentation&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/pdf&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/msword&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/vnd.openxmlformats-officedocument.wordprocessingml.document&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      text/plain&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      application/rtf&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      image/jpeg&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;    }&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;include?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;document_content_type&lt;/span&gt;
+
+    &lt;span class=&quot;sx&quot;&gt;%w{.xls .xlsx .ppt .pptx .pdf .doc .docx .txt .rtf .jpg .jpeg}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;include?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;extension&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;But as I was writing this I thought - hmm, why don&amp;#39;t I be a good programmer and use a better structure for this - &lt;code&gt;Set&lt;/code&gt;. An array has this problem that you need to compare every element to check if it&amp;#39;s in the array, it&amp;#39;s &lt;code&gt;O(n)&lt;/code&gt;. Set is based on hashes so in theory can find an element in &lt;code&gt;O(1)&lt;/code&gt; (constant time).&lt;/p&gt;
+
+&lt;p&gt;So I rewrote the code and was happy about it. But later got really curious and decided to actually &lt;a href=&quot;https://github.com/pawelniewie/benchmark-set-array-contains/tree/master/ruby&quot;&gt;benchmark it&lt;/a&gt;. &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;creating a new
+
+Warming up --------------------------------------
+               array   189.396k i/100ms
+                 set    16.874k i/100ms
+Calculating -------------------------------------
+               array      4.090M (± 7.2%) i/s -     20.455M in   5.027083s
+                 set    172.724k (± 5.3%) i/s -    877.448k in   5.094293s
+
+Comparison:
+               array:  4090134.6 i/s
+                 set:   172724.4 i/s - 23.68x  slower
+
+include?
+
+miss
+
+Warming up --------------------------------------
+               array   173.707k i/100ms
+       array symbols   158.803k i/100ms
+array symbols + to_sym
+                       131.336k i/100ms
+                 set   182.543k i/100ms
+         set symbols   199.911k i/100ms
+set symbols + to_sym   170.006k i/100ms
+Calculating -------------------------------------
+               array      3.818M (± 6.6%) i/s -     19.108M in   5.026220s
+       array symbols      2.891M (± 6.0%) i/s -     14.451M in   5.015273s
+array symbols + to_sym
+                          2.312M (± 6.0%) i/s -     11.558M in   5.016827s
+                 set      4.726M (± 6.0%) i/s -     23.731M in   5.039017s
+         set symbols      5.874M (± 6.8%) i/s -     29.387M in   5.025485s
+set symbols + to_sym      3.677M (± 7.1%) i/s -     18.361M in   5.018556s
+
+Comparison:
+         set symbols:  5873938.4 i/s
+                 set:  4726223.9 i/s - 1.24x  slower
+               array:  3818309.1 i/s - 1.54x  slower
+set symbols + to_sym:  3676572.9 i/s - 1.60x  slower
+       array symbols:  2891349.9 i/s - 2.03x  slower
+array symbols + to_sym:  2312024.8 i/s - 2.54x  slower
+
+
+hit
+
+Warming up --------------------------------------
+               array   198.282k i/100ms
+       array symbols   188.585k i/100ms
+array symbols + to_sym
+                       155.503k i/100ms
+                 set   187.467k i/100ms
+         set symbols   216.999k i/100ms
+set symbols + to_sym   216.249k i/100ms
+Calculating -------------------------------------
+               array      4.777M (± 6.2%) i/s -     23.794M in   4.999723s
+       array symbols      4.271M (± 6.3%) i/s -     21.310M in   5.008877s
+array symbols + to_sym
+                          3.043M (± 6.2%) i/s -     15.239M in   5.026281s
+                 set      4.611M (± 6.6%) i/s -     23.058M in   5.022503s
+         set symbols      6.434M (± 8.2%) i/s -     32.116M in   5.024084s
+set symbols + to_sym      6.318M (± 7.2%) i/s -     31.572M in   5.022345s
+
+Comparison:
+         set symbols:  6434032.0 i/s
+set symbols + to_sym:  6317710.7 i/s - same-ish: difference falls within error
+               array:  4776713.5 i/s - 1.35x  slower
+                 set:  4610506.9 i/s - 1.40x  slower
+       array symbols:  4270964.5 i/s - 1.51x  slower
+array symbols + to_sym:  3043429.0 i/s - 2.11x  slower
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;So that was interesting. First of all these are not &lt;em&gt;scientific&lt;/em&gt; results, ran them on my MacBook Pro doing a lot of other things in the background but I repeated the benchmark and got similar results, that&amp;#39;s from one of the runs (not a median of the runs, not going to bother with it).&lt;/p&gt;
+
+&lt;p&gt;What surpised me is the time I takes to create the set.&lt;/p&gt;
+
+&lt;p&gt;As expected &lt;code&gt;set symbols&lt;/code&gt; for &lt;em&gt;miss&lt;/em&gt; scenario is the fastest, what&amp;#39;s interesting that creating a symbol from string takes a lot of time and makes it even slower than browsing the array. This all depends on the size of the array of course. I ran this benchmark with a smaller array first and then the browsing through the array was faster than computing the hash.&lt;/p&gt;
+
+&lt;p&gt;What I don&amp;#39;t understand is why there&amp;#39;s such a difference between &lt;code&gt;array&lt;/code&gt; and &lt;code&gt;array symbols&lt;/code&gt;? Or why is &lt;code&gt;set&lt;/code&gt; that slower than &lt;code&gt;set symbols&lt;/code&gt;. I compared &lt;code&gt;hash&lt;/code&gt; cost and there is some difference that could influence the set:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;hash
+
+Warming up --------------------------------------
+                hash   227.244k i/100ms
+         hash symbol   238.749k i/100ms
+Calculating -------------------------------------
+                hash      7.063M (± 4.7%) i/s -     35.450M in   5.030842s
+         hash symbol      8.551M (± 4.5%) i/s -     42.736M in   5.008114s
+
+Comparison:
+         hash symbol:  8550770.0 i/s
+                hash:  7062788.4 i/s - 1.21x  slower
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;For &lt;em&gt;hit&lt;/em&gt; scenario the story is similar - not sure why it looks like it looks. So I learned that I don&amp;#39;t understand how Ruby works :-)&lt;/p&gt;
+
+&lt;p&gt;But I know how it compares to &lt;a href=&quot;https://github.com/pawelniewie/benchmark-set-array-contains/tree/master/java&quot;&gt;Java&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;Benchmark                    Mode  Cnt          Score         Error  Units
+ContainsHit.arrayContains   thrpt   15  104613718,801 ± 1303381,183  ops/s
+ContainsHit.setContains     thrpt   15  192043168,043 ± 1822039,485  ops/s
+ContainsMiss.arrayContains  thrpt   15   47823394,222 ±  516549,078  ops/s
+ContainsMiss.setContains    thrpt   15  341901148,094 ± 3934969,687  ops/s
+Create.createArray          thrpt   15   51892174,423 ±  593297,573  ops/s
+Create.createSet            thrpt   15    4830737,889 ±   83773,408  ops/s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now, creating a set is ~10 times slower. &lt;/p&gt;
+
+&lt;p&gt;Comparing to Ruby going through the whole array is ~12 times faster in Java (&lt;em&gt;miss&lt;/em&gt; scenario). Now comparing sets: &lt;em&gt;miss&lt;/em&gt; scenario is ~58 times faster in Java, and &lt;em&gt;hit&lt;/em&gt; scenario is ~29 times faster in Java.&lt;/p&gt;
+
+&lt;p&gt;Does it matter to me? Not at all :-)&lt;/p&gt;
+
+&lt;p&gt;Was it fun? Yeah!&lt;/p&gt;
+
+&lt;p&gt;You want to try it out? There&amp;#39;s &lt;a href=&quot;https://github.com/pawelniewie/benchmark-set-array-contains/&quot;&gt;the code available&lt;/a&gt; which you can run on your machine. You can also easily use it to compare other things.&lt;/p&gt;
+
+&lt;p&gt;Have comments? Share them with me &lt;a href=&quot;https://twitter.com/devonsteroids&quot;&gt;@devonsteroids&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;PS&lt;/p&gt;
+
+&lt;p&gt;Looking at Ruby&amp;#39;s source code &lt;code&gt;array.c&lt;/code&gt; you can find it uses an optimized &lt;code&gt;rb_equal_opt&lt;/code&gt; which is defined in &lt;code&gt;vm_insnhelper.c&lt;/code&gt; which finally uses &lt;code&gt;obj_eq_func&lt;/code&gt; - it has special handling for integers, floats, numbers and strings, but doesn&amp;#39;t have any for symbols. Haven&amp;#39;t debugged it yet but that could be the reason.&lt;/p&gt;
+
+&lt;div class=&quot;seriesNote&quot;&gt;
+    &lt;p&gt;This article is &lt;strong&gt;Part 1&lt;/strong&gt; in a &lt;strong&gt;2-Part&lt;/strong&gt; Series.&lt;/p&gt;
+    &lt;ul&gt;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        &lt;li&gt;Part 1 - 
+        
+            This Article
+        
+        &lt;/li&gt;
+    
+    
+    
+        
+        &lt;li&gt;Part 2 - 
+        
+            &lt;a href=&quot;/2017/03/21/making-ruby-array-include-faster/&quot;&gt;Making Ruby's Array.include? faster for symbols&lt;/a&gt;
+        
+        &lt;/li&gt;
+    
+    
+    
+    
+    
+    
+    
+    
+    &lt;/ul&gt;
+&lt;/div&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="java" /><category term="ruby" /><category term="performance" /><category term="benchmark" /><summary type="html"></summary></entry><entry><title type="html">Better shell history with hstr</title><link href="https://pawelniewiadomski.com/2017/03/15/better-shell-history/" rel="alternate" type="text/html" title="Better shell history with hstr" /><published>2017-03-15T00:00:00+00:00</published><updated>2017-03-15T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/03/15/better-shell-history</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/03/15/better-shell-history/">&lt;p&gt;When I found out &lt;a href=&quot;https://github.com/robbyrussell/oh-my-zsh&quot;&gt;oh-my-zsh&lt;/a&gt; I felt in love with per directory history. I&amp;#39;m working on different projects at my machine - work related, personal, blog, Java and Ruby. So for me per directory history was a good choice.&lt;/p&gt;
+
+&lt;p&gt;Of course I found myself hitting ctrl-g for global history from time to time. Some days often, some days rarely.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/media/2017/hstr.gif&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Recently I found out about &lt;a href=&quot;https://github.com/dvorka/hstr&quot;&gt;hstr&lt;/a&gt; which is a better history manager for bash/zsh.&lt;/p&gt;
+
+&lt;p&gt;Looked really nice, supported better search capabilities, so I immediately wanted to try it out.&lt;/p&gt;
+
+&lt;p&gt;But learned fast that it doesn&amp;#39;t support per directory history. I thought about fixing it, grabbed source code and was ready to go. But then it hit me - lets try global history first. Maybe it will be better with hstr?&lt;/p&gt;
+
+&lt;p&gt;So it&amp;#39;s been almost two months I&amp;#39;ve been using hstr with global history and I&amp;#39;m really happy. I no longer need per directory history.&lt;/p&gt;
+
+&lt;p&gt;I guess with a better tool I can handle more diverse history and it&amp;#39;s easier now to start with a new project/directory.&lt;/p&gt;
+
+&lt;p&gt;If you haven&amp;#39;t tried it out yet give &lt;a href=&quot;https://github.com/dvorka/hstr&quot;&gt;hstr&lt;/a&gt; a chance!&lt;/p&gt;
+
+&lt;p&gt;&lt;link href=&quot;//cdn-images.mailchimp.com/embedcode/classic-10_7.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+    #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+&lt;/style&gt;
+&lt;div id=&quot;mc_embed_signup&quot;&gt;
+&lt;form action=&quot;//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;amp;id=5759e18390&quot; method=&quot;post&quot; id=&quot;mc-embedded-subscribe-form&quot; name=&quot;mc-embedded-subscribe-form&quot; class=&quot;validate&quot; target=&quot;_blank&quot; novalidate&gt;
+    &lt;div id=&quot;mc_embed_signup_scroll&quot;&gt;
+    &lt;h2&gt;Get my newsletter for software people&lt;/h2&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;email&quot; value=&quot;&quot; name=&quot;EMAIL&quot; class=&quot;required email&quot; id=&quot;mce-EMAIL&quot; required placeholder=&quot;Your e-mail (required)&quot;&gt;
+&lt;/div&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;text&quot; value=&quot;&quot; name=&quot;NAME&quot; class=&quot;&quot; id=&quot;mce-NAME&quot; placeholder=&quot;Your first name&quot;&gt;
+&lt;/div&gt;
+    &lt;div id=&quot;mce-responses&quot; class=&quot;clear&quot;&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-error-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-success-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;position: absolute; left: -5000px;&quot; aria-hidden=&quot;true&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;b_30d4688f6cd649994b08f1974_5759e18390&quot; tabindex=&quot;-1&quot; value=&quot;&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;clear&quot;&gt;&lt;input type=&quot;submit&quot; value=&quot;Subscribe!&quot; name=&quot;subscribe&quot; id=&quot;mc-embedded-subscribe&quot; class=&quot;button&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="mac" /><category term="linux" /><category term="shell" /><category term="cli" /><summary type="html">When I found out oh-my-zsh I felt in love with per directory history. I&amp;#39;m working on different projects at my machine - work related, personal, blog, Java and Ruby. So for me per directory history was a good choice.</summary></entry><entry><title type="html">Introduction to Ruby GraphQL with queries, mutations and authorization (in Polish)</title><link href="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/" rel="alternate" type="text/html" title="Introduction to Ruby GraphQL with queries, mutations and authorization (in Polish)" /><published>2017-02-27T00:00:00+00:00</published><updated>2017-02-27T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/">&lt;p&gt;I&amp;#39;m working on an app that relies heavily on GraphQL. Here&amp;#39;s the talk I gave recently on &lt;a href=&quot;http://trug.pl&quot;&gt;TRUG&lt;/a&gt; about my experience so far.&lt;/p&gt;
+
+&lt;p&gt;I know many of you speak Polish so I&amp;#39;m publishing it on my blog as well. Sorry if you&amp;#39;re not. Time to learn maybe? ;-)&lt;/p&gt;
+
+&lt;p&gt;In summary I&amp;#39;m talking about:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;building schema with queries&lt;/li&gt;
+&lt;li&gt;pagination&lt;/li&gt;
+&lt;li&gt;handling client requested ordering&lt;/li&gt;
+&lt;li&gt;authorization with pundit&lt;/li&gt;
+&lt;li&gt;multi-tenancy support&lt;/li&gt;
+&lt;li&gt;adding mutations&lt;/li&gt;
+&lt;li&gt;returning either from mutations (success or validation errors)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;iframe width=&quot;853&quot; height=&quot;480&quot; src=&quot;https://www.youtube.com/embed/nwX4B2cmFo4&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Let me know if you have any questions, I&amp;#39;d be happy to answer them - &lt;a href=&quot;https://twitter.com/devonsteroids&quot;&gt;@devonsteroids&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;link href=&quot;//cdn-images.mailchimp.com/embedcode/classic-10_7.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+    #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+&lt;/style&gt;
+&lt;div id=&quot;mc_embed_signup&quot;&gt;
+&lt;form action=&quot;//pawelniewiadomski.us1.list-manage.com/subscribe/post?u=30d4688f6cd649994b08f1974&amp;amp;id=5759e18390&quot; method=&quot;post&quot; id=&quot;mc-embedded-subscribe-form&quot; name=&quot;mc-embedded-subscribe-form&quot; class=&quot;validate&quot; target=&quot;_blank&quot; novalidate&gt;
+    &lt;div id=&quot;mc_embed_signup_scroll&quot;&gt;
+    &lt;h2&gt;Get my newsletter for software people&lt;/h2&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;email&quot; value=&quot;&quot; name=&quot;EMAIL&quot; class=&quot;required email&quot; id=&quot;mce-EMAIL&quot; required placeholder=&quot;Your e-mail (required)&quot;&gt;
+&lt;/div&gt;
+&lt;div class=&quot;mc-field-group&quot;&gt;
+    &lt;input type=&quot;text&quot; value=&quot;&quot; name=&quot;NAME&quot; class=&quot;&quot; id=&quot;mce-NAME&quot; placeholder=&quot;Your first name&quot;&gt;
+&lt;/div&gt;
+    &lt;div id=&quot;mce-responses&quot; class=&quot;clear&quot;&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-error-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;response&quot; id=&quot;mce-success-response&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;position: absolute; left: -5000px;&quot; aria-hidden=&quot;true&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;b_30d4688f6cd649994b08f1974_5759e18390&quot; tabindex=&quot;-1&quot; value=&quot;&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;clear&quot;&gt;&lt;input type=&quot;submit&quot; value=&quot;Subscribe!&quot; name=&quot;subscribe&quot; id=&quot;mc-embedded-subscribe&quot; class=&quot;button&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="ruby" /><category term="rails" /><category term="api" /><category term="rest" /><category term="graphql" /><summary type="html">I&amp;#39;m working on an app that relies heavily on GraphQL. Here&amp;#39;s the talk I gave recently on TRUG about my experience so far.</summary></entry><entry><title type="html">Pitfalls of Ruby’s memoization pattern</title><link href="https://pawelniewiadomski.com/2017/02/20/pitfalls-of-ruby-memoization-pattern/" rel="alternate" type="text/html" title="Pitfalls of Ruby's memoization pattern" /><published>2017-02-20T00:00:00+00:00</published><updated>2017-02-20T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/02/20/pitfalls-of-ruby-memoization-pattern</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/02/20/pitfalls-of-ruby-memoization-pattern/">&lt;p&gt;&lt;code&gt;@something ||= calculate_it&lt;/code&gt; is so common in Ruby code. You use it often to store something &amp;quot;heavier&amp;quot;. But many times it leads to sub optimal performance. You&amp;#39;d expect the value to be cached no matter what. But reality is different as we recently learned in our code, run this and see:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdvancedService&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;something_big&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@local_cache&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;begin&lt;/span&gt;
+      &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Here I am, surprised?&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;AdvancedService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;something_big&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;AdvancedService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;something_big&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;||=&lt;/code&gt; is so simple to write that often you don&amp;#39;t give much thought to it. I&amp;#39;m guilty of this as well. The fix is simple for that:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdvancedService&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;something_big&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@local_cache&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defined?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@local_cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@local_cache&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;begin&lt;/span&gt;
+      &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Here I am, surprised?&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;How many of you remember about adding it there?&lt;/p&gt;
+
+&lt;p&gt;Now, what&amp;#39;s still wrong with this code? There&amp;#39;s a big problem there. You see that&amp;#39;s a service.&lt;/p&gt;
+
+&lt;p&gt;Check it out:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;AdvancedService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;something_big&lt;/span&gt;
+
+&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
+  &lt;span class=&quot;no&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;AdvancedService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;something_big&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;What happened here? As &lt;code&gt;AdvancedService&lt;/code&gt; is shared between threads the initialization ran only once (sometimes it can run twice when you delete first line as there&amp;#39;s no synchronization between threads). Is that OK?&lt;/p&gt;
+
+&lt;p&gt;Sometimes, but I guess not that often. I recently found a code that&amp;#39;s supposed to cache this value for the current request. But guess what? It cached it for the whole application. As most of the servers you use with Ruby/Rails are multi-threaded this will be happily shared between all requests.&lt;/p&gt;
+
+&lt;p&gt;To solve it you can use &lt;code&gt;Thread.current[:local_cache]&lt;/code&gt; (but remember &lt;a href=&quot;https://ruby-doc.org/core-2.2.0/Thread.html#5B-5D-method&quot;&gt;it&amp;#39;s not thread-local but fiber-local&lt;/a&gt;, WTF?).&lt;/p&gt;
+
+&lt;p&gt;But hey, remember, multi-threaded server - one that re-uses threads? So this fails if you want to have a per-request cache, but don&amp;#39;t worry &lt;a href=&quot;https://github.com/steveklabnik/request_store&quot;&gt;there&amp;#39;s a gem for that&lt;/a&gt; (and probably dozen more).&lt;/p&gt;
+
+&lt;p&gt;I personally cache as a last resort and only if I ran out of different options. But some architectures may require it. &lt;/p&gt;
+
+&lt;p&gt;I remember a time when I was working on large Java application with a multitude of DAOs (data access objects) that were querying the database to get single pieces of information (each DAO is responsible for one table usually), the problem was that different parts of the application needed the same information over and over. On the other hand the data was request specific, didn&amp;#39;t make sense to keep it always in memory. In cases like that per-request caching is the easiest and safest to use. &lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="ruby" /><category term="rails" /><summary type="html">@something ||= calculate_it is so common in Ruby code. You use it often to store something &amp;quot;heavier&amp;quot;. But many times it leads to sub optimal performance. You&amp;#39;d expect the value to be cached no matter what. But reality is different as we recently learned in our code, run this and see:</summary></entry><entry><title type="html">Making specs better and other links</title><link href="https://pawelniewiadomski.com/2017/01/06/making-specs-better-friday-link-pack/" rel="alternate" type="text/html" title="Making specs better and other links" /><published>2017-01-06T00:00:00+00:00</published><updated>2017-01-06T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/01/06/making-specs-better-friday-link-pack</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/01/06/making-specs-better-friday-link-pack/">&lt;p&gt;&lt;img src=&quot;https://pawelniewiadomski.com/media/2017/test_sign-2716x1810.jpg&quot; width=&quot;572&quot; srcset=&quot;https://pawelniewiadomski.com/media/2017/test_sign-2716x1810.jpg 1x, https://pawelniewiadomski.com/media/2017/test_sign-2716x1810.jpg 2x, https://pawelniewiadomski.com/media/2017/test_sign-2716x1810.jpg 3x&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Today couple of links that hopefully will make specs better.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s two in one - &lt;a href=&quot;https://semaphoreci.com/community/tutorials/using-rspec-metadata&quot;&gt;a nice blog post&lt;/a&gt; about using metadata in your specs to drive different behavior like cleaning a database, plus a good example of setting up database cleaner.&lt;/p&gt;
+
+&lt;p&gt;Ever wondered how to test Rails generators in your gem? Here&amp;#39;s &lt;a href=&quot;https://rossta.net/blog/testing-rails-generators.html&quot;&gt;a good article&lt;/a&gt; on this topic.&lt;/p&gt;
+
+&lt;p&gt;Using database cleaner? You should probably &lt;a href=&quot;http://sevenseacat.net/2015/02/01/use_database_cleaners_deletion_strategy.html&quot;&gt;consider using deletion strategy&lt;/a&gt;. But you mileage may vary - in our project it didn&amp;#39;t yield any performance gains.&lt;/p&gt;
+
+&lt;p&gt;And here&amp;#39;s some interesting alternative to database cleaner - &lt;a href=&quot;https://github.com/ebeigarts/database_flusher/&quot;&gt;database flusher&lt;/a&gt;. Author claims it to be faster, haven&amp;#39;t checked it out yet.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gist.github.com/printercu/23bce83879eaaf8161410324ad56b235&quot;&gt;Here&amp;#39;s a small speed up for Rails 5&lt;/a&gt; (if you haven&amp;#39;t upgraded yet to 5.0.2). Seems template views are recompiled in tests every request, that sounds slow!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://zverok.github.io/blog/2016-09-02-rspec-tricks.html&quot;&gt;Using rspec parts in your code&lt;/a&gt; - I like the idea of using matchers for better &lt;code&gt;case ... when&lt;/code&gt; but mocking and other unholy tricks - that&amp;#39;s 💩&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="pack" /><category term="links" /><summary type="html"></summary></entry><entry><title type="html">Are you being productive managing your time?</title><link href="https://pawelniewiadomski.com/2017/01/02/on-being-productive-managing-your-time/" rel="alternate" type="text/html" title="Are you being productive managing your time?" /><published>2017-01-02T00:00:00+00:00</published><updated>2017-01-02T00:00:00+00:00</updated><id>https://pawelniewiadomski.com/2017/01/02/on-being-productive-managing-your-time</id><content type="html" xml:base="https://pawelniewiadomski.com/2017/01/02/on-being-productive-managing-your-time/">&lt;p&gt;&lt;img src=&quot;https://pawelniewiadomski.com/media/2017/stars-4769x3489.jpg&quot; width=&quot;572&quot; srcset=&quot;https://pawelniewiadomski.com/media/2017/stars-4769x3489.jpg 1x, https://pawelniewiadomski.com/media/2017/stars-4769x3489.jpg 2x, https://pawelniewiadomski.com/media/2017/stars-4769x3489.jpg 3x&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;I just read a wonderful article about &lt;a href=&quot;https://www.theguardian.com/technology/2016/dec/22/why-time-management-is-ruining-our-lives&quot;&gt;managing your own productivity&lt;/a&gt;. Or more about a trap you can fall into when trying to be more productive.&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s a really great read so I encourage you to check it out. Yes, it it very long. It will take a lot of your precious time. And it will make you less productive ;-)&lt;/p&gt;
+
+&lt;p&gt;But that&amp;#39;s all for good.&lt;/p&gt;
+
+&lt;p&gt;You see, this hype around being more productive, doing more with less. Is just a hype.&lt;/p&gt;
+
+&lt;p&gt;There&amp;#39;s a limit to that. You can try different tricks. Be faster. Do more.&lt;/p&gt;
+
+&lt;p&gt;But what&amp;#39;s the point of it?&lt;/p&gt;
+
+&lt;p&gt;And that&amp;#39;s the most important question you need to find an answer for. What&amp;#39;s your point? What are you doing it for?&lt;/p&gt;
+
+&lt;p&gt;The article mentions the trap we felt into. Doing more for the sake of doing more.&lt;/p&gt;
+
+&lt;p&gt;Having no time to cherish our lives. I&amp;#39;ll let you discover it all while reading.&lt;/p&gt;
+
+&lt;p&gt;I want to focus on one specific aspect that was mentioned and is relevant to my blog.&lt;/p&gt;
+
+&lt;p&gt;Creativity requires some slack time. If you burst out feature by feature, if you pack sprints to the full capacity. You will only produce what you expect.&lt;/p&gt;
+
+&lt;p&gt;There won&amp;#39;t be any time to re-think what you do, how to do it better (or do something else instead that would yield better results).&lt;/p&gt;
+
+&lt;p&gt;I have observed this in teams I worked with - every time there was some time left at the end of a sprint people started to wonder off doing some cool stuff. Stuff that wouldn&amp;#39;t be scheduled but often resulted in better morale, faster dev loop, increase of quality.&lt;/p&gt;
+
+&lt;p&gt;Of course provided a product owner was not interfering with that adding new stories to the spring from the backlog because there&amp;#39;s some time left. Because work needs to happen!&lt;/p&gt;
+
+&lt;p&gt;Also from a personal note - when was the last time you just sit and did nothing? Nothing at all. Just sitting and listening to the wind, watching sky.&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s the most productive time of my day for me. A few minutes pass and I&amp;#39;m full of great ideas, new connections, reflections, and positive thoughts.&lt;/p&gt;
+
+&lt;p&gt;I wish I did it more often though as I&amp;#39;m so busy doing &amp;quot;work&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;PS&lt;/p&gt;
+
+&lt;p&gt;As &lt;a href=&quot;http://wookieb.pl&quot;&gt;Łukasz&lt;/a&gt; pointed out I&amp;#39;m referring to &lt;a href=&quot;https://staciechoice1010.wordpress.com/2014/08/08/focused-vs-diffused-mode/&quot;&gt;DIFFUSED thinking&lt;/a&gt;&lt;/p&gt;</content><author><name>Pawel Niewiadomski</name><email>11110000b@gmail.com</email></author><category term="teams" /><category term="management" /><category term="sprints" /><summary type="html"></summary></entry></feed>

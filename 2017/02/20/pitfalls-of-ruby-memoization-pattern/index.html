@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <meta property="og:title" content="Pitfalls of Ruby's memoization pattern">
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://pawelniewiadomski.com/2017/02/20/pitfalls-of-ruby-memoization-pattern/">
+
+<meta property="og:image" content="https://pawelniewiadomski.com/media/avatar.jpg">
+
+<meta property="og:description" content="">
+
+<meta property="og:site_name" content="Pawel Niewiadomski">
+
+<meta property="og:locale" content="en_US">
+
+
+  <meta property="article:published_time" content="2017-02-20T00:00:00+00:00">
+  <meta property="article:author" content="http://facebook.com/pawelniewie">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2017/02/27/graphql-intro-to-queries-mutations-authorization/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/12/06/is-unless-in-ruby-really-a-shortcut/">
+  
+    <meta property="og:see_also" content="https://pawelniewiadomski.com/2016/11/14/how-to-change-source-for-active-model/">
+  
+
+
+<meta property="fb:admins" content="http://facebook.com/pawelniewie">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-1934760-4', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="/public/jquery.scrolldepth.min.js"></script>
+<script src="/public/screentime.min.js"></script>
+<script src="/public/riveted.min.js"></script>
+<script>
+jQuery(function() {
+  jQuery.scrollDepth();
+  jQuery.screentime({
+	  fields: [
+	    { selector: '.masthead',
+	      name: 'Master header'
+	    },
+	    { selector: '.container .post',
+	      name: 'Post'
+	    },
+	    { selector: '.container .related',
+	      name: 'Related'
+	    }
+	  ],
+    googleAnalytics: true
+	});
+  riveted.init();
+});
+</script>
+<script src="/public/hotjar.min.js"></script>
+<script>
+jQuery(function() {
+	jQuery('#mce-NAME').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'First name');
+	});
+
+	jQuery('#mce-EMAIL').on('change', function() {
+		ga('send', 'event', 'Newsletter', 'Filled', 'Email');
+	});
+
+	jQuery('#mc-embedded-subscribe').on('click', function() {
+		ga('send', 'event', 'Newsletter', 'Clicked', 'Subscribe');
+	});
+});
+</script>
+
+  <title>
+    
+      Pitfalls of Ruby's memoization pattern &middot; Pawel Niewiadomski
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <link rel="canonical" href="https://pawelniewiadomski.com/2017/02/20/pitfalls-of-ruby-memoization-pattern/">
+</head>
+
+
+  <body>
+    <div class="container content">
+  <small class="back">
+    <strong>← <a href="https://pawelniewiadomski.com">back home</a></strong>
+  </small>
+
+  <article class="post">
+    <h1 class="post-title">Pitfalls of Ruby's memoization pattern</h1>
+    
+      <span class="post-date">20 Feb 2017</span>
+    
+    <p><code>@something ||= calculate_it</code> is so common in Ruby code. You use it often to store something "heavier". But many times it leads to sub optimal performance. You'd expect the value to be cached no matter what. But reality is different as we recently learned in our code, run this and see:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">AdvancedService</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">something_big</span>
+    <span class="vi">@local_cache</span> <span class="o">||=</span> <span class="k">begin</span>
+      <span class="nb">puts</span> <span class="s2">"Here I am, surprised?"</span>
+      <span class="kp">false</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">AdvancedService</span><span class="o">.</span><span class="n">something_big</span>
+<span class="no">AdvancedService</span><span class="o">.</span><span class="n">something_big</span>
+</code></pre></div>
+<p><code>||=</code> is so simple to write that often you don't give much thought to it. I'm guilty of this as well. The fix is simple for that:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="k">class</span> <span class="nc">AdvancedService</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">something_big</span>
+    <span class="k">return</span> <span class="vi">@local_cache</span> <span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="vi">@local_cache</span><span class="p">)</span>
+    <span class="vi">@local_cache</span> <span class="o">||=</span> <span class="k">begin</span>
+      <span class="nb">puts</span> <span class="s2">"Here I am, surprised?"</span>
+      <span class="kp">false</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>How many of you remember about adding it there?</p>
+
+<p>Now, what's still wrong with this code? There's a big problem there. You see that's a service.</p>
+
+<p>Check it out:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">AdvancedService</span><span class="o">.</span><span class="n">something_big</span>
+
+<span class="mi">2</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> 
+  <span class="no">Thread</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span>
+    <span class="nb">puts</span> <span class="no">AdvancedService</span><span class="o">.</span><span class="n">something_big</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>What happened here? As <code>AdvancedService</code> is shared between threads the initialization ran only once (sometimes it can run twice when you delete first line as there's no synchronization between threads). Is that OK?</p>
+
+<p>Sometimes, but I guess not that often. I recently found a code that's supposed to cache this value for the current request. But guess what? It cached it for the whole application. As most of the servers you use with Ruby/Rails are multi-threaded this will be happily shared between all requests.</p>
+
+<p>To solve it you can use <code>Thread.current[:local_cache]</code> (but remember <a href="https://ruby-doc.org/core-2.2.0/Thread.html#5B-5D-method">it's not thread-local but fiber-local</a>, WTF?).</p>
+
+<p>But hey, remember, multi-threaded server - one that re-uses threads? So this fails if you want to have a per-request cache, but don't worry <a href="https://github.com/steveklabnik/request_store">there's a gem for that</a> (and probably dozen more).</p>
+
+<p>I personally cache as a last resort and only if I ran out of different options. But some architectures may require it. </p>
+
+<p>I remember a time when I was working on large Java application with a multitude of DAOs (data access objects) that were querying the database to get single pieces of information (each DAO is responsible for one table usually), the problem was that different parts of the application needed the same information over and over. On the other hand the data was request specific, didn't make sense to keep it always in memory. In cases like that per-request caching is the easiest and safest to use. </p>
+
+  </article>
+
+  <footer>
+    <div class="links">
+      <a href="https://pawelniewiadomski.com/newsletter">Want to get on my list?</a>
+    </div>
+  </footer>
+</div>
+
+  </body>
+</html>
