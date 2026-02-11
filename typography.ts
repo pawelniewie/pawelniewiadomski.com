@@ -207,6 +207,9 @@ export default {
             border: '1px solid',
             borderColor: 'var(--tw-prose-pre-border)',
           },
+          'pre + pre': {
+            marginTop: theme('spacing.10'),
+          },
           'pre code': {
             display: 'inline',
             color: 'inherit',
