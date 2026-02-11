@@ -1,5 +1,5 @@
 ---
-title: "How to build BitBucket Cloud add-on in Rails &rarr; bootstraping rails"
+title: "How to build BitBucket Cloud add-on in Rails → bootstraping rails"
 date: "2016-05-28"
 description: "In this series I'm going to document how to build a simple BitBucket add-on using Rails. I'm going to replicate GitHub's Star feature that I often use and..."
 tags:

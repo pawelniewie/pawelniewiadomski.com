@@ -1,5 +1,5 @@
 ---
-title: "How to build BitBucket Cloud add-on in Rails &rarr; add-on descriptor"
+title: "How to build BitBucket Cloud add-on in Rails → add-on descriptor"
 date: "2016-05-29"
 description: "In this part of the series I'm going to publish BitBucket Connect descriptor. This is a file that describes how you want to integrate with BitBucket.  Edit..."
 tags:

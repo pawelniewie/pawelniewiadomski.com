@@ -1,5 +1,5 @@
 ---
-title: "How to build BitBucket Cloud add-on in Rails &rarr; user interface"
+title: "How to build BitBucket Cloud add-on in Rails → user interface"
 date: "2016-06-01"
 description: "Time to add some user interface :-) I'm adding new section into views/bitbucket/descriptor.json.ejb (I ommited the rest of the file for verbosity): json {..."
 tags:

@@ -84,7 +84,7 @@ So let's see how this works:
 
 What's really nice about the library is that you can still refer objects by their old id. So there's an easy migration path.
 
-I have mixed feelings about one things though &rarr; hashids are not stored, so once you want to change settings (for example make them longer) you will break existing ones. So think carefully how large your database can get.
+I have mixed feelings about one things though → hashids are not stored, so once you want to change settings (for example make them longer) you will break existing ones. So think carefully how large your database can get.
 
 Other than that I like the gem. You can also encode multiple ids into one (in case you have complex keys and associations that you want to link to).
 

@@ -12,7 +12,7 @@ Default cards coloring based on priority isn't that useful since you have rankin
 
 JIRA Software comes with a coloring scheme based on JQL queries. Thanks to that you can have any custom coloring scheme.
 
-Open your board and select `Board` &rarr; `Configure`, then select `Card colors`, here's the default configuration, not that useful:
+Open your board and select `Board` → `Configure`, then select `Card colors`, here's the default configuration, not that useful:
 
 ![](/images/2016/06/colors-on-board-1.png)
 

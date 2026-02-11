@@ -1,5 +1,5 @@
 ---
-title: "How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from JavaScript"
+title: "How to build BitBucket Cloud add-on in Rails → accessing BitBucket API from JavaScript"
 date: "2016-06-03"
 description: "There's only one major part missing in my app - calling back the service and storing results. I added a new model called Repo that will be used to store..."
 tags:

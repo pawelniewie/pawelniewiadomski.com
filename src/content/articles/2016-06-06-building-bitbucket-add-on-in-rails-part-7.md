@@ -1,5 +1,5 @@
 ---
-title: "How to build BitBucket Cloud add-on in Rails &rarr; accessing BitBucket API from the server"
+title: "How to build BitBucket Cloud add-on in Rails → accessing BitBucket API from the server"
 date: "2016-06-06"
 description: "The last thing I want to mention is how to make a call to BitBucket REST API from the server. This is something I struggled for. Seems the official..."
 tags:

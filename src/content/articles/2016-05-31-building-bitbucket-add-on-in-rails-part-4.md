@@ -1,5 +1,5 @@
 ---
-title: "How to build BitBucket Cloud add-on in Rails &rarr; lifecycle"
+title: "How to build BitBucket Cloud add-on in Rails → lifecycle"
 date: "2016-05-31"
 description: "Time to handle authentication between the service and BitBucket itself. I'm not going to go into details about authentication as it is well described..."
 tags:

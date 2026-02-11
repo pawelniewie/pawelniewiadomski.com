@@ -1,5 +1,5 @@
 ---
-title: "How to build BitBucket Cloud add-on in Rails &rarr; installation"
+title: "How to build BitBucket Cloud add-on in Rails → installation"
 date: "2016-05-30"
 description: "Time to install our plugin in BitBucket! First I need to make sure that BitBucket will be able to access our service running locally. For that I'm running..."
 tags:
