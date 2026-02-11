@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Using CloudFront, terraform and werker to host this blog"
 date: "2016-10-24"
 description: "I just spent couple of hours moving my blog to CloudFront. It would have been simpler if not Terraform but now I have this set up right I decided to save..."
 tags:
