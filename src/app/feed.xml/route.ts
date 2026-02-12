@@ -3,6 +3,7 @@ import { getAllArticles } from '@/lib/articles'
 
 export async function GET() {
   const siteUrl = process.env.BASE_URL || 'https://pawelniewiadomski.com'
+
   const author = {
     name: 'Pawel Niewiadomski',
     email: 'pawel@pawelniewiadomski.com',
@@ -16,6 +17,7 @@ export async function GET() {
     id: siteUrl,
     link: siteUrl,
     language: 'en',
+    image: `${siteUrl}/favicon.ico`,
     favicon: `${siteUrl}/favicon.ico`,
     copyright: `All rights reserved ${new Date().getFullYear()}, Pawel Niewiadomski`,
     feedLinks: {
