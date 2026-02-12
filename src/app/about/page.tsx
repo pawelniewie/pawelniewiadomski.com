@@ -6,9 +6,11 @@ import clsx from 'clsx'
 import { Container } from '@/components/Container'
 import {
   GitHubIcon,
+  InstagramIcon,
   LinkedInIcon,
   XIcon,
 } from '@/components/SocialIcons'
+import portraitImage from '@/images/portrait.jpg'
 
 function SocialLink({
   className,
@@ -58,7 +60,7 @@ export default function About() {
         <div className="lg:pl-20">
           <div className="max-w-xs px-2.5 lg:max-w-none">
             <Image
-              src="/images/avatar.jpg"
+              src={portraitImage}
               alt="Pawel Niewiadomski"
               width={400}
               height={400}
@@ -98,7 +100,7 @@ export default function About() {
         </div>
         <div className="lg:pl-20">
           <ul role="list">
-            <SocialLink href="https://twitter.com/devonsteroids" icon={XIcon}>
+            <SocialLink href="https://x.com/pawelniewie" icon={XIcon}>
               Follow on X
             </SocialLink>
             <SocialLink
