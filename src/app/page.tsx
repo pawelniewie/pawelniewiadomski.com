@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Card } from '@/components/Card'
 import { Container } from '@/components/Container'
 import {
-  GitHubIcon,
+  GitHubIcon, InstagramIcon,
   LinkedInIcon,
   XIcon,
 } from '@/components/SocialIcons'
@@ -60,6 +60,13 @@ export default async function Home() {
               icon={XIcon}
             />
             <SocialLink
+              href="https://instagram.com/life_of_pawel"
+              icon={InstagramIcon}
+              aria-label="Follow on Instagram"
+            >
+              Follow on Instagram
+            </SocialLink>
+            <SocialLink
               href="https://github.com/pawelniewie"
               aria-label="Follow on GitHub"
               icon={GitHubIcon}
@@ -86,8 +93,9 @@ export default async function Home() {
               </h2>
               <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
                 I worked as a contractor for Atlassian for over 7 years. I love
-                bootstrapping new projects, performance optimization, refactoring
-                complex code bases, and bringing order to teams and projects.
+                bootstrapping new projects, performance optimization,
+                refactoring complex code bases, and bringing order to teams and
+                projects.
               </p>
               <Link
                 href="/about"

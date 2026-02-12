@@ -103,24 +103,28 @@ export default function About() {
             <SocialLink
               href="https://x.com/pawelniewie"
               icon={XIcon}
+              aria-label="Follow on X"
             >
               Follow on X
             </SocialLink>
             <SocialLink
               href="https://instagram.com/life_of_pawel"
               icon={InstagramIcon}
+              aria-label="Follow on Instagram"
             >
               Follow on Instagram
             </SocialLink>
             <SocialLink
               href="https://github.com/pawelniewie"
               icon={GitHubIcon}
+              aria-label="Follow on GitHub"
             >
               Follow on GitHub
             </SocialLink>
             <SocialLink
               href="https://linkedin.com/in/pawelniewiadomski"
               icon={LinkedInIcon}
+              aria-label="Follow on LinkedIn"
             >
               Follow on LinkedIn
             </SocialLink>
@@ -128,6 +132,7 @@ export default function About() {
               href="mailto:pawel@pawelniewiadomski.com"
               icon={MailIcon}
               className="mt-4 border-t border-zinc-100 pt-4 dark:border-zinc-700/40"
+              aria-label="Send me an email"
             >
               pawel@pawelniewiadomski.com
             </SocialLink>
