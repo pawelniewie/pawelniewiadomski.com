@@ -99,28 +99,35 @@ export default function About() {
           </div>
         </div>
         <div className="lg:pl-20">
-          <ul role="list">
-            <SocialLink href="https://x.com/pawelniewie" icon={XIcon}>
+          <ul role="list" className="flex flex-col gap-4">
+            <SocialLink
+              href="https://x.com/pawelniewie"
+              icon={XIcon}
+            >
               Follow on X
+            </SocialLink>
+            <SocialLink
+              href="https://instagram.com/life_of_pawel"
+              icon={InstagramIcon}
+            >
+              Follow on Instagram
             </SocialLink>
             <SocialLink
               href="https://github.com/pawelniewie"
               icon={GitHubIcon}
-              className="mt-4"
             >
               Follow on GitHub
             </SocialLink>
             <SocialLink
               href="https://linkedin.com/in/pawelniewiadomski"
               icon={LinkedInIcon}
-              className="mt-4"
             >
               Follow on LinkedIn
             </SocialLink>
             <SocialLink
               href="mailto:pawel@pawelniewiadomski.com"
               icon={MailIcon}
-              className="mt-8 border-t border-zinc-100 pt-8 dark:border-zinc-700/40"
+              className="mt-4 border-t border-zinc-100 pt-4 dark:border-zinc-700/40"
             >
               pawel@pawelniewiadomski.com
             </SocialLink>
