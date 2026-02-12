@@ -24,10 +24,6 @@ yarn-error.log*
 
 # env files
 .env*
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
 # vercel
 .vercel
@@ -39,13 +35,6 @@ next-env.d.ts
 # worktrees
 .worktrees
 
-# jekyll artifacts
-_site
-.sass-cache
-.jekyll-metadata
-.jekyll-cache
-
 # ide
 .idea/
 .vscode/
-next-env.d.ts

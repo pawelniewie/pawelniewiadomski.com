@@ -5,9 +5,3 @@ out/
 build/
 .env*
 .worktrees/
-_posts/
-_drafts/
-_includes/
-_layouts/
-_sass/
-media/
