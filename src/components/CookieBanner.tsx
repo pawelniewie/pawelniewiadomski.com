@@ -28,7 +28,7 @@ export function CookieBanner() {
           We use cookies to understand how you use our site and to improve your
           experience. This includes analytics and session recording.{' '}
           <a
-            href="/privacy"
+            href="/privacy-policy"
             className="text-teal-500 underline hover:no-underline dark:text-teal-400"
           >
             Privacy policy
