@@ -6,6 +6,7 @@ FROM registry.docker.com/library/node:$NODE_VERSION-slim AS base
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV BASE_URL="https://pawelniewiadomski.com"
+ENV NEXT_PUBLIC_POSTHOG_KEY="phc_OOLWFCWostIN5ob1qhBgNiMus75hotINt10kS1epxkr"
 
 RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
