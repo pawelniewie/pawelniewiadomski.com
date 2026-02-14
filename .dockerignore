@@ -3,5 +3,9 @@ node_modules/
 .vercel/
 out/
 build/
+tmp/
+.idea/
+.github/
+.claude/
 .env*
 .worktrees/
