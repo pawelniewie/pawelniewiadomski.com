@@ -8,10 +8,12 @@ import { usePathname, useSearchParams } from 'next/navigation'
 // Initialize PostHog
 if (typeof window !== 'undefined') {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || '', {
-    api_host: '/ingest',
-    ui_host: 'https://eu.posthog.com',
+    api_host: "/ingest",
+    ui_host: "https://eu.posthog.com",
     capture_pageview: false, // We'll manually capture pageviews
     capture_pageleave: true,
+    defaults: "2026-01-30",
+    person_profiles: "always",
   })
 }
 
