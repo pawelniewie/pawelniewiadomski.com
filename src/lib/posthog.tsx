@@ -4,6 +4,7 @@ import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
+import { CookieBanner } from '@/components/CookieBanner'
 
 // Initialize PostHog
 if (typeof window !== 'undefined') {
@@ -14,6 +15,7 @@ if (typeof window !== 'undefined') {
     capture_pageleave: true,
     defaults: "2026-01-30",
     person_profiles: "always",
+    cookieless_mode: "on_reject",
 
     // Session Replay
     session_recording: {
@@ -66,6 +68,7 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
         <PostHogPageView />
       </Suspense>
       {children}
+      <CookieBanner />
     </PostHogProvider>
   )
 }
