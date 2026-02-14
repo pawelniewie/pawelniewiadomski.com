@@ -22,9 +22,6 @@ if (typeof window !== 'undefined') {
       recordCrossOriginIframes: false,
       maskAllInputs: true, // Privacy: mask all input fields by default
       maskTextSelector: '[data-ph-mask]', // Custom masking
-      recordCanvas: false, // Set true if you have interactive canvas elements
-      sampleRate: 1.0, // Record 100% of sessions (adjust to 0.1 for 10% sampling)
-      minimumDuration: 2000, // Only record sessions > 2 seconds
     },
 
     // Autocapture clicks, form submissions, etc.
@@ -36,7 +33,7 @@ if (typeof window !== 'undefined') {
     },
 
     // Exception/Error tracking
-    capture_exception_autocapture: true,
+    capture_exceptions: true,
 
     // Performance monitoring
     capture_performance: true,
