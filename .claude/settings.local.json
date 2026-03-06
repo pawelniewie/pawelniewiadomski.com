@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rails:*)",
+      "Bash(rspec:*)",
+      "Bash(npx cypress run:*)",
+      "Bash(npx playwright:*)",
+      "Bash(node scripts/migrate-posts.mjs:*)",
+      "WebFetch(domain:pawelniewiadomski.com)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "github"
+  ]
+}
