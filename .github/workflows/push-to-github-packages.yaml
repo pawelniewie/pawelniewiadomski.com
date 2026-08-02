@@ -22,6 +22,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write # assume the AWS ECS deploy role via OIDC
 
     steps:
       - name: Checkout repository
@@ -74,3 +75,18 @@ jobs:
             type=gha
             type=registry,ref=${{ env.REGISTRY }}/${{ steps.lowercase_repository.outputs.result }}:master
           cache-to: type=gha,mode=max
+
+      # Deploy the newly pushed image to ECS (pawelniewiadomski.com). Master only.
+      - name: Configure AWS credentials
+        if: github.event.workflow_run.head_branch == 'master'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::471112519766:role/prod-github-actions-ecs-deploy-role
+          aws-region: us-east-1
+
+      - name: Deploy to ECS
+        if: github.event.workflow_run.head_branch == 'master'
+        uses: ikigai-systems/fundamento-infra/.github/actions/ecs-deploy@master
+        with:
+          services: "pawelniewiadomski-com-website"
+          image-tag: ${{ steps.current-time.outputs.time }}
