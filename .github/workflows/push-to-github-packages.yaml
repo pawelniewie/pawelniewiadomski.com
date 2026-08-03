@@ -84,26 +84,33 @@ jobs:
           role-to-assume: arn:aws:iam::471112519766:role/prod-github-actions-ecs-deploy-role
           aws-region: us-east-1
 
+      # get-current-time emits an ISO timestamp with colons; docker/metadata-action
+      # sanitizes them to dashes for the pushed tag, so match that here.
+      - name: Compute image tag
+        if: github.event.workflow_run.head_branch == 'master'
+        id: imgtag
+        env:
+          TS: ${{ steps.current-time.outputs.time }}
+        run: echo "tag=${TS//:/-}" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch current task definition
+        if: github.event.workflow_run.head_branch == 'master'
+        run: aws ecs describe-task-definition --task-definition prod-pawelniewiadomski-com-website --query taskDefinition > task-def.json
+
+      - name: Render task definition
+        if: github.event.workflow_run.head_branch == 'master'
+        id: render
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-def.json
+          container-name: pawelniewiadomski-com-website
+          image: ghcr.io/pawelniewie/pawelniewiadomski.com:${{ steps.imgtag.outputs.tag }}
+
       - name: Deploy to ECS
         if: github.event.workflow_run.head_branch == 'master'
-        env:
-          IMAGE_TAG: ${{ steps.current-time.outputs.time }}
-        run: |
-          set -euo pipefail
-          # get-current-time emits an ISO timestamp with colons; docker/metadata-action
-          # sanitizes colons to dashes for the pushed tag, so match that here.
-          IMAGE_TAG="${IMAGE_TAG//:/-}"
-          CLUSTER=prod-ecs
-          SERVICE=prod-pawelniewiadomski-com-website
-          CONTAINER=pawelniewiadomski-com-website
-          td=$(aws ecs describe-task-definition --task-definition "$SERVICE" --query 'taskDefinition')
-          cur=$(jq -r --arg c "$CONTAINER" '.containerDefinitions[]|select(.name==$c)|.image' <<<"$td")
-          new="${cur%:*}:${IMAGE_TAG}"
-          echo "Deploying $SERVICE: $cur -> $new"
-          reg=$(jq --arg c "$CONTAINER" --arg img "$new" \
-            '.containerDefinitions |= map(if .name==$c then .image=$img else . end)
-             | del(.taskDefinitionArn,.revision,.status,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy)' <<<"$td")
-          arn=$(aws ecs register-task-definition --cli-input-json "$reg" --query 'taskDefinition.taskDefinitionArn' --output text)
-          aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "$arn" >/dev/null
-          aws ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE"
-          echo "Deployed $SERVICE -> $arn"
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render.outputs.task-definition }}
+          service: prod-pawelniewiadomski-com-website
+          cluster: prod-ecs
+          wait-for-service-stability: true
