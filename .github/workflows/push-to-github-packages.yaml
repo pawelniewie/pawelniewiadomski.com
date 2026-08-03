@@ -86,7 +86,21 @@ jobs:
 
       - name: Deploy to ECS
         if: github.event.workflow_run.head_branch == 'master'
-        uses: ikigai-systems/fundamento-infra/.github/actions/ecs-deploy@master
-        with:
-          services: "pawelniewiadomski-com-website"
-          image-tag: ${{ steps.current-time.outputs.time }}
+        env:
+          IMAGE_TAG: ${{ steps.current-time.outputs.time }}
+        run: |
+          set -euo pipefail
+          CLUSTER=prod-ecs
+          SERVICE=prod-pawelniewiadomski-com-website
+          CONTAINER=pawelniewiadomski-com-website
+          td=$(aws ecs describe-task-definition --task-definition "$SERVICE" --query 'taskDefinition')
+          cur=$(jq -r --arg c "$CONTAINER" '.containerDefinitions[]|select(.name==$c)|.image' <<<"$td")
+          new="${cur%:*}:${IMAGE_TAG}"
+          echo "Deploying $SERVICE: $cur -> $new"
+          reg=$(jq --arg c "$CONTAINER" --arg img "$new" \
+            '.containerDefinitions |= map(if .name==$c then .image=$img else . end)
+             | del(.taskDefinitionArn,.revision,.status,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy)' <<<"$td")
+          arn=$(aws ecs register-task-definition --cli-input-json "$reg" --query 'taskDefinition.taskDefinitionArn' --output text)
+          aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "$arn" >/dev/null
+          aws ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE"
+          echo "Deployed $SERVICE -> $arn"
