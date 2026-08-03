@@ -22,6 +22,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write # assume the AWS ECS deploy role via OIDC
 
     steps:
       - name: Checkout repository
@@ -74,3 +75,42 @@ jobs:
             type=gha
             type=registry,ref=${{ env.REGISTRY }}/${{ steps.lowercase_repository.outputs.result }}:master
           cache-to: type=gha,mode=max
+
+      # Deploy the newly pushed image to ECS (pawelniewiadomski.com). Master only.
+      - name: Configure AWS credentials
+        if: github.event.workflow_run.head_branch == 'master'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::471112519766:role/prod-github-actions-ecs-deploy-role
+          aws-region: us-east-1
+
+      # get-current-time emits an ISO timestamp with colons; docker/metadata-action
+      # sanitizes them to dashes for the pushed tag, so match that here.
+      - name: Compute image tag
+        if: github.event.workflow_run.head_branch == 'master'
+        id: imgtag
+        env:
+          TS: ${{ steps.current-time.outputs.time }}
+        run: echo "tag=${TS//:/-}" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch current task definition
+        if: github.event.workflow_run.head_branch == 'master'
+        run: aws ecs describe-task-definition --task-definition prod-pawelniewiadomski-com-website --query taskDefinition > task-def.json
+
+      - name: Render task definition
+        if: github.event.workflow_run.head_branch == 'master'
+        id: render
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-def.json
+          container-name: pawelniewiadomski-com-website
+          image: ghcr.io/pawelniewie/pawelniewiadomski.com:${{ steps.imgtag.outputs.tag }}
+
+      - name: Deploy to ECS
+        if: github.event.workflow_run.head_branch == 'master'
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render.outputs.task-definition }}
+          service: prod-pawelniewiadomski-com-website
+          cluster: prod-ecs
+          wait-for-service-stability: true
