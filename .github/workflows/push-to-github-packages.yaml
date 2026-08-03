@@ -90,6 +90,9 @@ jobs:
           IMAGE_TAG: ${{ steps.current-time.outputs.time }}
         run: |
           set -euo pipefail
+          # get-current-time emits an ISO timestamp with colons; docker/metadata-action
+          # sanitizes colons to dashes for the pushed tag, so match that here.
+          IMAGE_TAG="${IMAGE_TAG//:/-}"
           CLUSTER=prod-ecs
           SERVICE=prod-pawelniewiadomski-com-website
           CONTAINER=pawelniewiadomski-com-website
